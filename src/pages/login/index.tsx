@@ -1,6 +1,7 @@
 import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import agent from "../../Agent";
+import KiteLogo from '../../assets/kite.png';
 import Button from "../../components/Button";
 
 export default function Login(props: {}) {
@@ -32,7 +33,7 @@ export default function Login(props: {}) {
 
     return (
         <div className="login-page">
-            <img src="/kite.png" />
+            <img src={KiteLogo} alt="Kite | A Better BlueSky Client" />
             <h1>Kite</h1>
             <h2>Better BlueSky Client</h2>
             <form onSubmit={_handleSubmit}>
