@@ -8,7 +8,8 @@ export default function Login(props: {}) {
     const [form, setForm] = useState({
         identifier: '',
         password: '',
-        loading: false
+        loading: false,
+        error: null
     });
     const navigate = useNavigate();
 
@@ -18,7 +19,7 @@ export default function Login(props: {}) {
         setForm(prev => ({ ...prev, loading: true }));
         try {
             const result = await agent.login({
-                identifier: form.identifier.includes(".bsky.") ? form.identifier : `${form.identifier}.bsky.social`,
+                identifier: form.identifier.includes(".") ? form.identifier : `${form.identifier}.bsky.social`,
                 password: form.password
             });
             if (result.success) {
@@ -26,8 +27,8 @@ export default function Login(props: {}) {
             }
 
         } catch (err) {
-            window.location.reload();
-            setForm(prev => ({ ...prev, loading: false }));
+            console.table(err.message);
+            setForm(prev => ({ ...prev, error: err.message, loading: false }));
         }
     }
 
@@ -44,6 +45,7 @@ export default function Login(props: {}) {
                     <input type="password" placeholder="Password" value={form.password} onChange={e => setForm(prev => ({ ...prev, password: e.target.value }))} />
                 </div>
                 <Button text="Login" className="btn" loading={form.loading} />
+                {form.error ? <p className="error text-center">{form.error}</p> : ''}
             </form>
         </div>
     );

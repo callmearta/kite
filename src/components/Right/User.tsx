@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import AvatarPlaceholder from '../../assets/avatar-placeholder.svg';
+import AvatarPlaceholder from '../../assets/placeholder.png';
 import styles from './Right.module.scss';
 
 export default function User(props: {

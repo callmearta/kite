@@ -5,7 +5,7 @@ import { useAtomValue } from 'jotai';
 import { useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import agent from '../../Agent';
-import AvatarPlaceholder from '../../assets/avatar-placeholder.svg';
+import AvatarPlaceholder from '../../assets/placeholder.png';
 import Button from '../../components/Button';
 import styles from '../../components/NewModal/New.module.scss';
 import { userAtom } from '../../store/user';

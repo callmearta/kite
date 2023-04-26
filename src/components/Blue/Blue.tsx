@@ -5,7 +5,7 @@ import cn from 'classnames';
 import React, { SyntheticEvent, useEffect, useState } from "react";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { Link, useNavigate } from "react-router-dom";
-import AvatarPlaceholder from '../../assets/avatar-placeholder.svg';
+import AvatarPlaceholder from '../../assets/placeholder.png';
 import RepostIcon from '../../assets/repost-fill.svg';
 import fromNow from '../../utils/fromNow';
 import linkFromPost from "../../utils/linkFromPost";
@@ -88,7 +88,7 @@ export default function Blue(props: {
                         {post.indexedAt ? <span>{fromNow(new Date((post.indexedAt as string)))}</span> : ''}
                     </div>
                     <div dir="auto">
-                        {markdown ? <ReactMarkdown >{markdown}</ReactMarkdown> : <p>{(post?.record as any)?.text}</p>}
+                        {markdown ? <ReactMarkdown >{markdown.replace(/\n/g,' \\\n ')}</ReactMarkdown> : <p>{(post?.record as any)?.text}</p>}
                     </div>
                     {embed ? <div>
                         {embed.external ? <External embed={(embed as AppBskyEmbedExternal.View)} /> : ''}

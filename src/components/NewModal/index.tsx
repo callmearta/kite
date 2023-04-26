@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Portal } from "react-portal";
 import { useMutation, useQueryClient } from "react-query";
 import agent from "../../Agent";
-import AvatarPlaceholder from '../../assets/avatar-placeholder.svg';
+import AvatarPlaceholder from '../../assets/placeholder.png';
 import { newAtom } from "../../store/new";
 import { userAtom } from "../../store/user";
 import Blue from "../Blue/Blue";

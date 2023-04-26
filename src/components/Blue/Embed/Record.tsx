@@ -1,6 +1,6 @@
 import { AppBskyActorDefs, AppBskyEmbedRecord } from '@atproto/api';
 import { Link, useNavigate } from 'react-router-dom';
-import AvatarPlaceholder from '../../../assets/avatar-placeholder.svg';
+import AvatarPlaceholder from '../../../assets/placeholder.png';
 import linkFromPost from '../../../utils/linkFromPost';
 import Blue from '../Blue';
 import styles from '../Blue.module.scss';

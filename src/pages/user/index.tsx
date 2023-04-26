@@ -7,7 +7,7 @@ import { Portal } from 'react-portal';
 import { useMutation, useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import agent from "../../Agent";
-import AvatarPlaceholder from '../../assets/avatar-placeholder.svg';
+import AvatarPlaceholder from '../../assets/placeholder.png';
 import BackButton from "../../components/BackButton";
 import Blue from '../../components/Blue/Blue';
 import Button from "../../components/Button";
@@ -101,7 +101,7 @@ export default function User(props: {}) {
                                     {user?.viewer?.followedBy ? <span className="tag">Follows You</span> : ''}
                                 </div>
                                 <span className="text-grey">@{user?.handle}</span>
-                                <p dir="auto"><ReactMarkdown>{renderMarkdown(user?.description)}</ReactMarkdown></p>
+                                <p dir="auto"><ReactMarkdown>{renderMarkdown(user?.description.replace(/\n/g,' \\\n '))}</ReactMarkdown></p>
                                 <div className={styles.followStats}>
                                     <p>
                                         <strong>{user?.followersCount}</strong>
