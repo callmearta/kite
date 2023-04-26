@@ -2,7 +2,7 @@
 ## A Better BlueSky client
 
 Kite is an unofficial client for using BlueSky on the web. It is at first steps trying to mature by the time so any help and pull request would be appreciated. If the code's a bit unclean pardon me because I've done this basic version in about 14 hrs.
-[Access it from here](https://callmearta.github.io)
+[Access it from here](https://callmearta.github.io/kite)
 
 ## Features
 
