@@ -20,6 +20,26 @@
     }
 }
 
+.menuItem {
+    position: relative;
+}
+
+.badge {
+    width: 24px;
+    height: 24px;
+    font-size: .8rem;
+    color: #FFF;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary-color);
+    position: absolute;
+    left: 1.25rem;
+    top: -.25rem;
+    border: 2px solid var(--white-color);
+}
+
 .avatar {
     width: 40px;
     height: 40px;

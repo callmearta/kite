@@ -1,4 +1,4 @@
-import { Record } from '@atproto/api/dist/client/types/app/bsky/feed/post';
+import { Record } from 'atproto/packages/api/dist/client/types/app/bsky/feed/post';
 import { atom } from 'jotai';
 
 export const newAtom = atom<{

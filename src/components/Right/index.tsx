@@ -17,6 +17,7 @@ export default function Right(props: {}) {
     const { data: followingData, isLoading: followingLoading } = useQuery(["following", 1], () => agent.getFollows({ actor: user?.did!, limit: 10 }), {
         cacheTime: -1,
         refetchOnMount: false,
+        refetchOnWindowFocus: false,
         onSuccess: d => {
             d.data.follows.forEach(async user => {
                 try {

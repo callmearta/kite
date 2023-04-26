@@ -1,5 +1,5 @@
-import { AppBskyFeedGetTimeline } from '@atproto/api';
-import { FeedViewPost } from '@atproto/api/dist/client/types/app/bsky/feed/defs';
+import { AppBskyFeedGetTimeline } from 'atproto/packages/api';
+import { FeedViewPost } from 'atproto/packages/api/dist/client/types/app/bsky/feed/defs';
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { SESSION_LOCAL_STORAGE_KEY, default as agent, default as atp } from '../../Agent';

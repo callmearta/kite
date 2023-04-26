@@ -1,4 +1,4 @@
-import { AtpAgent, BskyAgent } from "@atproto/api";
+import { AtpAgent, BskyAgent } from "atproto/packages/api";
 
 export const SESSION_LOCAL_STORAGE_KEY = "arta";
 

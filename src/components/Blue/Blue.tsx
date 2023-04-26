@@ -1,6 +1,6 @@
-import { AppBskyActorProfile, AppBskyEmbedExternal, AppBskyEmbedImages, AppBskyEmbedRecord, AppBskyEmbedRecordWithMedia, ProfileRecord } from "@atproto/api";
-import { FeedViewPost, PostView, ReasonRepost, isReasonRepost } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
-import { ReasonType } from "@atproto/api/dist/client/types/com/atproto/moderation/defs";
+import { AppBskyActorProfile, AppBskyEmbedExternal, AppBskyEmbedImages, AppBskyEmbedRecord, AppBskyEmbedRecordWithMedia, ProfileRecord } from "atproto/packages/api";
+import { FeedViewPost, PostView, ReasonRepost, isReasonRepost } from "atproto/packages/api/dist/client/types/app/bsky/feed/defs";
+import { ReasonType } from "atproto/packages/api/dist/client/types/com/atproto/moderation/defs";
 import cn from 'classnames';
 import React, { SyntheticEvent, useEffect, useState } from "react";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";

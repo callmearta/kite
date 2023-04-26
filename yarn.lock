@@ -10,17 +10,6 @@
     "@jridgewell/gen-mapping" "^0.1.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@atproto/api@*":
-  version "0.2.8"
-  resolved "https://registry.npmjs.org/@atproto/api/-/api-0.2.8.tgz"
-  integrity sha512-LfPgtf3UNg2W/AxHkJMJrLNT9QAD6bi16Sw5Zt3mgANrDnHWGygA7gRpeNdgVI+kFEhQfrIItemJvWLIB9BJDQ==
-  dependencies:
-    "@atproto/common-web" "*"
-    "@atproto/uri" "*"
-    "@atproto/xrpc" "*"
-    tlds "^1.234.0"
-    typed-emitter "^2.1.0"
-
 "@atproto/common-web@*":
   version "0.1.0"
   resolved "https://registry.npmjs.org/@atproto/common-web/-/common-web-0.1.0.tgz"
@@ -30,13 +19,24 @@
     uint8arrays "3.0.0"
     zod "^3.14.2"
 
-"@atproto/lexicon@*":
-  version "0.0.4"
-  resolved "https://registry.npmjs.org/@atproto/lexicon/-/lexicon-0.0.4.tgz"
-  integrity sha512-00lqIKJetVlxQzNmEhrFzZeT9k+zGPBsHwtYpG7rH4vZ211i5WiDkmQcBwwFs2g/qCBt+nVq0dlgl3JhCLJXQg==
+"@atproto/identifier@*":
+  version "0.1.0"
+  resolved "https://registry.npmjs.org/@atproto/identifier/-/identifier-0.1.0.tgz"
+  integrity sha512-3LV7+4E6S0k8Rru7NBkyDF6Zf6NHVUXVS9d4l9fiXWMC49ghZMjq0vPmz80xjG1rRuFdJFbpRf4ApFciGxLIyQ==
   dependencies:
+    "@atproto/common-web" "*"
+
+"@atproto/lexicon@*", "@atproto/lexicon@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.npmjs.org/@atproto/lexicon/-/lexicon-0.1.0.tgz"
+  integrity sha512-Iy+gV9w42xLhrZrmcbZh7VFoHjXuzWvecGHIfz44owNjjv7aE/d2P5BbOX/XicSkmQ8Qkpg0BqwYDD1XBVS+DQ==
+  dependencies:
+    "@atproto/common-web" "*"
+    "@atproto/identifier" "*"
     "@atproto/nsid" "*"
+    "@atproto/uri" "*"
     iso-datestring-validator "^2.2.2"
+    multiformats "^9.6.4"
     zod "^3.14.2"
 
 "@atproto/nsid@*":
@@ -49,10 +49,10 @@
   resolved "https://registry.npmjs.org/@atproto/uri/-/uri-0.0.1.tgz"
   integrity sha512-Tm+20Bxdie+a4yvberrfWaDhrze/p3AvA5v5IV6XyZJYu2+fnionUrufUjkcs3PIWeSd6VMgVcRp3GaoiUvSvQ==
 
-"@atproto/xrpc@*":
-  version "0.0.4"
-  resolved "https://registry.npmjs.org/@atproto/xrpc/-/xrpc-0.0.4.tgz"
-  integrity sha512-Hxh+GgZx21Zvlb2RMlSlJDd3r3GR0vAS6OOZPW2xzWiVHsetb9ZlFB6D0AeAPj2R+U2UUkmdUR8G3U/nkgnQFA==
+"@atproto/xrpc@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.npmjs.org/@atproto/xrpc/-/xrpc-0.1.0.tgz"
+  integrity sha512-LhBeZkQwPezjEtricGYnG62udFglOqlnmMSS0KyWgEAPi4KMp4H2F4jNoXcf5NPtZ9S4N4hJaErHX4PJYv2lfA==
   dependencies:
     "@atproto/lexicon" "*"
     zod "^3.14.2"
@@ -415,6 +415,10 @@ async@^3.2.4:
   version "3.2.4"
   resolved "https://registry.npmjs.org/async/-/async-3.2.4.tgz"
   integrity sha512-iAB+JbDEGXhyIUavoDl9WP/Jj106Kz9DEn1DPgYw5ruDn0e3Wgi3sKFm55sASdGBNOQB8F59d9qQ7deqrHA8wQ==
+
+atproto@bluesky-social/atproto#main:
+  version "0.0.1"
+  resolved "git+ssh://git@github.com/bluesky-social/atproto.git#ece4b61d50543dc145c52265a77ad47ae36cb09d"
 
 bail@^2.0.0:
   version "2.0.2"
@@ -1460,13 +1464,6 @@ rollup@^3.10.0:
   optionalDependencies:
     fsevents "~2.3.2"
 
-rxjs@*:
-  version "7.8.0"
-  resolved "https://registry.npmjs.org/rxjs/-/rxjs-7.8.0.tgz"
-  integrity sha512-F2+gxDshqmIub1KdvZkaEfGDwLNpPvk9Fs6LD/MyQxNgMds/WH9OdDDXOmxUZpME+iSK3rQCctkL0DYyytUqMg==
-  dependencies:
-    tslib "^2.1.0"
-
 sade@^1.7.3:
   version "1.8.1"
   resolved "https://registry.npmjs.org/sade/-/sade-1.8.1.tgz"
@@ -1531,7 +1528,7 @@ supports-preserve-symlinks-flag@^1.0.0:
   resolved "https://registry.npmjs.org/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz"
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
 
-tlds@^1.234.0:
+tlds@^1.238.0:
   version "1.238.0"
   resolved "https://registry.npmjs.org/tlds/-/tlds-1.238.0.tgz"
   integrity sha512-lFPF9pZFhLrPodaJ0wt9QIN0l8jOxqmUezGZnm7BfkDSVd9q667oVIJukLVzhF+4oW7uDlrLlfJrL5yu9RWwew==
@@ -1564,18 +1561,6 @@ trough@^2.0.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/trough/-/trough-2.1.0.tgz"
   integrity sha512-AqTiAOLcj85xS7vQ8QkAV41hPDIJ71XJB4RCUrzo/1GM2CQwhkJGaf9Hgr7BOugMRpgGUrqRg/DrBDl4H40+8g==
-
-tslib@^2.1.0:
-  version "2.5.0"
-  resolved "https://registry.npmjs.org/tslib/-/tslib-2.5.0.tgz"
-  integrity sha512-336iVw3rtn2BUK7ORdIAHTyxHGRIHVReokCR3XjbckJMK7ms8FysBfhLR8IXnAgy7T0PTPNBWKiH514FOW/WSg==
-
-typed-emitter@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.npmjs.org/typed-emitter/-/typed-emitter-2.1.0.tgz"
-  integrity sha512-g/KzbYKbH5C2vPkaXGu8DJlHrGKHLsM25Zg9WuC9pMGfuvT+X25tZQWo5fK1BjBm8+UrVE9LDCvaY0CQk+fXDA==
-  optionalDependencies:
-    rxjs "*"
 
 typescript@^4.9.3:
   version "4.9.5"

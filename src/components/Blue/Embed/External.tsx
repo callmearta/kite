@@ -1,4 +1,4 @@
-import { AppBskyEmbedExternal } from '@atproto/api';
+import { AppBskyEmbedExternal } from 'atproto/packages/api';
 import { Link } from 'react-router-dom';
 import styles from '../Blue.module.scss';
 

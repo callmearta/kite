@@ -1,4 +1,4 @@
-import { FeedViewPost } from "@atproto/api/dist/client/types/app/bsky/feed/defs";
+import { FeedViewPost } from "atproto/packages/api/src/client/types/app/bsky/feed/defs";
 import React from "react";
 import Blue from "./Blue/Blue";
 import Loading from "./Loading";
@@ -13,7 +13,11 @@ export default function PostsRenderer(props: {
         // @ts-ignore
         return feed?.reduce((p1, p2) => {
             // @ts-ignore
-            const postExists = p1.find(i => i.post.cid == p2.post.cid || i.post.cid == p2.reply?.parent.cid || i.reply?.root.cid == p2.reply?.root.cid);
+            const postExists = p1.find(i => i.post.cid == p2.post.cid 
+                || i.post.cid == p2.reply?.parent.cid 
+                || i.reply?.root.cid == p2.reply?.root.cid 
+                // || ((p2 as FeedViewPost).reply && (p2 as FeedViewPost).post.likeCount <= 1)
+                );
             if (postExists) {
                 return [...p1];
             }
