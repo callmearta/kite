@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { BrowserRouter, RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { BrowserRouter, RouterProvider, createBrowserRouter, createHashRouter } from 'react-router-dom';
 import { handleSession } from './Agent';
 import './App.scss';
 import Feed from './pages/feed';
@@ -8,7 +8,9 @@ import Routes from './router/routes';
 
 const queryClient = new QueryClient();
 
-const Router = createBrowserRouter(Routes);
+const Router = createHashRouter(Routes,{
+  // basename:'/kite/'
+});
 
 function App() {
 

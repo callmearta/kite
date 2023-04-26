@@ -3,8 +3,11 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://callmearta.github.io/kite",
   "scripts": {
     "dev": "vite --host",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
@@ -25,6 +28,7 @@
     "@types/react-portal": "^4.0.4",
     "@vitejs/plugin-react": "^3.1.0",
     "classnames": "latest",
+    "gh-pages": "^5.0.0",
     "sass": "^1.59.2",
     "typescript": "^4.9.3",
     "vite": "^4.1.0"

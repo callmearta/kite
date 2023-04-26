@@ -1,5 +1,6 @@
 import { AppBskyActorDefs, AppBskyEmbedRecord } from '@atproto/api';
 import { Link, useNavigate } from 'react-router-dom';
+import AvatarPlaceholder from '../../../assets/avatar-placeholder.svg';
 import linkFromPost from '../../../utils/linkFromPost';
 import Blue from '../Blue';
 import styles from '../Blue.module.scss';
@@ -27,7 +28,7 @@ export default function Record(props: {
         embed && uri ? <div onClick={_handleLink} className={styles.record}>
             <div className={styles.recordHeader}>
                 <div className={styles.recordAvatar}>
-                    <img src={(author as AppBskyActorDefs.ProfileView)?.avatar} alt={author.displayName} />
+                    <img src={(author as AppBskyActorDefs.ProfileView)?.avatar || AvatarPlaceholder} alt={author.displayName} />
                 </div>
                 <div>
                     <p className="font-weight-bold">{(author as AppBskyActorDefs.ProfileView)?.displayName}</p>

@@ -5,6 +5,7 @@ import cn from 'classnames';
 import React, { SyntheticEvent, useEffect, useState } from "react";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { Link, useNavigate } from "react-router-dom";
+import AvatarPlaceholder from '../../assets/avatar-placeholder.svg';
 import RepostIcon from '../../assets/repost-fill.svg';
 import fromNow from '../../utils/fromNow';
 import linkFromPost from "../../utils/linkFromPost";
@@ -33,8 +34,8 @@ export default function Blue(props: {
     if (!post || !post.author) return <></>;
 
     const [markdown, setMarkdown] = useState('');
-    const markdownText = async () => {
-        const res = await renderMarkdown((post?.record as any)?.text);
+    const markdownText = () => {
+        const res = renderMarkdown((post?.record as any)?.text);
         setMarkdown(res);
     };
 
@@ -45,7 +46,7 @@ export default function Blue(props: {
     const _linkToUserProfile = (e: SyntheticEvent | any) => {
         e.preventDefault();
         e.stopPropagation();
-        const userLink = `/user/${(post.author as any).did}`;
+        const userLink = `/user/${(post.author as any).handle}`;
         if (e.ctrlKey) {
             window.open(userLink, "_blank");
         } else {
@@ -76,7 +77,7 @@ export default function Blue(props: {
                 </div>
                     : ''}
                 <div className={styles.avatar} onClick={_linkToUserProfile}>
-                    <img src={author.avatar} />
+                    <img src={author.avatar || AvatarPlaceholder} />
                 </div>
                 <div className={styles.body}>
                     <div className={styles.header}>

@@ -4,6 +4,7 @@ import cn from 'classnames';
 import { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import agent, { SESSION_LOCAL_STORAGE_KEY } from '../../Agent';
+import AvatarPlaceholder from '../../assets/avatar-placeholder.svg';
 import HomeFillIcon from '../../assets/home-fill.svg';
 import HomeIcon from '../../assets/home.svg';
 import LogoutIcon from '../../assets/logout.svg';
@@ -25,7 +26,7 @@ export default function Sidebar(props: {
             text: 'Home'
         },
         {
-            path: `/user/${data.did}`,
+            path: `/user/${data.handle}`,
             icon: ProfileIcon,
             fillIcon: ProfileFillIcon,
             text: 'Profile'
@@ -42,7 +43,7 @@ export default function Sidebar(props: {
         <div className={styles.sidebar}>
             <div className={styles.header}>
                 <div className={styles.avatar}>
-                    <img src={data?.avatar} alt={data?.displayName} />
+                    <img src={data?.avatar || AvatarPlaceholder} alt={data?.displayName} />
                 </div>
                 <div>
                     <strong className="d-block">{data?.displayName}</strong>

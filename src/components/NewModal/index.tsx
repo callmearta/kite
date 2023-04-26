@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Portal } from "react-portal";
 import { useMutation, useQueryClient } from "react-query";
 import agent from "../../Agent";
+import AvatarPlaceholder from '../../assets/avatar-placeholder.svg';
 import { newAtom } from "../../store/new";
 import { userAtom } from "../../store/user";
 import Blue from "../Blue/Blue";
@@ -73,12 +74,12 @@ export default function NewModal(props: {}) {
                 <div className={styles.modalWrapper}>
                     <div className={styles.left}>
                         <div className={styles.avatar}>
-                            <img src={user?.avatar} />
+                            <img src={user?.avatar || AvatarPlaceholder} alt="" />
                         </div>
                     </div>
                     <div className={styles.right}>
                         <form onSubmit={_handleSubmit}>
-                            <textarea className={cn({ [styles.open]: text.length })} placeholder="What's on your mind?" onKeyDown={_handleCtrlEnter} onChange={e => setText(e.target.value.substring(0, 254))} value={text} maxLength={254}></textarea>
+                            <textarea dir="auto" className={cn({ [styles.open]: text.length })} placeholder="What's on your mind?" onKeyDown={_handleCtrlEnter} onChange={e => setText(e.target.value.substring(0, 254))} value={text} maxLength={254}></textarea>
                             <div className={styles.footer}>
                                 <div>
                                     {text.length ? <span>{text.length}/254</span> : ''}

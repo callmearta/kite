@@ -1,7 +1,9 @@
 import { useAtom, useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
+import { Link } from 'react-router-dom';
 import agent from '../../Agent';
+import GithubIcon from '../../assets/github.svg';
 import { SuggestedAtom } from '../../store/suggested';
 import { userAtom } from '../../store/user';
 import Loading from '../Loading';
@@ -37,6 +39,14 @@ export default function Right(props: {}) {
                 {!suggested.length ? <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div> : suggested.filter((p: any, index) => suggested.findIndex((i:any) => i.did == p.did) != index ? null : p).filter((p:any) => !p.viewer.following && p.did != user?.did).splice(0,6).map(p =>
                     <User key={(p as any).did} user={p} />
                 )}
+            </div>
+            <div className={styles.copy}>
+                <p>Developed by <Link to="/user/arta.bsky.social">Arta</Link></p>
+                <div className={styles.icon}>
+                    <a href="https://github.com/callmearta/kite" title="" target="_blank">
+                        <img src={GithubIcon} alt="" />
+                    </a>
+                </div>
             </div>
         </div>
     );

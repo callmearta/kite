@@ -2,11 +2,12 @@ import { ProfileViewDetailed } from '@atproto/api/dist/client/types/app/bsky/act
 import cn from 'classnames';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { SyntheticEvent, useEffect, useState } from 'react';
-import ReactMarkdown from "react-markdown";
+import ReactMarkdown from 'react-markdown';
 import { Portal } from 'react-portal';
 import { useMutation, useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import agent from "../../Agent";
+import AvatarPlaceholder from '../../assets/avatar-placeholder.svg';
 import BackButton from "../../components/BackButton";
 import Blue from '../../components/Blue/Blue';
 import Button from "../../components/Button";
@@ -68,6 +69,8 @@ export default function User(props: {}) {
         }
     }, []);
 
+    
+
     return (
         <>
             <Layout key={user?.did}>
@@ -77,16 +80,16 @@ export default function User(props: {}) {
                 {isLoading || !user ? <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div> :
                     <>
                         <div className={styles.header}>
-                            {user.banner ? <div className={styles.cover} onClick={() => 
+                            {user.banner ? <div className={styles.cover} onClick={() =>
                                 // @ts-ignore
                                 setLightbox(() => ({ show: true, images: [user.banner] }))}>
                                 <img src={user?.banner} />
                             </div> : ''}
                             <div className={cn(styles.info, { [styles.noCover]: !user?.banner })}>
-                                <div className={styles.avatar} onClick={() => 
+                                <div className={styles.avatar} onClick={() =>
                                     // @ts-ignore
                                     setLightbox(() => ({ show: true, images: [user?.avatar] }))}>
-                                    <img src={user?.avatar} alt={user?.displayName} />
+                                    <img src={user?.avatar || AvatarPlaceholder} alt={user?.displayName} />
                                 </div>
                                 {user.did == me?.did ? '' : <div className={styles.infoRight}>
                                     {user?.viewer?.following ? <Button className="btn" text="Unfollow" loading={unfollowLoading} loadingColored onClick={_handleUnfollow} /> : <Button className="btn primary" text="Follow" loading={followLoading} onClick={_handleFollow} />}
@@ -98,7 +101,7 @@ export default function User(props: {}) {
                                     {user?.viewer?.followedBy ? <span className="tag">Follows You</span> : ''}
                                 </div>
                                 <span className="text-grey">@{user?.handle}</span>
-                                <p dir="auto" dangerouslySetInnerHTML={{ __html: user?.description?.replace(/\n/g, "<br/>")! }}></p>
+                                <p dir="auto"><ReactMarkdown>{renderMarkdown(user?.description)}</ReactMarkdown></p>
                                 <div className={styles.followStats}>
                                     <p>
                                         <strong>{user?.followersCount}</strong>

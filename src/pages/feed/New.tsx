@@ -5,6 +5,7 @@ import { useAtomValue } from 'jotai';
 import { useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import agent from '../../Agent';
+import AvatarPlaceholder from '../../assets/avatar-placeholder.svg';
 import Button from '../../components/Button';
 import styles from '../../components/NewModal/New.module.scss';
 import { userAtom } from '../../store/user';
@@ -48,12 +49,12 @@ export default function New(props: {}) {
         <div className={styles.wrapper}>
             <div className={styles.left}>
                 <div className={styles.avatar}>
-                    <img src={user?.avatar} />
+                    <img src={user?.avatar || AvatarPlaceholder} alt="" />
                 </div>
             </div>
             <div className={styles.right}>
                 <form onSubmit={_handleSubmit}>
-                    <textarea className={cn({ [styles.open]: text.length })} placeholder="What's on your mind?" onKeyDown={_handleCtrlEnter} onChange={e => setText(e.target.value.substring(0, 254))} value={text}></textarea>
+                    <textarea dir="auto" className={cn({ [styles.open]: text.length })} placeholder="What's on your mind?" onKeyDown={_handleCtrlEnter} onChange={e => setText(e.target.value.substring(0, 254))} value={text}></textarea>
                     <div className={styles.footer}>
                         <div>
                             {text.length ? <span>{text.length}/254</span> : ''}
