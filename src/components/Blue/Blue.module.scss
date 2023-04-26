@@ -1,0 +1,354 @@
+.blue {
+    width: 100%;
+    display: flex;
+    // margin:.5rem 0;
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    padding-bottom: .25rem;
+    border-bottom: 1px solid var(--stroke-color);
+    font-family: Montserrat, Vazir;
+    color: var(--text-color) !important;
+    flex-wrap: wrap;
+    word-break: break-word;
+
+    &:hover {
+        background: #f9f9f9;
+    }
+
+    p {
+        margin: 0;
+    }
+}
+
+.footer {
+    width: 100%;
+    display: flex;
+    padding-top: .5rem;
+
+    &>div,
+    &>button {
+        flex: .3;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        font-size: .8rem;
+
+        &:first-child {
+            margin-left: 0;
+        }
+        span {
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+        img {
+            margin-right: .5rem;
+        }
+    }
+}
+
+.avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    overflow: hidden;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: .25rem;
+
+    &>div {
+        display: flex;
+
+        // flex-direction: column;
+        &>strong {
+            &:first-child {
+                font-size: 1rem;
+            }
+        }
+    }
+
+    strong {
+        font-size: 1rem;
+        margin-right: .5rem;
+    }
+
+    &>span {
+        font-size: .8rem !important;
+    }
+
+    span {
+        font-size: .9rem;
+        color: #888;
+    }
+}
+
+.body {
+    padding-left: 1rem;
+    width: calc(100% - 52px);
+    font-size: .95rem;
+    line-height: 1.4rem;
+
+    p {
+        a {
+            color: var(--primary-color);
+            transition: transform .05s ease-out;
+            display: inline-block;
+
+            &:hover {
+                transform: scale(1.02);
+            }
+        }
+    }
+}
+
+.isReply {
+    position: relative;
+
+    &::before {
+        width: 1px;
+        height: 50px;
+        background: var(--stroke-color);
+        position: absolute;
+        content: '';
+        display: block;
+        left: 3rem;
+        top: 0;
+        z-index: -1;
+    }
+}
+
+.parent {
+    position: relative;
+    border-bottom: none;
+
+    &::before {
+        width: 1px;
+        height: 100%;
+        background: var(--stroke-color);
+        position: absolute;
+        content: '';
+        display: block;
+        left: 3rem;
+        top: 1rem;
+        z-index: -1;
+    }
+
+    &.isReply {
+        &::before {
+            top: 1rem;
+            height: calc(100% - 1rem);
+        }
+    }
+}
+
+.like,
+.repost {
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    padding: 0;
+    color: #111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Montserrat;
+    font-size: 1rem;
+}
+
+.icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: .25rem;
+
+    img {
+        margin: 0 !important;
+    }
+
+    &:hover {
+        background: #FFF;
+    }
+}
+
+.single {
+    flex-direction: column;
+    cursor: initial;
+
+    &:hover {
+        background: initial;
+    }
+
+    .avatar {
+        width: 120px;
+        height: 120px;
+    }
+
+    .body {
+        padding-left: 0;
+        padding-top: 1rem;
+        width: 100%;
+
+        p {
+            padding: 1rem 0;
+            font-size: 1.1rem;
+        }
+    }
+
+    .footer {
+        border-top: 1px solid var(--stroke-color);
+        margin-left: -1.5rem;
+        margin-right: -1.5rem;
+        width: calc(100% + 3rem);
+        padding: 1rem 2.5rem;
+        padding-bottom: 0;
+        margin-top: 1rem;
+    }
+}
+
+.external {
+    padding: 1rem;
+    border-radius: 14px;
+    border: 1px solid var(--stroke-color);
+    display: flex;
+    margin-top: 1rem;
+    align-items: center;
+
+    &:hover {
+        background: var(--white-color);
+    }
+
+    h4,
+    p {
+        margin: .25rem 0;
+    }
+}
+
+.externalImage {
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-right: 1rem;
+    flex:0 0 auto;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.image {
+    width: 100%;
+    border-radius: 14px;
+    max-height: 450px;
+    overflow: hidden;
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2px;
+
+    img {
+        width: calc(50% - 2px);
+        border-radius: 14px;
+        flex: 1;
+    }
+}
+
+.record {
+    border-radius: 14px;
+    padding: 1rem;
+    border: 1px solid var(--stroke-color);
+    margin-top: 1rem;
+    cursor: pointer;
+    display: block;
+
+    &:hover {
+        background: var(--white-color);
+    }
+}
+
+.recordHeader {
+    display: flex;
+    align-items: center;
+
+    p {
+        font-size: .9rem;
+        margin: 0 !important;
+    }
+
+    span {
+        font-size: .9rem;
+        margin-top: -.25rem;
+        display: block;
+    }
+}
+
+.recordAvatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-right: 1rem;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.recordBody {
+    padding-top: .75rem;
+    padding-bottom: 0rem;
+}
+
+.reasonRepost {
+    width: 100%;
+    flex: 0 0 auto;
+    padding: .5rem;
+    margin-top:-.5rem;
+    font-size:.8rem;
+    padding-bottom:.75rem;
+    font-weight:bold;
+
+    &>div {
+        display: Flex;
+        align-items: center;
+        img{
+            margin-right:.5rem;
+            width:18px;
+            height:18px;
+            position:relative;
+            top:-2px;
+        }
+    }
+}
