@@ -69,22 +69,26 @@
     flex-wrap: wrap;
     width: 100%;
     justify-content: center;
-    margin-top: .5rem;
+    margin-top: 1rem;
     position: sticky;
     p {
         width: 100%;
         text-align: center;
         color: var(--grey-color);
         font-size: .9rem;
+        margin: 0;
+        margin-bottom: .25rem;
     }
     img {
         width: 32px;
         height: 32px;
+        margin-top: 1rem;
     }
     a {
         opacity: .6;
         font-weight: bold;
         color: var(--primary-color);
+        display: inline-block;
         &:hover {
             opacity: 1;
         }

@@ -26,8 +26,8 @@ export default function Login(props: {}) {
                 navigate("/");
             }
 
-        } catch (err) {
-            console.table(err.message);
+        } catch (err: any) {
+            console.error(err.message);
             setForm(prev => ({ ...prev, error: err.message, loading: false }));
         }
     }

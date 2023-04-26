@@ -88,7 +88,7 @@ export default function Blue(props: {
                         {post.indexedAt ? <span>{fromNow(new Date((post.indexedAt as string)))}</span> : ''}
                     </div>
                     <div dir="auto">
-                        {markdown ? <ReactMarkdown >{markdown.replace(/\n/g,' \\\n ')}</ReactMarkdown> : <p>{(post?.record as any)?.text}</p>}
+                        {markdown ? <ReactMarkdown >{markdown?.replace(/\n/g,' \\\n ') || ''}</ReactMarkdown> : <p>{(post?.record as any)?.text}</p>}
                     </div>
                     {embed ? <div>
                         {embed.external ? <External embed={(embed as AppBskyEmbedExternal.View)} /> : ''}

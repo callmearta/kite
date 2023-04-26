@@ -101,7 +101,7 @@ export default function User(props: {}) {
                                     {user?.viewer?.followedBy ? <span className="tag">Follows You</span> : ''}
                                 </div>
                                 <span className="text-grey">@{user?.handle}</span>
-                                <p dir="auto"><ReactMarkdown>{renderMarkdown(user?.description.replace(/\n/g,' \\\n '))}</ReactMarkdown></p>
+                                <p dir="auto"><ReactMarkdown>{renderMarkdown(user?.description?.replace(/\n/g,' \\\n ') || '')}</ReactMarkdown></p>
                                 <div className={styles.followStats}>
                                     <p>
                                         <strong>{user?.followersCount}</strong>

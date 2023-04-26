@@ -6,6 +6,7 @@ import { Link, useLocation } from 'react-router-dom';
 import agent, { SESSION_LOCAL_STORAGE_KEY } from '../../Agent';
 import HomeFillIcon from '../../assets/home-fill.svg';
 import HomeIcon from '../../assets/home.svg';
+import KiteIcon from '../../assets/kite.png';
 import LogoutIcon from '../../assets/logout.svg';
 import AvatarPlaceholder from '../../assets/placeholder.png';
 import ProfileFillIcon from '../../assets/profile-fill.svg';
@@ -41,6 +42,10 @@ export default function Sidebar(props: {
 
     return (
         <div className={styles.sidebar}>
+            <div className={styles.logo}>
+                <img src={KiteIcon} alt="Kite | a better bluesky client"/>
+                <h1>Kite</h1>
+            </div>
             <div className={styles.header}>
                 <div className={styles.avatar}>
                     <img src={data?.avatar || AvatarPlaceholder} alt={data?.displayName} />
