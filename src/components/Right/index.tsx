@@ -14,21 +14,29 @@ export default function Right(props: {}) {
     const user = useAtomValue(userAtom);
     const [followings, setFollowings] = useState<Array<any>>([]);
     const [suggested,setSuggested] = useAtom(SuggestedAtom);
-    const { data: followingData, isLoading: followingLoading } = useQuery(["following", 1], () => agent.getFollows({ actor: user?.did!, limit: 10 }), {
+    // const { data: followingData, isLoading: followingLoading } = useQuery(["following", 1], () => agent.getFollows({ actor: user?.did!, limit: 10 }), {
+    //     cacheTime: -1,
+    //     refetchOnMount: false,
+    //     refetchOnWindowFocus: false,
+    //     onSuccess: d => {
+    //         d.data.follows.forEach(async user => {
+    //             try {
+    //                 const result = await agent.getFollows({ actor: user.did, limit: 10 });
+    //                 // @ts-ignore
+    //                 setSuggested((prev: Array<any>) => [...prev, ...result.data.follows]);
+    //             }
+    //             catch (error) {
+    //                 console.error(error);
+    //             }
+    //         });
+    //     }
+    // });
+    const { data: followingData, isLoading: followingLoading } = useQuery(["following", 1], () => agent.api.app.bsky.actor.getSuggestions({ limit: 10 }), {
         cacheTime: -1,
         refetchOnMount: false,
         refetchOnWindowFocus: false,
         onSuccess: d => {
-            d.data.follows.forEach(async user => {
-                try {
-                    const result = await agent.getFollows({ actor: user.did, limit: 10 });
-                    // @ts-ignore
-                    setSuggested((prev: Array<any>) => [...prev, ...result.data.follows]);
-                }
-                catch (error) {
-                    console.error(error);
-                }
-            });
+            setSuggested(d.data.actors);
         }
     });
 

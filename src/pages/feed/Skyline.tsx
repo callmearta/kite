@@ -38,12 +38,13 @@ export default function Skyline(props: {}) {
             const lastPage = d.pages[d.pages.length - 1];
             if (
                 !feed.length
-                || page.current != d.pages[d.pages.length - 1].data.cursor
+                || (page.current && page.current != d.pages[d.pages.length - 1].data.cursor)
 
                 // If we have feed data and our first post is same as fetched data's first page's first post it means there's no new data and also the data is not coming from pagination
                 // and also we check our last page's last post with fetched data's last page's last post to check if this data is from pagination and if so we append it to the feed
                 || (feed.length && feed[0].post.uri == d.pages[0].data.feed[0].post.uri && feed[feed.length - 1].post.uri != lastPage.data.feed[lastPage.data.feed.length - 1].post.uri)
             ) {
+
                 setFeed([...feed, ...d.pages[d.pages.length - 1].data.feed]);
             } else {
                 _handleNewPosts(d.pages[0].data.feed)
@@ -58,11 +59,31 @@ export default function Skyline(props: {}) {
 
     const _handleNewPosts = useCallback((data: FeedViewPost[]) => {
         const samePost = data[0].post.uri == feed[0].post.uri;
-
+        
         if (!samePost) {
             setNewPosts(data);
         }
+        _updatePosts(data);
     }, [feed]);
+
+    const _updatePosts = (data: FeedViewPost[]) => {
+        let newFeed = [...feed];
+        for (let i = 0; i < data.length; i++) {
+            const post = data[i];
+            const postInFeedIndex = newFeed.findIndex(p => p.post.uri == post.post.uri);
+            if (postInFeedIndex > -1) {
+                if(post.post)
+                newFeed[postInFeedIndex].post = post.post;
+
+                if(post.reply)
+                newFeed[postInFeedIndex].reply = post.reply;
+
+                if(post.reason)
+                newFeed[postInFeedIndex].reason = post.reason;
+            }
+        }
+        setFeed([...newFeed]);
+    };
 
     const _handleRefetch = () => {
         refetchRef.current = setTimeout(() => {
@@ -112,8 +133,8 @@ export default function Skyline(props: {}) {
         e.preventDefault();
         e.stopPropagation();
 
-        setUi(prev => ({...prev, hot:true}));
-        localStorage.setItem(UI_STORAGE_KEY, JSON.stringify({...ui, hot:true}));
+        setUi(prev => ({ ...prev, hot: true }));
+        localStorage.setItem(UI_STORAGE_KEY, JSON.stringify({ ...ui, hot: true }));
     };
 
     return (

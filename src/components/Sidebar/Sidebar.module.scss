@@ -8,10 +8,13 @@
     padding-left: 4rem;
     padding-right: 4rem;
     background: var(--white-color);
-    z-index: 8;
+    z-index: 9;
     padding-top: 3rem;
     height: 100vh;
     border-right: 1px solid var(--stroke-color);
+    @media screen and (max-width: 1440px) {
+        margin-left: 0 !important;
+    }
 }
 
 .logo {

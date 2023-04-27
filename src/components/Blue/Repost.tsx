@@ -1,5 +1,5 @@
 import { FeedViewPost, PostView } from 'atproto/packages/api/src/client/types/app/bsky/feed/defs';
-import { SyntheticEvent, useCallback, useState } from 'react';
+import { SyntheticEvent, useCallback, useEffect, useState } from 'react';
 import agent from '../../Agent';
 import RepostFillIcon from '../../assets/repost-fill.svg';
 import RepostIcon from '../../assets/repost.svg';
@@ -13,6 +13,12 @@ export default function Repost(props: {
     const [repostCount, setRepostCount] = useState(post.repostCount);
     const [repostUri, setRepostUri] = useState((post.viewer as any)?.repost || '');
     const [loading,setLoading] = useState(false);
+
+    useEffect(() => {
+        setRepostCount(post.repostCount);
+        setHasReposted((post.viewer as any)?.repost)
+        setRepostUri((post.viewer as any)?.repost)
+    },[post.repostCount, (post.viewer as any)?.repost]);
 
     const _handleRepost = useCallback(async (e: SyntheticEvent) => {
         e.preventDefault();

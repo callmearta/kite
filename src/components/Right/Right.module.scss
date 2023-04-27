@@ -5,6 +5,9 @@
     padding: 1.5rem;
     position: sticky;
     top: 0;
+    @media screen and (max-width: 1440px) {
+        margin-right: 0;
+    }
 }
 
 .suggested {

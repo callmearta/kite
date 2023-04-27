@@ -1,6 +1,6 @@
 import { FeedViewPost, PostView } from 'atproto/packages/api/src/client/types/app/bsky/feed/defs';
 import cn from 'classnames';
-import { SyntheticEvent, useCallback, useState } from 'react';
+import { SyntheticEvent, useCallback, useEffect, useState } from 'react';
 import agent from '../../Agent';
 import HeartFillIcon from '../../assets/like-fill.svg';
 import HeartIcon from '../../assets/like.svg';
@@ -15,6 +15,12 @@ export default function Like(props: {
     const [likeUri, setLikeUri] = useState<boolean | string>((post.viewer as any)?.like || '');
     const [likeCount, setLikeCount] = useState<number>((post.likeCount as number));
     const [loading,setLoading] = useState(false);
+
+    useEffect(() => {
+        setLikeCount(post.likeCount as number);
+        setLiked((post.viewer as any)?.like)
+        setLikeUri((post.viewer as any)?.like)
+    },[post.likeCount, (post.viewer as any)?.like]);
 
     const _handleLike = useCallback(async (e: SyntheticEvent) => {
         e.preventDefault();
