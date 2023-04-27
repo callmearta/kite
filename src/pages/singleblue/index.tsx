@@ -35,7 +35,7 @@ export default function SingleBlue(props: {}) {
     };
 
     return (
-        <Layout backButton>
+        <Layout className="single" backButton>
             {isLoading ? <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div> : <>
                 {post.parent ? (
                     parents.length ? parents.slice(0,parents.length - 1) : <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div>

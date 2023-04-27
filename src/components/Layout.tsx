@@ -1,3 +1,4 @@
+import cn from 'classnames';
 import { useAtom, useAtomValue } from "jotai";
 import React, { useEffect, useState } from "react";
 import { Portal } from "react-portal";
@@ -6,6 +7,7 @@ import agent, { SESSION_LOCAL_STORAGE_KEY } from "../Agent";
 import { newAtom } from "../store/new";
 import { userAtom } from "../store/user";
 import BackButton from "./BackButton";
+import Lightbox from './Lightbox';
 import Loading from "./Loading";
 import NewModal from "./NewModal";
 import Right from "./Right";
@@ -13,9 +15,10 @@ import Sidebar from "./Sidebar/Sidebar";
 
 export default function Layout(props: {
     children?: React.ReactNode
-    backButton?: boolean
+    backButton?: boolean,
+    className?: string
 }) {
-    const { children, backButton } = props;
+    const { children, backButton, className } = props;
     const [user,setUser] = useAtom(userAtom);
     const newModal = useAtomValue(newAtom);
 
@@ -42,13 +45,14 @@ export default function Layout(props: {
         <div className="feed">
             {!isLoading ? <>
                 <Sidebar data={data?.data} />
-                <div className="feed-center">
+                <div className={cn("feed-center",className)}>
                     {backButton ? <div className="back-button-wrapper"><BackButton /></div> : ''}
                     {children}
                 </div>
                 <Right />
             </> : <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div>}
             {newModal.show && newModal.cid ? <Portal><NewModal /></Portal> : ''}
+            <Lightbox />
         </div>
     );
 }

@@ -22,7 +22,7 @@ export default function Image(props: {
             <div className={styles.image}>
                 {embed.images.map((img, index) => <img onClick={_showLightbox} key={index} src={img.thumb} alt={img.alt} />)}
             </div>
-            <Lightbox />
+            {/* <Lightbox /> */}
         </>
     );
 }

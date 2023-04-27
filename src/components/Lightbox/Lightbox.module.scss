@@ -20,8 +20,8 @@
 }
 
 .content {
-    max-height: 100vh;
-    width: 70vw;
+    max-height: 90vh;
+    max-width: 70vw;
     // overflow:hidden;
     display: flex;
     // align-items:center;
@@ -30,14 +30,15 @@
     z-index: 2;
     gap: 2px;
     div {
-        width: 100%;
+        // width: 100%;
         display: flex;
+        max-height: 90vh;
         align-items: center;
         justify-content: center;
     }
     img {
         max-width: 100%;
-        max-height: 100%;
+        max-height: 90vh;
         // flex:1;
         object-fit: contain;
     }

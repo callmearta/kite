@@ -15,7 +15,7 @@ export default function Notifications(props: {}) {
         refetchOnWindowFocus: false,
         refetchInterval: 5000,
         onSuccess: async d => {
-            if(notifs.length && notifs[0].uri != d.data.notifications[0].uri)
+            if(d.data.notifications.filter(i => !i.isRead).length)
                 _updateSeen();
             const locNotifs = d.data.notifications;
             const uniqueUris = [...new Set(locNotifs.filter(
@@ -52,7 +52,7 @@ export default function Notifications(props: {}) {
     const _updateSeen = async () => {
         const result = await agent.updateSeenNotifications();
         if(result.success){
-            // queryClient.invalidateQueries(["notifications"]);
+            queryClient.invalidateQueries(["notifications"]);
         }
     };
 

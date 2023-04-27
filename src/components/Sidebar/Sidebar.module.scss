@@ -1,9 +1,14 @@
 .sidebar {
-    width: 250px;
+    min-width: 250px;
     padding: 2rem 0;
     margin-left: -250px;
     position: sticky;
     top: 0;
+    left: 0;
+    padding-left: 4rem;
+    padding-right: 4rem;
+    background: var(--white-color);
+    z-index: 8;
     padding-top: 3rem;
     height: 100vh;
     border-right: 1px solid var(--stroke-color);

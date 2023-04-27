@@ -66,8 +66,15 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: .25rem;
+    flex-wrap: wrap;
     &>div {
+        flex-wrap: wrap;
         display: flex;
+        flex: .85;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
         // flex-direction: column;
         &>strong {
             &:first-child {
@@ -78,6 +85,10 @@
     strong {
         font-size: 1rem;
         margin-right: .5rem;
+        // max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
     &>span {
         font-size: .8rem !important;
