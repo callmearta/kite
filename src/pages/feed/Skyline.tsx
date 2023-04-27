@@ -11,21 +11,35 @@ import styles from './Feed.module.scss';
 import New from './New';
 
 export default function Skyline(props: {}) {
-    const [page, setPage] = useState('');
+    const page = useRef<any>(null);
     const refetchRef = useRef<any>(null);
     const [newPosts, setNewPosts] = useState<Array<any>>([]);
 
-    const _fetchFeed = async ({ pageParam }: { pageParam: any }) => {
-        setPage(pageParam || null);
+    const _fetchFeed = async (pageParam: any) => {
+        // if(pageParam)
+        //     page.current= (pageParam || null);
         const feed: AppBskyFeedGetTimeline.Response = await agent.getTimeline({
             algorithm: "reverse-chronological",
             cursor: pageParam
         });
+        if (pageParam)
+            page.current = feed.data.cursor;
         return feed;
     }
-    const { data, isLoading, hasNextPage, fetchNextPage, refetch } = useInfiniteQuery(["skyline"], ({pageParam}) => _fetchFeed({pageParam}), {
+    const { data, isLoading, hasNextPage, fetchNextPage, refetch } = useInfiniteQuery(["skyline"], ({ pageParam }) => _fetchFeed(pageParam), {
+        refetchOnMount: false,
+        refetchOnWindowFocus: false,
+        cacheTime: Infinity,
         onSuccess: d => {
-            if ((!feed.length || page != d.pages[d.pages.length-1].data.cursor) && feed[0].post.uri == d.pages[0].data.feed[0].post.uri) {
+            const lastPage = d.pages[d.pages.length - 1];
+            if (
+                !feed.length
+                || page.current != d.pages[d.pages.length - 1].data.cursor
+                
+                // If we have feed data and our first post is same as fetched data's first page's first post it means there's no new data and also the data is not coming from pagination
+                // and also we check our last page's last post with fetched data's last page's last post to check if this data is from pagination and if so we append it to the feed
+                || (feed.length && feed[0].post.uri == d.pages[0].data.feed[0].post.uri && feed[feed.length - 1].post.uri != lastPage.data.feed[lastPage.data.feed.length - 1].post.uri)
+            ) {
                 setFeed([...feed, ...d.pages[d.pages.length - 1].data.feed]);
             } else {
                 _handleNewPosts(d.pages[0].data.feed)
@@ -50,7 +64,7 @@ export default function Skyline(props: {}) {
         refetchRef.current = setTimeout(() => {
             refetch({ refetchPage: (page, index) => index === 0 });
             _handleRefetch();
-        },5000);
+        }, 5000);
     };
 
     useEffect(() => {
@@ -59,7 +73,7 @@ export default function Skyline(props: {}) {
         return () => {
             clearTimeout(refetchRef.current);
         };
-    },[]);
+    }, []);
 
     useEffect(() => {
         let fetching = false;
