@@ -7,6 +7,7 @@ import Blue from '../../components/Blue/Blue';
 import Layout from '../../components/Layout';
 import Loading from '../../components/Loading';
 import Sidebar from '../../components/Sidebar/Sidebar';
+import SkyCol from './SkyCol';
 import Skyline from './Skyline';
 
 export default function Feed(props: {}) {
@@ -14,6 +15,7 @@ export default function Feed(props: {}) {
     return (
         <Layout>
             <Skyline />
+            <SkyCol />
         </Layout>
     );
 }

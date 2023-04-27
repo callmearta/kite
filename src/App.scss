@@ -135,7 +135,6 @@ body {
 
 .skyline,
 .feed-center {
-    width: 700px;
     &>h1 {
         padding: 1rem 1.5rem;
         // padding-bottom:1.5rem;
@@ -143,6 +142,30 @@ body {
         border-bottom: 1px solid var(--stroke-color);
     }
     border-right: 1px solid var(--stroke-color);
+}
+
+.feed-center {
+    display: flex;
+    width: auto;
+}
+
+.skyline {
+    width: 700px;
+}
+
+.skycol {
+    width: 500px;
+    height: 100vh;
+    overflow: auto;
+    &::-webkit-scrollbar {
+        width: 6px;
+        background: var(--light-color);
+    }
+    &::-webkit-scrollbar-thumb {
+        width: 10px;
+        background: var(--primary-color);
+        border-radius: 24px;
+    }
 }
 
 .feed {
