@@ -58,3 +58,9 @@
         object-fit: cover;
     }
 }
+
+.hover {
+    &:hover {
+        background: var(--light-color);
+    }
+}

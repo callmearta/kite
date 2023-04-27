@@ -2,7 +2,7 @@ import { AppBskyActorProfile, AppBskyEmbedExternal, AppBskyEmbedImages, AppBskyE
 import { FeedViewPost, PostView, ReasonRepost, isReasonRepost } from "atproto/packages/api/src/client/types/app/bsky/feed/defs";
 import { ReasonType } from "atproto/packages/api/src/client/types/com/atproto/moderation/defs";
 import cn from 'classnames';
-import React, { SyntheticEvent, useEffect, useState } from "react";
+import React, { SyntheticEvent, useEffect, useReducer, useRef, useState } from "react";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { Link, useNavigate } from "react-router-dom";
 import AvatarPlaceholder from '../../assets/placeholder.png';
@@ -27,6 +27,7 @@ export default function Blue(props: {
     className?: string
 }) {
     const { post, isReply, isParent, isSingle, reason, className } = props;
+    const elementRef = useRef<any>(null);
     const navigate = useNavigate();
     const embed = post.embed as AppBskyEmbedImages.View | AppBskyEmbedExternal.View | AppBskyEmbedRecord.View | AppBskyEmbedRecordWithMedia.View;
     const author = post.author as AppBskyActorProfile.Record;
@@ -39,8 +40,17 @@ export default function Blue(props: {
         setMarkdown(res);
     };
 
+    const _handleSingleScroll = () => {
+        if(!isSingle) return;
+        (elementRef.current as HTMLElement).scrollIntoView({
+            behavior:'auto',
+            inline: 'start'
+        });
+    };
+
     useEffect(() => {
         markdownText();
+        _handleSingleScroll();
     }, []);
 
     const _linkToUserProfile = (e: SyntheticEvent | any) => {
@@ -56,7 +66,7 @@ export default function Blue(props: {
 
     return (
         <>
-            <div className={cn(styles.blue, className, { [styles.isReply]: isReply, [styles.parent]: isParent, [styles.single]: isSingle })} onClick={(e: any) => {
+            <div ref={elementRef} className={cn(styles.blue, className, { [styles.isReply]: isReply, [styles.parent]: isParent, [styles.single]: isSingle })} onClick={(e: any) => {
                 if (isSingle) {
                     return e.preventDefault();
                 }

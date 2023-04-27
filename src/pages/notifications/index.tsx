@@ -1,18 +1,24 @@
+import { useAtom } from "jotai";
 import { useCallback, useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import agent from "../../Agent";
 import Layout from "../../components/Layout";
 import Loading from "../../components/Loading";
+import { notificationsAtom } from "../../store/notifications";
 import Notification from "./Notification";
 import styles from './Notification.module.scss';
 
 export default function Notifications(props: {}) {
-    const [loading, setLoading] = useState(true);
+    
     const queryClient = useQueryClient();
-    const { data } = useQuery(["notifications"], () => agent.listNotifications({}), {
+    const { data,isLoading } = useQuery(["notifications"], () => agent.listNotifications({}), {
+        refetchOnWindowFocus: false,
+        refetchInterval: 5000,
         onSuccess: async d => {
-            const notifs = d.data.notifications;
-            const uniqueUris = [...new Set(notifs.filter(
+            if(notifs.length && notifs[0].uri != d.data.notifications[0].uri)
+                _updateSeen();
+            const locNotifs = d.data.notifications;
+            const uniqueUris = [...new Set(locNotifs.filter(
                 i => i.reason == 'mention' ||
                     i.reason == 'like' ||
                     i.reason == 'reply' ||
@@ -27,7 +33,7 @@ export default function Notifications(props: {}) {
                     uris: chunk
                 });
     
-                let newNotifs = [...notifs];
+                let newNotifs = [...locNotifs];
                 for (let i = 0; i < newNotifs.length; i++) {
                     const post = newNotifs[i];
                     let notifIndex = result.data.posts.findIndex(i => (post.record as any).subject?.uri == i.uri);
@@ -38,15 +44,15 @@ export default function Notifications(props: {}) {
                 setNotifs(newNotifs);
                 setLoading(false);
             }
-            _updateSeen();
         }
     });
-    const [notifs, setNotifs] = useState(data?.data.notifications || []);
+    const [loading, setLoading] = useState(isLoading);
+    const [notifs, setNotifs] = useAtom(notificationsAtom);
 
     const _updateSeen = async () => {
         const result = await agent.updateSeenNotifications();
         if(result.success){
-            queryClient.invalidateQueries(["notifications"]);
+            // queryClient.invalidateQueries(["notifications"]);
         }
     };
 

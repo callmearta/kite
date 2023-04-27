@@ -20,7 +20,9 @@ export default function Sidebar(props: {
     data: ProfileView | any
 }) {
     const { data } = props;
-    const { data: notificationData } = useQuery(["notifications"], () => agent.listNotifications({}));
+    const { data: notificationData } = useQuery(["notifications"], () => agent.listNotifications({}),{
+        refetchInterval:5000
+    });
     const unreadCount = notificationData?.data.notifications.filter(i => !i.isRead).length || 0;
     const location = useLocation();
 

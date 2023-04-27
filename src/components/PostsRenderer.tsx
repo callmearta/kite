@@ -1,5 +1,7 @@
 import { FeedViewPost } from "atproto/packages/api/src/client/types/app/bsky/feed/defs";
 import React from "react";
+import { Link } from "react-router-dom";
+import linkFromPost from "../utils/linkFromPost";
 import Blue from "./Blue/Blue";
 import Loading from "./Loading";
 
@@ -15,8 +17,8 @@ export default function PostsRenderer(props: {
         return feed?.reduce((p1, p2: FeedViewPost) => {
             // @ts-ignore
             const postExists = p1.find(i => i.post.cid == p2.post.cid
-                || i.post.cid == p2.reply?.parent.cid
-                || i.reply?.root.cid == p2.reply?.root.cid
+                // || i.post.cid == p2.reply?.parent.cid
+                // || i.reply?.root.cid == p2.reply?.root.cid
                 || ((p2 as FeedViewPost).reply && (p2?.post as any).likeCount <= 1)
             );
             if (postExists) {
@@ -32,6 +34,7 @@ export default function PostsRenderer(props: {
                 if (!!post.reply) {
                     return <React.Fragment key={index}>
                         {post.reply.parent.cid != post.reply.root.cid ? <Blue key={post.reply.root.cid} post={post.reply.root} isParent={true} /> : ''}
+                        {post.reply.parent.cid != post.reply.root.cid ? <p className="view-thread"><Link to={linkFromPost(post.reply.parent)} title="View Thread">+ View Thread</Link></p> : ''}
                         <Blue post={post.reply.parent} key={post.reply.parent.cid} isReply={true} isParent={true} />
                         <Blue post={post.post} key={post.post.cid} isReply={true} />
                     </React.Fragment>
