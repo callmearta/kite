@@ -1,5 +1,5 @@
 // @ts-ignore
-import { Notification as NotificationType } from 'atproto/packages/api/dist/client/types/app/bsky/notification/listNotifications';
+import { Notification as NotificationType } from 'atproto/packages/api/src/client/types/app/bsky/notification/listNotifications';
 import HeartFillIcon from '../../assets/like-fill.svg';
 import AvatarPlaceholder from '../../assets/placeholder.png';
 import UserFillIcon from '../../assets/profile-fill.svg';
@@ -30,7 +30,7 @@ export default function Notification(props: {
                 {notif.reason == 'follow' ? <p className={styles.headerText}><strong>{notif.author.displayName || notif.author.handle}</strong> followed you</p> : ''}
                 {notif.reason == 'mention' ? <p className={styles.headerText}><strong>{notif.author.displayName || notif.author.handle}</strong> mentioned you in their post</p> : ''}
                 {notif.reason == 'reply' ? <p className={styles.headerText}><strong>{notif.author.displayName || notif.author.handle}</strong> replied to your post</p> : ''}
-                {notif.post?.record?.text ? <p dir="auto" className={styles.text}>{notif.post?.record?.text}</p> : ''}
+                {(notif.post as any)?.record?.text ? <p dir="auto" className={styles.text}>{(notif.post as any)?.record?.text}</p> : ''}
             </div>
         </div>
     );

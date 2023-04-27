@@ -1,5 +1,5 @@
 import { ProfileRecord } from 'atproto/packages/api';
-import { ProfileView } from 'atproto/packages/api/dist/client/types/app/bsky/actor/defs';
+import { ProfileView } from 'atproto/packages/api/src/client/types/app/bsky/actor/defs';
 import cn from 'classnames';
 import { useEffect } from 'react';
 import { useQuery } from 'react-query';

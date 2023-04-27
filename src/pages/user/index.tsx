@@ -1,4 +1,4 @@
-import { ProfileViewDetailed } from 'atproto/packages/api/dist/client/types/app/bsky/actor/defs';
+import { ProfileViewDetailed } from 'atproto/packages/api/src/client/types/app/bsky/actor/defs';
 import cn from 'classnames';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { SyntheticEvent, useEffect, useState } from 'react';

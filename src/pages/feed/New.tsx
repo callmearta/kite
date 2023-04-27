@@ -1,5 +1,5 @@
 import { RichText } from 'atproto/packages/api';
-import { Record } from 'atproto/packages/api/dist/client/types/app/bsky/feed/post';
+import { Record } from 'atproto/packages/api/src/client/types/app/bsky/feed/post';
 import cn from 'classnames';
 import { useAtomValue } from 'jotai';
 import { useState } from 'react';

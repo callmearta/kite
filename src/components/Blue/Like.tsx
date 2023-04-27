@@ -1,4 +1,4 @@
-import { FeedViewPost, PostView } from 'atproto/packages/api/dist/client/types/app/bsky/feed/defs';
+import { FeedViewPost, PostView } from 'atproto/packages/api/src/client/types/app/bsky/feed/defs';
 import cn from 'classnames';
 import { SyntheticEvent, useCallback, useState } from 'react';
 import agent from '../../Agent';

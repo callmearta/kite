@@ -1,6 +1,6 @@
 import { AppBskyActorProfile, AppBskyEmbedExternal, AppBskyEmbedImages, AppBskyEmbedRecord, AppBskyEmbedRecordWithMedia, ProfileRecord } from "atproto/packages/api";
-import { FeedViewPost, PostView, ReasonRepost, isReasonRepost } from "atproto/packages/api/dist/client/types/app/bsky/feed/defs";
-import { ReasonType } from "atproto/packages/api/dist/client/types/com/atproto/moderation/defs";
+import { FeedViewPost, PostView, ReasonRepost, isReasonRepost } from "atproto/packages/api/src/client/types/app/bsky/feed/defs";
+import { ReasonType } from "atproto/packages/api/src/client/types/com/atproto/moderation/defs";
 import cn from 'classnames';
 import React, { SyntheticEvent, useEffect, useState } from "react";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
@@ -77,7 +77,7 @@ export default function Blue(props: {
                 </div>
                     : ''}
                 <div className={styles.avatar} onClick={_linkToUserProfile}>
-                    <img src={author.avatar || AvatarPlaceholder} />
+                    <img src={author.avatar || AvatarPlaceholder as any} />
                 </div>
                 <div className={styles.body}>
                     <div className={styles.header}>

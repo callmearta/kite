@@ -10,14 +10,15 @@ export default function PostsRenderer(props: {
     const { isLoading, feed } = props;
 
     const _sortPosts: any | FeedViewPost = () => {
+        
         // @ts-ignore
-        return feed?.reduce((p1, p2) => {
+        return feed?.reduce((p1, p2: FeedViewPost) => {
             // @ts-ignore
-            const postExists = p1.find(i => i.post.cid == p2.post.cid 
-                || i.post.cid == p2.reply?.parent.cid 
-                || i.reply?.root.cid == p2.reply?.root.cid 
-                // || ((p2 as FeedViewPost).reply && (p2 as FeedViewPost).post.likeCount <= 1)
-                );
+            const postExists = p1.find(i => i.post.cid == p2.post.cid
+                || i.post.cid == p2.reply?.parent.cid
+                || i.reply?.root.cid == p2.reply?.root.cid
+                || ((p2 as FeedViewPost).reply && (p2?.post as any).likeCount <= 1)
+            );
             if (postExists) {
                 return [...p1];
             }
@@ -35,7 +36,7 @@ export default function PostsRenderer(props: {
                         <Blue post={post.post} key={post.post.cid} isReply={true} />
                     </React.Fragment>
                 }
-                return <Blue key={post.post.cid} post={post.post} isReply={!!post.reply} />
+                return <Blue key={post?.post?.cid} post={post?.post} isReply={!!post.reply} />
             }
             ) : ''
     );

@@ -6,7 +6,6 @@ export default function External(props: {
     embed: AppBskyEmbedExternal.View
 }) {
     const { embed } = props;
-    console.log(embed);
 
     return (
         <Link target='_blank' title={embed.external.title} to={embed.external.uri} className={styles.external}>
