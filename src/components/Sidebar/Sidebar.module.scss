@@ -1,7 +1,7 @@
 .sidebar {
-    min-width: 250px;
+    min-width: 350px;
     padding: 2rem 0;
-    margin-left: -250px;
+    margin-left: -350px;
     position: sticky;
     top: 0;
     left: 0;
@@ -21,6 +21,11 @@
     display: flex;
     align-items: center;
     margin-bottom: 3rem;
+    justify-content: space-between;
+    &>div:first-child {
+        display: flex;
+        align-items: center;
+    }
     img {
         width: 40px;
         height: auto;
@@ -82,7 +87,7 @@
         display: flex;
         align-items: center;
         margin: 2rem 0;
-        color: #111;
+        color: var(--text-color);
         opacity: .7;
         text-decoration: none;
         &:hover {

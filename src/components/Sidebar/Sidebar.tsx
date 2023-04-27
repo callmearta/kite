@@ -14,14 +14,17 @@ import NotificationIcon from '../../assets/notification.svg';
 import AvatarPlaceholder from '../../assets/placeholder.png';
 import ProfileFillIcon from '../../assets/profile-fill.svg';
 import ProfileIcon from '../../assets/profile.svg';
+import SettingsFillIcon from '../../assets/settings-fill.svg';
+import SettingsIcon from '../../assets/settings.svg';
+import ThemeToggle from '../ThemeToggle';
 import styles from './Sidebar.module.scss';
 
 export default function Sidebar(props: {
     data: ProfileView | any
 }) {
     const { data } = props;
-    const { data: notificationData } = useQuery(["notifications"], () => agent.listNotifications({}),{
-        refetchInterval:5000
+    const { data: notificationData } = useQuery(["notifications"], () => agent.listNotifications({}), {
+        refetchInterval: 5000
     });
     const unreadCount = notificationData?.data.notifications.filter(i => !i.isRead).length || 0;
     const location = useLocation();
@@ -46,6 +49,12 @@ export default function Sidebar(props: {
             text: 'Profile'
         },
         {
+            path: `/settings`,
+            icon: SettingsIcon,
+            fillIcon: SettingsFillIcon,
+            text: 'Settings'
+        },
+        {
             path: '/logout',
             icon: LogoutIcon,
             fillIcon: LogoutIcon,
@@ -56,8 +65,11 @@ export default function Sidebar(props: {
     return (
         <div className={styles.sidebar}>
             <div className={styles.logo}>
-                <img src={KiteIcon} alt="Kite | a better bluesky client" />
-                <h1>Kite</h1>
+                <div>
+                    <img src={KiteIcon} alt="Kite | a better bluesky client" />
+                    <h1>Kite</h1>
+                </div>
+                <ThemeToggle />
             </div>
             <div className={styles.header}>
                 <div className={styles.avatar}>
@@ -70,7 +82,7 @@ export default function Sidebar(props: {
             </div>
             <div className={styles.menu}>
                 {ITEMS.map((i, index) =>
-                    <Link key={index} to={i.path} className={cn(styles.menuItem,{ [styles.menuActive]: i.path == location.pathname })}>
+                    <Link key={index} to={i.path} className={cn(styles.menuItem, { [styles.menuActive]: i.path == location.pathname })}>
                         <img alt="" src={i.path == location.pathname ? i.fillIcon : i.icon} />
                         <strong>
                             {i.text}

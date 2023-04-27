@@ -6,6 +6,7 @@ import agent from "../../Agent";
 import Blue from "../../components/Blue/Blue";
 import Layout from "../../components/Layout";
 import Loading from "../../components/Loading";
+import blacklist from "../../utils/blacklist";
 
 export default function SingleBlue(props: {}) {
     const params = useParams();
@@ -41,7 +42,7 @@ export default function SingleBlue(props: {}) {
                     parents.length ? parents.slice(0,parents.length - 1) : <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div>
                     ) : ''}
                 <Blue isSingle={true} post={post?.post} />
-                {post?.replies.map((p: any, index: number) => <Blue key={index} post={p.post} />)}
+                {post?.replies.filter(blacklist).map((p: any, index: number) => <Blue key={index} post={p.post} />)}
             </>
             }
         </Layout>
