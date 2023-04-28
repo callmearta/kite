@@ -43,7 +43,7 @@ export default function Right(props: {}) {
         },
         enabled: settings.suggested == 'personalized'
     });
-    const { data: followingDataGlobal, isLoading: followingLoadingGlobal } = useQuery(["followingGlobal", 1], () => agent.api.app.bsky.actor.getSuggestions({ limit: 10 }), {
+    const { data: followingDataGlobal, isLoading: followingLoadingGlobal } = useQuery(["followingGlobal", 1], () => agent.api.app.bsky.actor.getSuggestions({ limit: 6 }), {
         refetchOnMount: false,
         refetchOnWindowFocus: false,
         onSuccess: d => {
