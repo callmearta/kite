@@ -11,6 +11,13 @@ Kite is an unofficial client for using BlueSky on the web. It is at first steps 
 - Create new Text Posts
 - Embeds, Images, External Links in Posts
 - Create New Posts Using Ctrl+Enter
+- Vazir Font For Persian And Arabic Texts
+- Likes Tab For Users
+- Blacklist Certain Words In Posts And User Handles And Names
+- Get Follow Suggestions Relative To Your Followings
+- Dark Mode
+- What's Hot Column Next To Skyline Which You Can Close
+- Notifications Page
 - ✨Beautiful UI ✨
 
 ## Installation
