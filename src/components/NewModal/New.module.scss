@@ -32,6 +32,7 @@
         font-size:1.1rem;
         min-height:50px;
         transition: all .15s ease-out;
+        color: var(--text-color);
 
         &.open{
             min-height:150px;
