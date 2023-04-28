@@ -63,7 +63,7 @@ export default function Sidebar(props: {
     ];
 
     return (
-        <div className={styles.sidebar}>
+        <div className={cn(styles.sidebar,"sidebar")}>
             <div className={styles.logo}>
                 <div>
                     <img src={KiteIcon} alt="Kite | a better bluesky client" />

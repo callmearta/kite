@@ -10,6 +10,7 @@ import { SuggestedAtom } from '../../store/suggested';
 import { userAtom } from '../../store/user';
 import blacklist from '../../utils/blacklist';
 import Loading from '../Loading';
+import Donate from './Donate';
 import styles from './Right.module.scss';
 import User from './User';
 
@@ -70,11 +71,6 @@ export default function Right(props: {}) {
         }
     }, [suggested.data, settings.suggested]);
 
-    // useEffect(() => {
-    //     if(!personalizedDone){
-    //         setSuggested(prev => ({ ...prev, loading: true }));
-    //     }
-    // }, [settings.suggested,personalizedDone]);
 
     return (
         <div className={styles.right}>
@@ -88,6 +84,7 @@ export default function Right(props: {}) {
                     )}
             </div>
             <div className={styles.copy}>
+                <Donate />
                 <p>Version 0.0.1</p>
                 <p>Developed by <Link to="/user/arta.bsky.social">Arta</Link></p>
                 <div className={styles.icon}>
