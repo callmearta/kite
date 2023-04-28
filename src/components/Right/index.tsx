@@ -12,6 +12,7 @@ import blacklist from '../../utils/blacklist';
 import Loading from '../Loading';
 import Donate from './Donate';
 import styles from './Right.module.scss';
+import Search from './Search';
 import User from './User';
 
 export default function Right(props: {}) {
@@ -74,9 +75,10 @@ export default function Right(props: {}) {
 
     return (
         <div className={styles.right}>
+            <Search />
             <div className={styles.suggested}>
                 <h4>Who To Follow?</h4>
-                <p>Here you'll see a list of your followings followings :))</p>
+                <p>Here you'll see a list of new people to follow</p>
                 {suggested.loading || followingLoading || followingLoadingGlobal ?
                     <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div> :
                     (settings.suggested == 'personalized' ? suggested.filteredList : suggested.data).map(p =>

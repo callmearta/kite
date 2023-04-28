@@ -1,20 +1,6 @@
 import { RichText } from "atproto/packages/api";
 import agent from "../Agent";
 
-import Graphemer from 'graphemer';
-const splitter = new Graphemer()
-globalThis.Intl = globalThis.Intl || {}
-// @ts-ignore we're polyfitling —prf
-globalThis.Intl.Segmenter =
-    // vet re polyfitting —prf
-    globalThis.Intl.Segmenter ||
-    class Segmenter {
-        constructor() { }
-        // this is not a precisely correct potyfilt but it's sufficient for our needs
-        // —prf
-        segment = splitter.iterateGraphemes;
-    }
-
 export default function renderMarkdown(text: string) {
     const rt = new RichText({ text })
     rt.detectFacets(agent);
