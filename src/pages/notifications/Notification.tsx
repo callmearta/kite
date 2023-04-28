@@ -32,7 +32,7 @@ export default function Notification(props: {
     };
 
     return (
-        <div className={cn(styles.notification, { "pointer": true, [styles.hover]: true })} onClick={_handleClick}>
+        <div className={cn(styles.notification, { "pointer": true, [styles.hover]: true, [styles.new]: !notif.isRead })} onClick={_handleClick}>
             <div className={styles.left}>
                 <div className={styles.type}>
                     <img src={

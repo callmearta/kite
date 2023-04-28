@@ -11,8 +11,7 @@ const blacklist = (
     customList?: any[]
 ) => {
     const isProfileList = data.did;
-    const localList = (customList && customList?.filter(i => (i as string).trim().length > 1)) || getSettings()?.blacklist || [];
-
+    const localList = (customList && typeof customList == 'object' && customList?.filter(i => (i as string).trim().length > 1)) || getSettings()?.blacklist.filter(i => (i as string).trim().length > 1) || [];
     if (isProfileList) {
         const isBlacked = [...list, ...localList].filter(i => (data.handle as string).includes(i)).length;
         return !isBlacked;

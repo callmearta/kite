@@ -17,6 +17,7 @@
         "@atproto/xrpc": "^0.1.0",
         "atproto": "bluesky-social/atproto#main",
         "jotai": "^2.0.4",
+        "markdown-to-jsx": "^7.2.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-markdown": "^8.0.7",

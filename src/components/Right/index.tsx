@@ -17,37 +17,32 @@ export default function Right(props: {}) {
     const user = useAtomValue(userAtom);
     const settings = useAtomValue(settingsAtom);
     const [suggested, setSuggested] = useAtom(SuggestedAtom);
-    const { data: followingData, isLoading: followingLoading, status } = useQuery(["following", 1], () => agent.getFollows({ actor: user?.did!, limit: 10 }), {
-        // cacheTime: Infinity,
+    const [personalizedDone, setPersonalizedDone] = useState(false);
+    const { data: followingData, isLoading: followingLoading, status } = useQuery(["following", 1], () => agent.getFollows({ actor: user?.did!, limit: 50 }), {
         refetchOnMount: false,
         refetchOnWindowFocus: false,
-        onSuccess: d => {
-            for (let i = 0; i < d.data?.follows?.length; i++) {
-                const user = d.data.follows[i];
-                (async () => {
+        onSuccess: async d => {
+            setPersonalizedDone(false);
+            await Promise.all(
+                d.data.follows.map(async user => {
                     try {
                         const result = await agent.getFollows({ actor: user.did, limit: 10 });
                         if (result.data.follows) {
                             setSuggested((prev): any => {
-                                if (typeof prev.data != 'undefined') {
-                                    return { ...prev, data: [...suggested.data, ...result.data.follows] };
-                                } else {
-                                    return { ...prev, data: [...result.data.follows] };
-                                }
+                                return { ...prev, filteredList: [], loading: true, data: [...prev.data, ...result.data.follows] };
                             });
                         }
                     }
                     catch (error) {
                         console.error(error);
                     }
-
-                })()
-            }
+                })
+            );
+            setPersonalizedDone(true);
         },
         enabled: settings.suggested == 'personalized'
     });
     const { data: followingDataGlobal, isLoading: followingLoadingGlobal } = useQuery(["followingGlobal", 1], () => agent.api.app.bsky.actor.getSuggestions({ limit: 10 }), {
-        // cacheTime: Infinity,
         refetchOnMount: false,
         refetchOnWindowFocus: false,
         onSuccess: d => {
@@ -56,20 +51,30 @@ export default function Right(props: {}) {
         enabled: settings.suggested == 'global'
     });
 
+    const _handleList = async () => {
+        const sort = await Promise.all(
+            suggested.data?.filter((p: any, index) => suggested.data.findIndex((i: any) => i.did == p.did) != index ? null : p)
+                .filter(p => blacklist(p)).filter((p: any) => !p.viewer.following && p.did != user?.did)
+                .map(value => ({ value, sort: Math.random() }))
+                .reverse()
+                .sort((a, b) => a.sort - b.sort)
+                .map(({ value }) => value).splice(0, 6)
+        );
+        
+        setSuggested(prev => ({ ...prev, filteredList: sort, loading: false }));
+    };
+
     useEffect(() => {
-        if (suggested.data.length && status == 'success' && !suggested.filteredList.length && settings.suggested == 'personalized') {
-            setSuggested(prev => ({
-                ...prev,
-                loading: false,
-                filteredList: suggested.data?.filter((p: any, index) => suggested.data.findIndex((i: any) => i.did == p.did) != index ? null : p)
-                    .filter(p => blacklist(p)).filter((p: any) => !p.viewer.following && p.did != user?.did)
-                    .map(value => ({ value, sort: Math.random() }))
-                    .reverse()
-                    .sort((a, b) => a.sort - b.sort)
-                    .map(({ value }) => value).splice(0, 6)
-            }));
+        if (suggested.data.length && status == 'success' && !suggested.filteredList.length && settings.suggested == 'personalized' && personalizedDone) {
+            _handleList();
         }
-    }, [suggested.data]);
+    }, [suggested.data, settings.suggested]);
+
+    // useEffect(() => {
+    //     if(!personalizedDone){
+    //         setSuggested(prev => ({ ...prev, loading: true }));
+    //     }
+    // }, [settings.suggested,personalizedDone]);
 
     return (
         <div className={styles.right}>
@@ -78,7 +83,7 @@ export default function Right(props: {}) {
                 <p>Here you'll see a list of your followings followings :))</p>
                 {suggested.loading || followingLoading || followingLoadingGlobal ?
                     <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div> :
-                    (suggested.filteredList.length ? suggested.filteredList : suggested.data).map(p =>
+                    (settings.suggested == 'personalized' ? suggested.filteredList : suggested.data).map(p =>
                         <User key={(p as any).did} user={p} />
                     )}
             </div>

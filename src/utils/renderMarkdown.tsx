@@ -7,7 +7,7 @@ export default function renderMarkdown(text: string) {
     let markdown = ''
     for (const segment of rt.segments()) {
         if (segment.isLink()) {
-            markdown += `[${segment.text}](${segment.link?.uri})`
+            markdown += `<a href="${segment.link?.uri}" target="_blank">${segment.text}</a>`
         } else if (segment.isMention()) {
             markdown += `[${segment.text}](/kite/#/user/${segment.text.substring(1,segment.text.length)})`
         } else {

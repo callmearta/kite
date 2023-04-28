@@ -26,7 +26,7 @@
         display: flex;
         align-items: center;
     }
-    img {
+    &>div img {
         width: 40px;
         height: auto;
         margin-right: 1rem;

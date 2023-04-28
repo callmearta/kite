@@ -2,8 +2,8 @@ import { AppBskyActorProfile, AppBskyEmbedExternal, AppBskyEmbedImages, AppBskyE
 import { FeedViewPost, PostView, ReasonRepost, isReasonRepost } from "atproto/packages/api/src/client/types/app/bsky/feed/defs";
 import { ReasonType } from "atproto/packages/api/src/client/types/com/atproto/moderation/defs";
 import cn from 'classnames';
+import Markdown from 'markdown-to-jsx';
 import React, { SyntheticEvent, useEffect, useReducer, useRef, useState } from "react";
-import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { Link, useNavigate } from "react-router-dom";
 import AvatarPlaceholder from '../../assets/placeholder.png';
 import RepostIcon from '../../assets/repost-fill.svg';
@@ -97,9 +97,9 @@ export default function Blue(props: {
                         </div>
                         {post.indexedAt ? <span>{fromNow(new Date((post.indexedAt as string)))}</span> : ''}
                     </div>
-                    <div dir="auto">
-                        {markdown ? <ReactMarkdown >{markdown?.replace(/\n/g,' \\\n ') || ''}</ReactMarkdown> : <p>{(post?.record as any)?.text}</p>}
-                    </div>
+                    <p dir="auto">
+                        {markdown ? <Markdown >{markdown?.replace(/\n/g,' <br/> ') || ''}</Markdown> : <p>{(post?.record as any)?.text}</p>}
+                    </p>
                     {embed ? <div>
                         {embed.external ? <External embed={(embed as AppBskyEmbedExternal.View)} /> : ''}
                         {embed.images ? <Image embed={(embed as AppBskyEmbedImages.View)} /> : ''}

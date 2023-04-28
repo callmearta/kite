@@ -21,7 +21,7 @@ body.dark {
     --white-color: #010101;
     --grey-color: #888;
     --light-color: #181818;
-    img[src*=".svg"]:not(img[src*="-fill.svg"]) {
+    img[src*=".svg"]:not(img[src*="-fill"]) {
         filter: brightness(1.5);
     }
     img[src*="placeholder.png"] {

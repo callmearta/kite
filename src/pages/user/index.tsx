@@ -1,8 +1,8 @@
 import { ProfileViewDetailed } from 'atproto/packages/api/src/client/types/app/bsky/actor/defs';
 import cn from 'classnames';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import Markdown from 'markdown-to-jsx';
 import { SyntheticEvent, useEffect, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
 import { Portal } from 'react-portal';
 import { useMutation, useQuery } from "react-query";
 import { useParams } from "react-router-dom";
@@ -101,7 +101,7 @@ export default function User(props: {}) {
                                     {user?.viewer?.followedBy ? <span className="tag">Follows You</span> : ''}
                                 </div>
                                 <span className="text-grey">@{user?.handle}</span>
-                                <p dir="auto"><ReactMarkdown>{renderMarkdown(user?.description?.replace(/\n/g,' \\\n ') || '')}</ReactMarkdown></p>
+                                <p dir="auto"><Markdown>{renderMarkdown(user?.description?.replace(/\n/g,' <br/> ') || '')}</Markdown></p>
                                 <div className={styles.followStats}>
                                     <p>
                                         <strong>{user?.followersCount}</strong>
