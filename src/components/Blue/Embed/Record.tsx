@@ -25,8 +25,6 @@ export default function Record(props: {
         }
     };
 
-    console.log(embed.record.embeds);
-
     return (
         embed && uri ? <div onClick={_handleLink} className={styles.record}>
             <div className={styles.recordHeader}>
