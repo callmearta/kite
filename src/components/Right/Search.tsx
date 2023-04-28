@@ -6,6 +6,7 @@ import { enabled } from 'store';
 import agent from '../../Agent';
 import SearchIcon from '../../assets/search.svg';
 import { searchAtom } from '../../store/search';
+import blacklist from '../../utils/blacklist';
 import Loading from '../Loading';
 import styles from './Search.module.scss';
 import User from './User';
@@ -44,7 +45,7 @@ export default function Search(props: {}) {
                 {search.show && search.text.length ? <div className={styles.resultWrapper}>
                     <div className={styles.result}>
                         {isLoading || !data?.data.actors.length ? <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div> :
-                            data?.data.actors.map(user => <User key={user.did} user={user} />)
+                            data?.data.actors.filter(p => blacklist(p)).map(user => <User key={user.did} user={user} />)
                         }
                     </div>
                 </div> : ''}

@@ -97,9 +97,18 @@ export default function Blue(props: {
                         </div>
                         {post.indexedAt ? <span>{fromNow(new Date((post.indexedAt as string)))}</span> : ''}
                     </div>
-                    <p dir="auto">
-                        {markdown ? <Markdown >{markdown?.replace(/\n/g,' <br/> ') || ''}</Markdown> : <p>{(post?.record as any)?.text}</p>}
-                    </p>
+                    {/* <p dir="auto"> */}
+                        {markdown ? <Markdown options={{
+                            forceBlock: true,
+                            overrides:{
+                                p: {
+                                    props:{
+                                        dir:"auto"
+                                    }
+                                }
+                            }
+                        }}>{markdown?.replace(/\n/g,' <br/> ') || ''}</Markdown> : <p>{(post?.record as any)?.text}</p>}
+                    {/* </p> */}
                     {embed ? <div>
                         {embed.external ? <External embed={(embed as AppBskyEmbedExternal.View)} /> : ''}
                         {embed.images ? <Image embed={(embed as AppBskyEmbedImages.View)} /> : ''}

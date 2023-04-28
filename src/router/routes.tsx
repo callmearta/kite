@@ -21,6 +21,14 @@ const Routes = [
         path: '/user/:did',
         element: <Auth><User /></Auth>
     }, {
+    }, {
+        path: '/user/:did/posts',
+        element: <Auth><User /></Auth>
+    }, {
+    }, {
+        path: '/user/:did/likes',
+        element: <Auth><User /></Auth>
+    }, {
         path: '/notifications',
         element: <Auth><Notifications /></Auth>
     }, {

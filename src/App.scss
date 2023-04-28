@@ -40,6 +40,9 @@ body.dark {
     img[src*="placeholder.png"] {
         filter: invert(1);
     }
+    img[src*="close.svg"] {
+        filter: invert(1) !important;
+    }
 }
 
 a,

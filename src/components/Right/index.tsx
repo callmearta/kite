@@ -20,7 +20,7 @@ export default function Right(props: {}) {
     const settings = useAtomValue(settingsAtom);
     const [suggested, setSuggested] = useAtom(SuggestedAtom);
     const [personalizedDone, setPersonalizedDone] = useState(false);
-    const { data: followingData, isLoading: followingLoading, status } = useQuery(["following", 1], () => agent.getFollows({ actor: user?.did!, limit: 50 }), {
+    const { data: followingData, isLoading: followingLoading, status } = useQuery(["following", 1], () => agent.getFollows({ actor: user?.did!, limit: 20 }), {
         refetchOnMount: false,
         refetchOnWindowFocus: false,
         onSuccess: async d => {

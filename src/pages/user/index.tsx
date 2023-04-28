@@ -5,7 +5,7 @@ import Markdown from 'markdown-to-jsx';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { Portal } from 'react-portal';
 import { useMutation, useQuery } from "react-query";
-import { useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import agent from "../../Agent";
 import AvatarPlaceholder from '../../assets/placeholder.png';
 import BackButton from "../../components/BackButton";
@@ -18,11 +18,16 @@ import PostsRenderer from '../../components/PostsRenderer';
 import { lightboxAtom } from '../../store/lightbox';
 import { userAtom } from '../../store/user';
 import renderMarkdown from "../../utils/renderMarkdown";
+import Likes from './Likes';
+import Posts from './Posts';
 import styles from './User.module.scss';
 
 export default function User(props: {}) {
     const params = useParams();
     const { did } = params;
+    const location = useLocation();
+    const pathname = location.pathname;
+    const tabFromUrl = pathname.split('/')[pathname.split('/').length - 1];
     const me = useAtomValue(userAtom);
     const [lightbox, setLightbox] = useAtom<any>(lightboxAtom);
     const { data, isLoading } = useQuery(["user", did], () => agent.getProfile({
@@ -36,9 +41,8 @@ export default function User(props: {}) {
         }
     });
     const [user, setUser] = useState<ProfileViewDetailed | any>(data?.data! || null);
-    const { data: postsData, isLoading: postsLoading } = useQuery(["userPosts", did], () => agent.getAuthorFeed({
-        actor: did!
-    }));
+    const [tab, setTab] = useState<'posts' | 'likes'>();
+
 
     const { mutate: followMutate, isLoading: followLoading } = useMutation(() => agent.follow(user?.did!), {
         onSuccess: d => {
@@ -69,7 +73,7 @@ export default function User(props: {}) {
         }
     }, []);
 
-    
+
 
     return (
         <>
@@ -101,7 +105,7 @@ export default function User(props: {}) {
                                     {user?.viewer?.followedBy ? <span className="tag">Follows You</span> : ''}
                                 </div>
                                 <span className="text-grey">@{user?.handle}</span>
-                                <p dir="auto"><Markdown>{renderMarkdown(user?.description?.replace(/\n/g,' <br/> ') || '')}</Markdown></p>
+                                <p dir="auto"><Markdown>{renderMarkdown(user?.description?.replace(/\n/g, ' <br/> ') || '')}</Markdown></p>
                                 <div className={styles.followStats}>
                                     <p>
                                         <strong>{user?.followersCount}</strong>
@@ -115,15 +119,11 @@ export default function User(props: {}) {
                             </div>
                         </div>
                         <div className={styles.tabs}>
-                            <a href="#" title="" target="_self" className={cn(styles.tab, { [styles.active]: true })}>Posts</a>
-                            {/* <a href="#" title="" target="_self" className={styles.tab}>Posts & Replies</a> */}
+                            <Link to={`/user/${did}/posts`} title="" target="_self" className={cn(styles.tab, { [styles.active]: tabFromUrl == 'posts' || tabFromUrl == did })}>Posts</Link>
+                            <Link to={`/user/${did}/likes`} title="" target="_self" className={cn(styles.tab, { [styles.active]: tabFromUrl == 'likes' })}>Likes</Link>
                         </div>
                         <div className={styles.posts}>
-                            {postsLoading ? <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div> :
-                                <>
-                                    <PostsRenderer isLoading={isLoading} feed={postsData?.data.feed} />
-                                </>
-                            }
+                            {{ posts: <Posts />, likes: <Likes />, [did as string]: <Posts /> }[tabFromUrl]}
                         </div>
                     </>
                 }

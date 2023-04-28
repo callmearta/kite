@@ -21,6 +21,10 @@ export default function Feed(props: {}) {
         }else if(document.body.classList.contains('hot-col')){
             document.body.classList.remove('hot-col');
         }
+
+        return () => {
+            document.body.classList.remove('hot-col');
+        }
     },[ui.hot]);
 
     return (
