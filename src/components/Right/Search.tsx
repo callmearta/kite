@@ -1,7 +1,8 @@
 import { useAtom } from 'jotai';
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { Portal } from 'react-portal';
 import { useQuery } from 'react-query';
+import { useLocation } from 'react-router-dom';
 import { enabled } from 'store';
 import agent from '../../Agent';
 import SearchIcon from '../../assets/search.svg';
@@ -13,6 +14,7 @@ import User from './User';
 
 export default function Search(props: {}) {
     const [search, setSearch] = useAtom(searchAtom);
+    const location = useLocation();
     const timeoutRef = useRef<any>(null);
     const { data, isLoading, refetch, isFetching } = useQuery(["search", search.text], useCallback(() => agent.searchActors({
         term: search.text,
@@ -32,6 +34,10 @@ export default function Search(props: {}) {
         setSearch(prev => ({ ...prev, text: e.target.value }));
         timeoutRef.current = setTimeout(_fetchData, 500);
     }
+
+    useEffect(() => {
+        setSearch(prev => ({...prev, show:false}));
+    },[location.pathname]);
 
     return (
         <>

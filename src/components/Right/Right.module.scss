@@ -4,6 +4,7 @@
     height: 100vh;
     padding: 1.5rem;
     position: sticky;
+    z-index: 9;
     top: 0;
     @media screen and (max-width: 1440px) {
         margin-right: 0;
