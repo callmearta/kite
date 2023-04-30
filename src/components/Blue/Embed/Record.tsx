@@ -39,9 +39,13 @@ export default function Record(props: {
                 </div>
             </div>
             <div className={styles.recordBody}>
-                <p dir="auto">{(embed.record.value || embed.record as any)?.text}</p>
+                <p dir="auto">{
+                // @ts-ignore
+                (embed.record.value || embed.record as any)?.text}</p>
             </div>
-            {AppBskyEmbedImages.isView((embed.record.embeds as any)[0]) ? <Image embed={(embed.record.embeds as any)[0]} /> : ''}
+            {
+            // @ts-ignore
+            AppBskyEmbedImages.isView((embed.record.embeds as any)[0]) ? <Image embed={(embed.record.embeds as any)[0]} /> : ''}
         </div> : null
     );
 }

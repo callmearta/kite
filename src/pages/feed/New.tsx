@@ -32,23 +32,27 @@ export default function New(props: {}) {
 
     const _handleSubmit = async (e: any) => {
         e.preventDefault();
+        
+        const files = await _handleFilesUpload();
 
-        if (!text.length) return;
+        if (!text.length && !files.length) return;
         const rt = new RichText({ text });
         await rt.detectFacets(agent);
 
-        const files = await _handleFilesUpload();
-
-        mutate({
+        let data = {
             createdAt: new Date().toISOString(),
             text: rt.text,
             facets: rt.facets,
-            embed: {
+            $type: 'app.bsky.feed.post',
+        }
+        if(files.length){
+            data.embed = {
                 $type: "app.bsky.embed.images",
                 images: files.length ? files.map(i => ({ alt: "", image: i.data.blob.original })) : undefined
-            },
-            $type: 'app.bsky.feed.post',
-        })
+            }
+        }
+
+        mutate(data)
     };
 
     const _handleFilesUpload = async () => {
