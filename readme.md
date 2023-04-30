@@ -21,7 +21,7 @@ Kite is an unofficial client for using BlueSky on the web. It is at first steps 
 - ✨Beautiful UI ✨
 
 ## Donations
-Big thanks to [https://github.com/dgellow](DgEllow) for providing the Kite.Black domain name!
+Big thanks to [DgEllow](https://github.com/dgellow) for providing the Kite.Black domain name!
 
 ## Installation
 Simply clone the project and run following commands like any other React project. Assure that you've got ViteJS installed globally.
