@@ -1,18 +1,19 @@
-import { AppBskyEmbedImages } from 'atproto/packages/api';
+import { AppBskyEmbedImages, AppBskyEmbedRecordWithMedia } from 'atproto/packages/api';
 import { useSetAtom } from 'jotai';
 import { lightboxAtom } from '../../../store/lightbox';
 import Lightbox from '../../Lightbox';
 import styles from '../Blue.module.scss';
 
 export default function Image(props: {
-    embed: AppBskyEmbedImages.View
+    embed: AppBskyEmbedImages.View | AppBskyEmbedRecordWithMedia.View
 }) {
     const { embed } = props;
     const setLightbox = useSetAtom(lightboxAtom);
 
     const _showLightbox = () => {
         setLightbox({
-            images: embed.images,
+            // @ts-ignore
+            images: embed.images || embed.media.images,
             show: true
         });
     };
@@ -20,7 +21,9 @@ export default function Image(props: {
     return (
         <>
             <div className={styles.image}>
-                {embed.images.map((img, index) => <img onClick={_showLightbox} key={index} src={img.thumb} alt={img.alt} />)}
+                {
+                // @ts-ignore
+                (embed.images || embed.media.images).map((img, index) => <img onClick={_showLightbox} key={index} src={img.thumb} alt={img.alt} />)}
             </div>
             {/* <Lightbox /> */}
         </>

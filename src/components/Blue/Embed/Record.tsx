@@ -1,4 +1,4 @@
-import { AppBskyActorDefs, AppBskyEmbedImages, AppBskyEmbedRecord } from 'atproto/packages/api';
+import { AppBskyActorDefs, AppBskyEmbedImages, AppBskyEmbedRecord, AppBskyEmbedRecordWithMedia } from 'atproto/packages/api';
 import { Link, useNavigate } from 'react-router-dom';
 import AvatarPlaceholder from '../../../assets/placeholder.png';
 import linkFromPost from '../../../utils/linkFromPost';
@@ -7,10 +7,12 @@ import styles from '../Blue.module.scss';
 import Image from './Image';
 
 export default function Record(props: {
-    embed: AppBskyEmbedRecord.View
+    embed: AppBskyEmbedRecord.View | AppBskyEmbedRecordWithMedia.View
 }) {
-    const { embed } = props;
+    let embed = props.embed.record.author ? props.embed : props.embed.record;
+    // @ts-ignore
     const author = embed.record.author || embed.author as AppBskyActorDefs.ProfileView | any;
+    // @ts-ignore
     const uri = embed?.record?.uri || embed.uri as string;
     const navigate = useNavigate();
 

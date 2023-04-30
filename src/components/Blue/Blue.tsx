@@ -112,6 +112,7 @@ export default function Blue(props: {
                     {embed ? <div>
                         {embed.external ? <External embed={(embed as AppBskyEmbedExternal.View)} /> : ''}
                         {embed.images ? <Image embed={(embed as AppBskyEmbedImages.View)} /> : ''}
+                        {embed.media ? <Image embed={(embed as AppBskyEmbedImages.View)} /> : ''}
                         {embed.record ? <Record embed={(embed as AppBskyEmbedRecord.View)} /> : ''}
                     </div> : ''}
                     <div className={styles.footer}>
