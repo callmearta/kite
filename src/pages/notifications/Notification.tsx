@@ -9,6 +9,7 @@ import AvatarPlaceholder from '../../assets/placeholder.png';
 import UserFillIcon from '../../assets/profile-fill.svg';
 import ReplyFillIcon from '../../assets/reply-fill.svg';
 import RepostFillIcon from '../../assets/repost-fill.svg';
+import RepostIcon from '../../assets/repost.svg';
 import linkFromPost from '../../utils/linkFromPost';
 import styles from './Notification.module.scss';
 
@@ -29,6 +30,9 @@ export default function Notification(props: {
         if(notif.reason == 'follow'){
             navigate(`/user/${notif.author.handle}`);
         }
+        if(notif.reason == 'quote'){
+            navigate(linkFromPost(notif));
+        }
     };
 
     return (
@@ -37,7 +41,7 @@ export default function Notification(props: {
                 <div className={styles.type}>
                     <img src={
                         // @ts-ignore
-                        { like: HeartFillIcon, repost: RepostFillIcon, follow: UserFillIcon, reply: ReplyFillIcon }[notif.reason]} alt="" />
+                        { like: HeartFillIcon, repost: RepostFillIcon, follow: UserFillIcon, reply: ReplyFillIcon, quote: RepostIcon }[notif.reason]} alt="" />
                 </div>
                 <div className={styles.avatar}>
                     <img src={notif.author.avatar || AvatarPlaceholder} alt="" />
@@ -45,6 +49,7 @@ export default function Notification(props: {
             </div>
             <div className={styles.right}>
                 {notif.reason == 'like' ? <p className={styles.headerText}><strong>{notif.author.displayName || notif.author.handle}</strong> liked your post</p> : ''}
+                {notif.reason == 'quote' ? <p className={styles.headerText}><strong>{notif.author.displayName || notif.author.handle}</strong> quoted your post</p> : ''}
                 {notif.reason == 'repost' ? <p className={styles.headerText}><strong>{notif.author.displayName || notif.author.handle}</strong> reposted your post</p> : ''}
                 {notif.reason == 'follow' ? <p className={styles.headerText}><strong>{notif.author.displayName || notif.author.handle}</strong> followed you</p> : ''}
                 {notif.reason == 'mention' ? <p className={styles.headerText}><strong>{notif.author.displayName || notif.author.handle}</strong> mentioned you in their post</p> : ''}
@@ -55,6 +60,7 @@ export default function Notification(props: {
                     </>
                     : ''}
                 {(notif.post as any)?.record?.text ? <p dir="auto" className={styles.text}>{(notif.post as any)?.record?.text}</p> : ''}
+                {notif.reason == 'quote' ? <p dir="auto" className={styles.text}>{(notif as any)?.record?.text}</p> : ''}
             </div>
         </div>
     );
