@@ -28,11 +28,14 @@ export default function Blue(props: {
 }) {
     const { post, isReply, isParent, isSingle, reason, className } = props;
     const elementRef = useRef<any>(null);
-    const navigate = useNavigate();
-    const embed = post.embed as AppBskyEmbedImages.View | AppBskyEmbedExternal.View | AppBskyEmbedRecord.View | AppBskyEmbedRecordWithMedia.View;
-    const author = post.author as AppBskyActorProfile.Record;
+    if (!post) return <div ref={elementRef} className={cn(styles.blue, styles.deleted, className, { [styles.isReply]: isReply, [styles.parent]: isParent, [styles.single]: isSingle })}>
+        <p>This Skeet Is Deleted</p>
+    </div>;
 
-    if (!post || !post.author) return <></>;
+    const navigate = useNavigate();
+    const embed = post?.embed as AppBskyEmbedImages.View | AppBskyEmbedExternal.View | AppBskyEmbedRecord.View | AppBskyEmbedRecordWithMedia.View;
+    const author = post?.author as AppBskyActorProfile.Record;
+
 
     const [markdown, setMarkdown] = useState('');
     const markdownText = () => {
@@ -41,9 +44,9 @@ export default function Blue(props: {
     };
 
     const _handleSingleScroll = () => {
-        if(!isSingle) return;
+        if (!isSingle) return;
         (elementRef.current as HTMLElement).scrollIntoView({
-            behavior:'auto',
+            behavior: 'auto',
             inline: 'start'
         });
     };
@@ -65,7 +68,7 @@ export default function Blue(props: {
     };
 
     return (
-        <>
+        !post ? <p>Not Found</p> : <>
             <div ref={elementRef} className={cn(styles.blue, className, { [styles.isReply]: isReply, [styles.parent]: isParent, [styles.single]: isSingle })} onClick={(e: any) => {
                 if (isSingle) {
                     return e.preventDefault();
@@ -98,16 +101,16 @@ export default function Blue(props: {
                         {post.indexedAt ? <span>{fromNow(new Date((post.indexedAt as string)))}</span> : ''}
                     </div>
                     {/* <p dir="auto"> */}
-                        {markdown ? <Markdown options={{
-                            forceBlock: true,
-                            overrides:{
-                                p: {
-                                    props:{
-                                        dir:"auto"
-                                    }
+                    {markdown ? <Markdown options={{
+                        forceBlock: true,
+                        overrides: {
+                            p: {
+                                props: {
+                                    dir: "auto"
                                 }
                             }
-                        }}>{markdown?.replace(/\n/g,' <br/> ') || ''}</Markdown> : <p>{(post?.record as any)?.text}</p>}
+                        }
+                    }}>{markdown?.replace(/\n/g, ' <br/> ') || ''}</Markdown> : <p>{(post?.record as any)?.text}</p>}
                     {/* </p> */}
                     {embed ? <div>
                         {embed.external ? <External embed={(embed as AppBskyEmbedExternal.View)} /> : ''}
