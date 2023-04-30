@@ -130,7 +130,7 @@ export default function Blue(props: {
                                     <Comments post={post} />
                                     <Repost post={post} />
                                     <Like post={post} />
-                                    {post.author?.did == user?.did ? <More post={post} setDeleted={setDeleted} /> : <div></div>}
+                                    {(post.author as any)?.did == user?.did ? <More post={post} setDeleted={setDeleted} /> : <div></div>}
                                 </div>
                             </>
                         }

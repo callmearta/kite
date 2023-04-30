@@ -24,7 +24,10 @@ export default function Blocks(props: {}) {
         },
         onSuccess: async d => {
             const lastPageRecords = d.pages[d.pages.length - 1].data.records.map(record => (record.value as any).subject);
-            if(!lastPageRecords.length) return;
+            if(!lastPageRecords.length) {
+                setLoading(false);
+                return;
+            };
             
             const result = await agent.api.app.bsky.actor.getProfiles({
                 actors: d.pages[d.pages.length - 1].data.records.map(record => (record.value as any).subject)
