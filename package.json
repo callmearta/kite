@@ -3,7 +3,7 @@
     "private": true,
     "version": "0.0.0",
     "type": "module",
-    "homepage": "https://callmearta.github.io/kite",
+    "homepage": "https://kite.black",
     "scripts": {
         "dev": "vite --host",
         "predeploy": "npm run build",

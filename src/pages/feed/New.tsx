@@ -46,6 +46,7 @@ export default function New(props: {}) {
             $type: 'app.bsky.feed.post',
         }
         if(files.length){
+            // @ts-ignore
             data.embed = {
                 $type: "app.bsky.embed.images",
                 images: files.length ? files.map(i => ({ alt: "", image: i.data.blob.original })) : undefined

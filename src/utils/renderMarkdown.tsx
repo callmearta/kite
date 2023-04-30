@@ -9,7 +9,7 @@ export default function renderMarkdown(text: string) {
         if (segment.isLink()) {
             markdown += `<a href="${segment.link?.uri}" target="_blank">${segment.text}</a>`
         } else if (segment.isMention()) {
-            markdown += `[${segment.text}](/kite/#/user/${segment.text.substring(1, segment.text.length)})`
+            markdown += `[${segment.text}](/#/user/${segment.text.substring(1, segment.text.length)})`
         } else {
             markdown += segment.text
         }
