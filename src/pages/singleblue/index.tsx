@@ -41,8 +41,8 @@ export default function SingleBlue(props: {}) {
                 {post.parent ? (
                     parents.length ? parents.slice(0,parents.length - 1) : <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div>
                     ) : ''}
-                <Blue isSingle={true} post={post?.post} />
-                {post?.replies.filter(blacklist).map((p: any, index: number) => <Blue key={index} post={p.post} />)}
+                <Blue key={post?.post.uri} isSingle={true} post={post?.post} />
+                {post?.replies.filter(blacklist).map((p: any, index: number) => <Blue key={p.post.uri} post={p.post} />)}
             </>
             }
         </Layout>

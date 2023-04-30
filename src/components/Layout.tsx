@@ -51,7 +51,7 @@ export default function Layout(props: {
                 </div>
                 <Right />
             </> : <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div>}
-            {newModal.show && newModal.cid ? <Portal><NewModal /></Portal> : ''}
+            {newModal.show ? <Portal><NewModal /></Portal> : ''}
             <Lightbox />
         </div>
     );

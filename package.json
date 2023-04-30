@@ -15,6 +15,7 @@
         "@atproto/lexicon": "^0.1.0",
         "@atproto/uri": "latest",
         "@atproto/xrpc": "^0.1.0",
+        "@rollup/plugin-replace": "^5.0.2",
         "atproto": "bluesky-social/atproto#main",
         "graphemer": "^1.4.0",
         "jotai": "^2.0.4",
@@ -26,7 +27,8 @@
         "react-query": "^3.39.3",
         "react-router-dom": "^6.9.0",
         "store": "^2.0.12",
-        "tlds": "^1.238.0"
+        "tlds": "^1.238.0",
+        "vite-plugin-pwa": "^0.14.7"
     },
     "devDependencies": {
         "@types/react": "^18.0.27",

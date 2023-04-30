@@ -35,8 +35,10 @@ export default function Likes(props: {}) {
             }
             newPosts = newPosts.filter(p => p.post);
             setPostsData([...postsData, ...newPosts]);
+            setLoading(false);
         }
     });
+    const [loading, setLoading] = useState(true);
     const [postsData, setPostsData] = useState<Record[]>([]);
 
     useEffect(() => {
@@ -56,9 +58,11 @@ export default function Likes(props: {}) {
     }, [fetchNextPage, hasNextPage])
 
     return (
-        postsLoading || !postsData.length ? <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div> :
+        loading ? <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div> :
             <>
-                <PostsRenderer isLoading={postsLoading} feed={postsData} />
+                {postsData.length ? <PostsRenderer isLoading={postsLoading} feed={postsData} /> :
+                    <p className="text-center p-5 text-grey">There are no likes!</p>
+                }
                 {hasNextPage ? <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div> : ''}
             </>
 

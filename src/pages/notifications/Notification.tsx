@@ -35,6 +35,13 @@ export default function Notification(props: {
         }
     };
 
+    const _linkToProfile = (e:SyntheticEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        navigate(`/user/${notif.author.handle}`);
+    }
+
     return (
         <div className={cn(styles.notification, { "pointer": true, [styles.hover]: true, [styles.new]: !notif.isRead })} onClick={_handleClick}>
             <div className={styles.left}>
@@ -43,7 +50,7 @@ export default function Notification(props: {
                         // @ts-ignore
                         { like: HeartFillIcon, repost: RepostFillIcon, follow: UserFillIcon, reply: ReplyFillIcon, quote: RepostIcon }[notif.reason]} alt="" />
                 </div>
-                <div className={styles.avatar}>
+                <div className={styles.avatar} onClick={_linkToProfile}>
                     <img src={notif.author.avatar || AvatarPlaceholder} alt="" />
                 </div>
             </div>

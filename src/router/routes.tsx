@@ -29,6 +29,10 @@ const Routes = [
         path: '/user/:did/likes',
         element: <Auth><User /></Auth>
     }, {
+    }, {
+        path: '/user/:did/blocks',
+        element: <Auth><User /></Auth>
+    }, {
         path: '/notifications',
         element: <Auth><Notifications /></Auth>
     }, {

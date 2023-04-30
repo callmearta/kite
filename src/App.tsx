@@ -7,6 +7,7 @@ import Feed from './pages/feed';
 import Routes from './router/routes';
 
 import Graphemer from 'graphemer';
+import ReloadPrompt from './Prompt';
 const splitter = new Graphemer()
 window.Intl = window.Intl || {}
 // @ts-ignore we're polyfitling —prf
@@ -37,6 +38,7 @@ function App() {
       <div className="App">
         <RouterProvider router={Router} />
       </div>
+      <ReloadPrompt/>
     </QueryClientProvider>
   )
 }

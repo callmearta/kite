@@ -1,3 +1,4 @@
+import cn from 'classnames';
 import { useNavigate } from 'react-router-dom';
 import AvatarPlaceholder from '../../assets/placeholder.png';
 import styles from './Right.module.scss';
@@ -20,7 +21,7 @@ export default function User(props: {
     };
 
     return (
-        <div className={styles.user} onClick={_handleClick}>
+        <div className={cn('user',styles.user)} onClick={_handleClick}>
             <div className={styles.avatar}>
                 <img src={user.avatar || AvatarPlaceholder} alt="" />
             </div>

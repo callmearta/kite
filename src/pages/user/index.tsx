@@ -18,6 +18,7 @@ import PostsRenderer from '../../components/PostsRenderer';
 import { lightboxAtom } from '../../store/lightbox';
 import { userAtom } from '../../store/user';
 import renderMarkdown from "../../utils/renderMarkdown";
+import Blocks from './Blocks';
 import Likes from './Likes';
 import Posts from './Posts';
 import styles from './User.module.scss';
@@ -121,9 +122,10 @@ export default function User(props: {}) {
                         <div className={styles.tabs}>
                             <Link to={`/user/${did}/posts`} title="" target="_self" className={cn(styles.tab, { [styles.active]: tabFromUrl == 'posts' || tabFromUrl == did })}>Posts</Link>
                             <Link to={`/user/${did}/likes`} title="" target="_self" className={cn(styles.tab, { [styles.active]: tabFromUrl == 'likes' })}>Likes</Link>
+                            <Link to={`/user/${did}/blocks`} title="" target="_self" className={cn(styles.tab, { [styles.active]: tabFromUrl == 'blocks' })}>Blocks</Link>
                         </div>
                         <div className={styles.posts}>
-                            {{ posts: <Posts />, likes: <Likes />, [did as string]: <Posts /> }[tabFromUrl]}
+                            {{ posts: <Posts />, likes: <Likes />, blocks: <Blocks />, [did as string]: <Posts /> }[tabFromUrl]}
                         </div>
                     </>
                 }

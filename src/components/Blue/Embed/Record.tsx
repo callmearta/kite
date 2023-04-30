@@ -7,19 +7,23 @@ import styles from '../Blue.module.scss';
 import Image from './Image';
 
 export default function Record(props: {
-    embed: AppBskyEmbedRecord.View | AppBskyEmbedRecordWithMedia.View
+    embed: AppBskyEmbedRecord.View | AppBskyEmbedRecordWithMedia.View,
+    author?: AppBskyActorDefs.ProfileView,
+    uri?: string,
+    isQuote?: boolean
 }) {
-    let embed = props.embed.record.author ? props.embed : props.embed.record;
+    const { author: propsAuthor, uri: propsUri, isQuote } = props;
+    let embed = isQuote ? props.embed : (props.embed.record?.author ? props.embed : props.embed.record);
     // @ts-ignore
-    const author = embed.record.author || embed.author as AppBskyActorDefs.ProfileView | any;
+    const author = propsAuthor || embed.record.author || embed.author as AppBskyActorDefs.ProfileView | any;
     // @ts-ignore
-    const uri = embed?.record?.uri || embed.uri as string;
+    const uri = propsUri || embed?.record?.uri || embed.uri as string;
     const navigate = useNavigate();
 
     const _handleLink = (e: any) => {
         e.preventDefault();
         e.stopPropagation();
-        if(e.target.tagName == 'IMG') return;
+        if (e.target.tagName == 'IMG') return;
         if (e.ctrlKey) {
             window.open(linkFromPost(embed.record), "_blank");
         } else {
@@ -40,12 +44,12 @@ export default function Record(props: {
             </div>
             <div className={styles.recordBody}>
                 <p dir="auto">{
-                // @ts-ignore
-                (embed.record.value || embed.record as any)?.text}</p>
+                    // @ts-ignore
+                    (embed.record.value || embed.record as any)?.text}</p>
             </div>
             {
-            // @ts-ignore
-            AppBskyEmbedImages.isView((embed.record.embeds as any)[0]) ? <Image embed={(embed.record.embeds as any)[0]} /> : ''}
+                // @ts-ignore
+                isQuote ? '' : AppBskyEmbedImages.isView((embed.record.embeds as any)[0]) ? <Image embed={(embed.record.embeds as any)[0]} /> : ''}
         </div> : null
     );
 }

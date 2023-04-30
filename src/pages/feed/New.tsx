@@ -19,10 +19,12 @@ export default function New(props: {}) {
     const [text, setText] = useState('');
     const [lightbox, setLightbox] = useAtom(lightboxAtom);
     const [files, setFiles] = useState<any[]>([]);
+    const [fileUploadLoading,setFileUploadLoading] = useState(false);
     const { mutate, isLoading } = useMutation((d: Record) => agent.api.app.bsky.feed.post.create({ repo: agent.session?.did }, d), {
         onSuccess: d => {
             setText('');
             setFiles([]);
+            setFileUploadLoading(false);
             queryClient.invalidateQueries(["skyline"]);
         },
         onError: error => {
@@ -33,9 +35,9 @@ export default function New(props: {}) {
     const _handleSubmit = async (e: any) => {
         e.preventDefault();
         
-        const files = await _handleFilesUpload();
-
-        if (!text.length && !files.length) return;
+        if ((!text.length && !files.length) || isLoading || fileUploadLoading) return;
+        
+        const filesUpload = await _handleFilesUpload();
         const rt = new RichText({ text });
         await rt.detectFacets(agent);
 
@@ -45,11 +47,11 @@ export default function New(props: {}) {
             facets: rt.facets,
             $type: 'app.bsky.feed.post',
         }
-        if(files.length){
+        if(filesUpload.length){
             // @ts-ignore
             data.embed = {
                 $type: "app.bsky.embed.images",
-                images: files.length ? files.map(i => ({ alt: "", image: i.data.blob.original })) : undefined
+                images: filesUpload.length ? filesUpload.map(i => ({ alt: "", image: i.data.blob.original })) : undefined
             }
         }
 
@@ -57,6 +59,7 @@ export default function New(props: {}) {
     };
 
     const _handleFilesUpload = async () => {
+        setFileUploadLoading(true);
         const results = await Promise.all(
             files.map(_handleFileUpload)
         )
@@ -128,7 +131,7 @@ export default function New(props: {}) {
                                     <img src={ImageIcon} alt="" />
                                 </label>
                             </div>
-                            <Button type="submit" loading={isLoading} className="btn primary" text='Post' />
+                            <Button type="submit" loading={isLoading || fileUploadLoading} className="btn primary" text='Post' />
                         </div>
                     </div>
                 </form>

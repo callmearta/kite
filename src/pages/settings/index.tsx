@@ -48,7 +48,7 @@ export default function Settings(props:{}){
                 <h2>Blacklist:</h2>
                 <p>You won't see these anywhere, whether these keywords are in a post or in someones name. Seperate them using comma (,) .</p>
                 <div className="input-wrapper">
-                    <textarea placeholder="Seperate with , ex: rick, abi, user" value={settings.blacklist.join(',')} onChange={_handleBlacklistChange}></textarea>
+                    <textarea placeholder="Seperate with , ex: abi,user" value={settings.blacklist.join(',')} onChange={_handleBlacklistChange}></textarea>
                 </div>
             </section>
         </Layout>

@@ -2,11 +2,13 @@ import { AppBskyActorProfile, AppBskyEmbedExternal, AppBskyEmbedImages, AppBskyE
 import { FeedViewPost, PostView, ReasonRepost, isReasonRepost } from "atproto/packages/api/src/client/types/app/bsky/feed/defs";
 import { ReasonType } from "atproto/packages/api/src/client/types/com/atproto/moderation/defs";
 import cn from 'classnames';
+import { useAtomValue } from "jotai";
 import Markdown from 'markdown-to-jsx';
 import React, { SyntheticEvent, useEffect, useReducer, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AvatarPlaceholder from '../../assets/placeholder.png';
 import RepostIcon from '../../assets/repost-fill.svg';
+import { userAtom } from "../../store/user";
 import fromNow from '../../utils/fromNow';
 import linkFromPost from "../../utils/linkFromPost";
 import renderMarkdown from "../../utils/renderMarkdown";
@@ -16,6 +18,7 @@ import External from "./Embed/External";
 import Image from "./Embed/Image";
 import Record from "./Embed/Record";
 import Like from "./Like";
+import More from "./More";
 import Repost from "./Repost";
 
 export default function Blue(props: {
@@ -24,10 +27,12 @@ export default function Blue(props: {
     isParent?: boolean,
     isSingle?: boolean,
     reason?: ReasonType | any,
-    className?: string
+    className?: string,
+    isCompose?: boolean
 }) {
-    const { post, isReply, isParent, isSingle, reason, className } = props;
+    const { post, isReply, isParent, isSingle, reason, className, isCompose } = props;
     const elementRef = useRef<any>(null);
+    const [deleted, setDeleted] = useState(false);
     if (!post) return <div ref={elementRef} className={cn(styles.blue, styles.deleted, className, { [styles.isReply]: isReply, [styles.parent]: isParent, [styles.single]: isSingle })}>
         <p>This Skeet Is Deleted</p>
     </div>;
@@ -35,7 +40,7 @@ export default function Blue(props: {
     const navigate = useNavigate();
     const embed = post?.embed as AppBskyEmbedImages.View | AppBskyEmbedExternal.View | AppBskyEmbedRecord.View | AppBskyEmbedRecordWithMedia.View;
     const author = post?.author as AppBskyActorProfile.Record;
-
+    const user = useAtomValue(userAtom);
 
     const [markdown, setMarkdown] = useState('');
     const markdownText = () => {
@@ -68,63 +73,69 @@ export default function Blue(props: {
     };
 
     return (
-        !post ? <p>Not Found</p> : <>
-            <div ref={elementRef} className={cn(styles.blue, className, { [styles.isReply]: isReply, [styles.parent]: isParent, [styles.single]: isSingle })} onClick={(e: any) => {
-                if (isSingle) {
-                    return e.preventDefault();
-                }
-
-                if (e.target.tagName != 'A' && e.target.tagName != 'IMG') {
-                    if (e.ctrlKey) {
-                        window.open(linkFromPost(post), "_blank");
-                    } else {
-                        navigate(linkFromPost(post));
+        deleted ? null :
+            !post ? <p>Not Found</p> : <>
+                <div ref={elementRef} className={cn(styles.blue, className, { [styles.isReply]: isReply, [styles.parent]: isParent, [styles.single]: isSingle })} onClick={(e: any) => {
+                    if (isSingle) {
+                        return e.preventDefault();
                     }
-                }
-            }}>
-                {reason ? <div className={styles.reasonRepost}>
-                    <div>
-                        <img src={RepostIcon} />
-                        Reposted By {(reason as ReasonRepost).by.displayName}
-                    </div>
-                </div>
-                    : ''}
-                <div className={styles.avatar} onClick={_linkToUserProfile}>
-                    <img src={author.avatar || AvatarPlaceholder as any} />
-                </div>
-                <div className={styles.body}>
-                    <div className={styles.header}>
+
+                    if (e.target.tagName != 'A' && e.target.tagName != 'IMG') {
+                        if (e.ctrlKey) {
+                            window.open(linkFromPost(post), "_blank");
+                        } else {
+                            navigate(linkFromPost(post));
+                        }
+                    }
+                }}>
+                    {reason ? <div className={styles.reasonRepost}>
                         <div>
-                            <strong>{author.displayName}</strong>
-                            <span>{(author.handle as string)}</span>
+                            <img src={RepostIcon} />
+                            Reposted By {(reason as ReasonRepost).by.displayName}
                         </div>
-                        {post.indexedAt ? <span>{fromNow(new Date((post.indexedAt as string)))}</span> : ''}
                     </div>
-                    {/* <p dir="auto"> */}
-                    {markdown ? <Markdown options={{
-                        forceBlock: true,
-                        overrides: {
-                            p: {
-                                props: {
-                                    dir: "auto"
+                        : ''}
+                    <div className={styles.avatar} onClick={_linkToUserProfile}>
+                        <img src={author.avatar || AvatarPlaceholder as any} />
+                    </div>
+                    <div className={styles.body}>
+                        <div className={styles.header}>
+                            <div>
+                                <strong>{author.displayName}</strong>
+                                <span>@{(author.handle as string)}</span>
+                            </div>
+                            {post.indexedAt ? <span>{fromNow(new Date((post.indexedAt as string)))}</span> : ''}
+                        </div>
+                        {/* <p dir="auto"> */}
+                        {markdown ? <Markdown options={{
+                            forceBlock: true,
+                            overrides: {
+                                p: {
+                                    props: {
+                                        dir: "auto"
+                                    }
                                 }
                             }
+                        }}>{markdown?.replace(/\n/g, ' <br/> ') || ''}</Markdown> : <p>{(post?.record as any)?.text}</p>}
+                        {/* </p> */}
+                        {isCompose ? '' :
+                            <>
+                                {embed ? <div>
+                                    {embed.external ? <External embed={(embed as AppBskyEmbedExternal.View)} /> : ''}
+                                    {embed.images ? <Image embed={(embed as AppBskyEmbedImages.View)} /> : ''}
+                                    {embed.media ? <Image embed={(embed as AppBskyEmbedImages.View)} /> : ''}
+                                    {embed.record ? <Record embed={(embed as AppBskyEmbedRecord.View)} /> : ''}
+                                </div> : ''}
+                                <div className={styles.footer}>
+                                    <Comments post={post} />
+                                    <Repost post={post} />
+                                    <Like post={post} />
+                                    {post.author?.did == user?.did ? <More post={post} setDeleted={setDeleted} /> : <div></div>}
+                                </div>
+                            </>
                         }
-                    }}>{markdown?.replace(/\n/g, ' <br/> ') || ''}</Markdown> : <p>{(post?.record as any)?.text}</p>}
-                    {/* </p> */}
-                    {embed ? <div>
-                        {embed.external ? <External embed={(embed as AppBskyEmbedExternal.View)} /> : ''}
-                        {embed.images ? <Image embed={(embed as AppBskyEmbedImages.View)} /> : ''}
-                        {embed.media ? <Image embed={(embed as AppBskyEmbedImages.View)} /> : ''}
-                        {embed.record ? <Record embed={(embed as AppBskyEmbedRecord.View)} /> : ''}
-                    </div> : ''}
-                    <div className={styles.footer}>
-                        <Comments post={post} />
-                        <Repost post={post} />
-                        <Like post={post} />
                     </div>
-                </div>
-            </div>
-        </>
+                </div >
+            </>
     );
 }

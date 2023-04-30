@@ -11,7 +11,7 @@ import styles from './Notification.module.scss';
 export default function Notifications(props: {}) {
     
     const queryClient = useQueryClient();
-    const { data,isLoading } = useQuery(["notifications"], () => agent.listNotifications({}), {
+    const { data,isLoading, isFetching } = useQuery(["notifications"], () => agent.listNotifications({}), {
         refetchOnWindowFocus: false,
         refetchInterval: 5000,
         onSuccess: async d => {
@@ -46,7 +46,7 @@ export default function Notifications(props: {}) {
             }
         }
     });
-    const [loading, setLoading] = useState(isLoading);
+    const [loading, setLoading] = useState(isLoading && isFetching);
     const [notifs, setNotifs] = useAtom(notificationsAtom);
 
     const _updateSeen = async () => {
