@@ -71,7 +71,7 @@ export default function Sidebar(props: {
                 </div>
                 <ThemeToggle />
             </div>
-            <div className={styles.header}>
+            <Link to={`/user/${data?.handle}`} className={styles.header}>
                 <div className={styles.avatar}>
                     <img src={data?.avatar || AvatarPlaceholder} alt={data?.displayName} />
                 </div>
@@ -79,7 +79,7 @@ export default function Sidebar(props: {
                     <strong className="d-block">{data?.displayName}</strong>
                     <span className="d-block">{'@' + data?.handle}</span>
                 </div>
-            </div>
+            </Link>
             <div className={styles.menu}>
                 {ITEMS.map((i, index) =>
                     <Link key={index} to={i.path} className={cn(styles.menuItem, { [styles.menuActive]: i.path == location.pathname })}>

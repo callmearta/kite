@@ -60,10 +60,23 @@
 .userRight {
     p {
         margin: 0;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
     }
     span {
         font-size: .9rem;
         color: #888;
+        display: block;
+    }
+    .tag {
+        background: rgba(0, 0, 0, .15);
+        padding: .25rem .5rem;
+        padding-bottom: .15rem;
+        margin-top: .25rem;
+        font-size: .8rem;
+        display: inline-block;
+        border-radius: 4px;
     }
 }
 

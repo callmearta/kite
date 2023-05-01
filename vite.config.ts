@@ -8,7 +8,7 @@ const pwaOptions: Partial<VitePWAOptions> = {
     name: "Kite",
     short_name: "Kite",
     description: "Kite | A Better Bluesky Web Client",
-    theme_color: "#EDA12F",
+    theme_color: "#111",
     icons: [
       {
         src: '192x192.png',

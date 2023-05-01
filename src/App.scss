@@ -138,7 +138,7 @@ body {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    background: #fff;
+    background: var(--white-color);
     h1 {
         font-size: 3rem;
     }
@@ -553,4 +553,8 @@ body.hot-col .sidebar {
         border-bottom: 1px solid var(--stroke-color);
         margin: 0;
     }
+}
+
+button {
+    font-size: 1rem;
 }

@@ -1,5 +1,6 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import store from 'store';
 import agent from "../../Agent";
 import KiteLogo from '../../assets/kite.png';
 import Button from "../../components/Button";
@@ -11,7 +12,14 @@ export default function Login(props: {}) {
         loading: false,
         error: null
     });
+    const theme = store.get("theme");
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if(theme == 'dark'){
+            document.body.classList.add('dark');
+        }
+    },[]);
 
     const _handleSubmit = async (e: FormEvent) => {
         e.preventDefault();

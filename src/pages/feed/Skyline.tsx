@@ -6,6 +6,7 @@ import { useAtom } from 'jotai';
 import React, { SyntheticEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { useInfiniteQuery, useQuery } from 'react-query';
 import agent from '../../Agent';
+import ArrowIcon from '../../assets/back.svg';
 import HotIcon from '../../assets/hot.png';
 import Loading from '../../components/Loading';
 import PostsRenderer from '../../components/PostsRenderer';
@@ -59,7 +60,7 @@ export default function Skyline(props: {}) {
 
     const _handleNewPosts = useCallback((data: FeedViewPost[]) => {
         const samePost = data[0].post.uri == feed[0].post.uri;
-        
+
         if (!samePost) {
             setNewPosts(data);
         }
@@ -72,14 +73,14 @@ export default function Skyline(props: {}) {
             const post = data[i];
             const postInFeedIndex = newFeed.findIndex(p => p.post.uri == post.post.uri);
             if (postInFeedIndex > -1) {
-                if(post.post)
-                newFeed[postInFeedIndex].post = post.post;
+                if (post.post)
+                    newFeed[postInFeedIndex].post = post.post;
 
-                if(post.reply)
-                newFeed[postInFeedIndex].reply = post.reply;
+                if (post.reply)
+                    newFeed[postInFeedIndex].reply = post.reply;
 
-                if(post.reason)
-                newFeed[postInFeedIndex].reason = post.reason;
+                if (post.reason)
+                    newFeed[postInFeedIndex].reason = post.reason;
             }
         }
         setFeed([...newFeed]);
@@ -139,7 +140,19 @@ export default function Skyline(props: {}) {
 
     return (
         <div className="skyline">
-            {newPosts.length ? <button onClick={_handleNewPostsClick} className={cn("btn primary", styles.newPosts)}>New Posts</button> : ''}
+            {newPosts.length ? <button onClick={_handleNewPostsClick} className={cn("btn primary", styles.newPosts)}>
+                <div className={styles.newAvatars}>
+                    {newPosts.filter((i, index) => i.post && i.post.author && newPosts.findIndex(p => p.post?.author.did == i.post?.author.did) == index).slice(0, 3).map(post =>
+                        <div className={styles.newAvatar} key={post?.post?.author.cid}>
+                            <img src={post.post?.author?.avatar} alt="" />
+                        </div>
+                    )}
+                </div>
+                <strong>
+                    New Posts
+                </strong>
+                <img src={ArrowIcon} alt="" />
+            </button> : ''}
             <div className="col-header">
                 <h1>Skyline</h1>
                 {!ui.hot ? <button className="icon-btn" onClick={_handleHot}>

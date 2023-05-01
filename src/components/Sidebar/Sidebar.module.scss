@@ -72,6 +72,7 @@
 .header {
     display: flex;
     align-items: center;
+    border-radius: 14px;
     &>div:last-child {
         margin-left: 1rem;
         span {
