@@ -34,7 +34,7 @@ export default function PostsRenderer(props: {
 
     return (
         isLoading || !feed ? <div className='d-flex align-items-center justify-content-center p-5'><Loading isColored /></div> :
-            feed ? _sortPosts().map((post: FeedViewPost, index: number) => {
+            feed ? _sortPosts().filter((post:any) => !post?.blocked).map((post: FeedViewPost, index: number) => {
                 if (!!post.reply) {
                     return <React.Fragment key={index}>
                         {post.reply.parent.cid != post.reply.root.cid ? <Blue key={post.reply.root.cid} post={post.reply.root} isParent={true} reason={post.reason} /> : ''}

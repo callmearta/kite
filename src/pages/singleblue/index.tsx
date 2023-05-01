@@ -19,7 +19,7 @@ export default function SingleBlue(props: {}) {
     };
     const { data, isLoading } = useQuery(["singlepost", cid, repo], () => _fetch({}), {
         onSuccess: d => {
-            if(!parents.length){
+            if(!parents.length && !data?.data.thread.blocked){
                 _generateParents(d.data.thread);
             }
         }
@@ -37,12 +37,15 @@ export default function SingleBlue(props: {}) {
 
     return (
         <Layout className="single" backButton>
-            {isLoading ? <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div> : <>
+            {isLoading ? <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div> : 
+            post.blocked ?  
+                <p className="p-5 d-flex align-items-center justify-content-center">You've blocked this account</p>
+            : <>
                 {post.parent ? (
                     parents.length ? parents.slice(0,parents.length - 1) : <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div>
                     ) : ''}
                 <Blue key={post?.post.uri} isSingle={true} post={post?.post} />
-                {post?.replies.filter(blacklist).map((p: any, index: number) => <Blue key={p.post.uri} post={p.post} />)}
+                {post?.replies.filter(blacklist).filter(p => !p.blocked).map((p: any, index: number) => <Blue key={p.post.uri} post={p.post} />)}
             </>
             }
         </Layout>

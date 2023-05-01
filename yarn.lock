@@ -1310,7 +1310,7 @@ at-least-node@^1.0.0:
 
 atproto@bluesky-social/atproto#main:
   version "0.0.1"
-  resolved "git+ssh://git@github.com/bluesky-social/atproto.git#ece4b61d50543dc145c52265a77ad47ae36cb09d"
+  resolved "git+ssh://git@github.com/bluesky-social/atproto.git#9366734f6dd4cc6a7e36df65ea662a01963b3f5d"
 
 available-typed-arrays@^1.0.5:
   version "1.0.5"

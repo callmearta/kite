@@ -110,3 +110,62 @@ h1 {
         }
     }
 }
+
+.more {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--stroke-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: .5rem;
+    cursor: pointer;
+    button {
+        cursor: pointer;
+        background: none;
+        border: none;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    position:relative;
+    z-index:10;
+    .moreDropdown {
+        position: absolute;
+        top: calc(100% + .5rem);
+        right: 0;
+        background: var(--white-color);
+        border: 1px solid var(--stroke-color);
+        border-radius: 14px;
+        padding: 0;
+        width: 250px;
+        p {
+            padding: 1rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            img,
+            &>span:first-child {
+                margin-right: .5rem;
+            }
+        }
+    }
+}
+
+.infoRight {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.moreBackdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9;
+}

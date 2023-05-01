@@ -20,6 +20,7 @@ import { userAtom } from '../../store/user';
 import renderMarkdown from "../../utils/renderMarkdown";
 import Blocks from './Blocks';
 import Likes from './Likes';
+import More from './More';
 import Posts from './Posts';
 import styles from './User.module.scss';
 
@@ -31,7 +32,7 @@ export default function User(props: {}) {
     const tabFromUrl = pathname.split('/')[pathname.split('/').length - 1];
     const me = useAtomValue(userAtom);
     const [lightbox, setLightbox] = useAtom<any>(lightboxAtom);
-    const { data, isLoading } = useQuery(["user", did], () => agent.getProfile({
+    const { data, isLoading, refetch } = useQuery(["user", did], () => agent.getProfile({
         actor: did!
     }), {
         onSuccess: d => {
@@ -44,7 +45,6 @@ export default function User(props: {}) {
     const [user, setUser] = useState<ProfileViewDetailed | any>(data?.data! || null);
     const [tab, setTab] = useState<'posts' | 'likes'>();
 
-
     const { mutate: followMutate, isLoading: followLoading } = useMutation(() => agent.follow(user?.did!), {
         onSuccess: d => {
             setUser((prev: any) => ({ ...prev, viewer: { ...prev?.viewer, following: d.uri } }));
@@ -53,6 +53,24 @@ export default function User(props: {}) {
     const { mutate: unfollowMutate, isLoading: unfollowLoading } = useMutation(() => agent.deleteFollow(user?.viewer?.following!), {
         onSuccess: d => {
             setUser((prev: any) => ({ ...prev, viewer: { ...prev?.viewer, following: false } }));
+        }
+    });
+
+    const { mutate: unblockMutate, isLoading: unblockLoading } = useMutation(() => {
+        const myDid = me?.did;
+        const split = user.viewer.blocking.split('/');
+        const rkey = split[split.length - 1];
+
+        return agent.api.com.atproto.repo.deleteRecord(
+            {
+                collection: 'app.bsky.graph.block',
+                repo: myDid!,
+                rkey: rkey
+            }
+        )
+    }, {
+        onSuccess: d => {
+            refetch();
         }
     });
 
@@ -74,7 +92,12 @@ export default function User(props: {}) {
         }
     }, []);
 
-
+    const _handleUnblock = (e: SyntheticEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        unblockMutate();
+    }
 
     return (
         <>
@@ -97,7 +120,15 @@ export default function User(props: {}) {
                                     <img src={user?.avatar || AvatarPlaceholder} alt={user?.displayName} />
                                 </div>
                                 {user.did == me?.did ? '' : <div className={styles.infoRight}>
-                                    {user?.viewer?.following ? <Button className="btn" text="Unfollow" loading={unfollowLoading} loadingColored onClick={_handleUnfollow} /> : <Button className="btn primary" text="Follow" loading={followLoading} onClick={_handleFollow} />}
+                                    {
+                                        user.viewer.blocking ?
+                                            <Button className="btn" text="Unblock" loading={unblockLoading} loadingColored onClick={_handleUnblock} />
+                                            :
+                                            user?.viewer?.following ?
+                                                <Button className="btn" text="Unfollow" loading={unfollowLoading} loadingColored onClick={_handleUnfollow} />
+                                                : <Button className="btn primary" text="Follow" loading={followLoading} onClick={_handleFollow} />
+                                    }
+                                    {user.viewer.blocking ? '' : <More refetch={refetch} user={user} me={me} />}
                                 </div>}
                             </div>
                             <div>
@@ -116,17 +147,25 @@ export default function User(props: {}) {
                                         <strong>{user?.followsCount}</strong>
                                         <span>Followings</span>
                                     </p>
+                                    <p>
+                                        <strong>{user?.postsCount}</strong>
+                                        <span>Posts</span>
+                                    </p>
                                 </div>
                             </div>
                         </div>
-                        <div className={styles.tabs}>
-                            <Link to={`/user/${did}/posts`} title="" target="_self" className={cn(styles.tab, { [styles.active]: tabFromUrl == 'posts' || tabFromUrl == did })}>Posts</Link>
-                            <Link to={`/user/${did}/likes`} title="" target="_self" className={cn(styles.tab, { [styles.active]: tabFromUrl == 'likes' })}>Likes</Link>
-                            <Link to={`/user/${did}/blocks`} title="" target="_self" className={cn(styles.tab, { [styles.active]: tabFromUrl == 'blocks' })}>Blocks</Link>
-                        </div>
-                        <div className={styles.posts}>
-                            {{ posts: <Posts />, likes: <Likes />, blocks: <Blocks />, [did as string]: <Posts /> }[tabFromUrl]}
-                        </div>
+                        {user.viewer.blocking ?
+                            <p className="d-flex align-items-center justify-content-center p-5">You've blocked this account</p>
+                            : <>
+                                <div className={styles.tabs}>
+                                    <Link to={`/user/${did}/posts`} title="" target="_self" className={cn(styles.tab, { [styles.active]: tabFromUrl == 'posts' || tabFromUrl == did })}>Posts</Link>
+                                    <Link to={`/user/${did}/likes`} title="" target="_self" className={cn(styles.tab, { [styles.active]: tabFromUrl == 'likes' })}>Likes</Link>
+                                    <Link to={`/user/${did}/blocks`} title="" target="_self" className={cn(styles.tab, { [styles.active]: tabFromUrl == 'blocks' })}>Blocks</Link>
+                                </div>
+                                <div className={styles.posts}>
+                                    {{ posts: <Posts />, likes: <Likes />, blocks: <Blocks />, [did as string]: <Posts /> }[tabFromUrl]}
+                                </div>
+                            </>}
                     </>
                 }
             </Layout>

@@ -9,15 +9,21 @@ export default function Posts(props: {}) {
     const params = useParams();
     const { did } = params;
     const [posts, setPosts] = useState<any[]>([]);
+    const [blocked,setBlocked] = useState(false);
     const { data: postsData, isLoading: postsLoading, hasNextPage, fetchNextPage } = useInfiniteQuery(["userPosts", did], ({ pageParam }) => {
         return agent.getAuthorFeed({
             actor: did!,
             cursor: pageParam || undefined
+        }).catch(err => {
+            if(err.error == 'BlockedActor'){
+                setBlocked(true);
+            }
         })
     }, {
         retryOnMount: true,
         onSuccess: d => {
-            setPosts(d.pages.map(p => p.data.feed).flat());
+            if(d.pages && d.pages.length && d.pages[0])
+            setPosts(d.pages.map(p => p?.data.feed).flat());
         },
         getNextPageParam: (lastPage, allPages) => {
             return lastPage?.data?.cursor ? lastPage.data.cursor : undefined;
@@ -43,7 +49,9 @@ export default function Posts(props: {}) {
     return (
         postsLoading ? <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div> :
             <>
-                <PostsRenderer isLoading={postsLoading} feed={posts} />
+                {blocked ? 
+                <p className="p-5 d-flex align-items-center justify-content-center">You've blocked this account</p>
+                :<PostsRenderer isLoading={postsLoading} feed={posts} />}
                 {hasNextPage ? <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div> : ''}
             </>
 
