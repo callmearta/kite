@@ -32,6 +32,7 @@ export default function Repost(props: {
         if (loading) return;
         const currentReposted = hasReposted;
         const currentRepostCount = repostCount as number;
+        setDropdownOpen(false);
         setLoading(true);
         setHasReposted(prev => !prev);
         if (!currentReposted) {

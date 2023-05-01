@@ -14,22 +14,30 @@ export default function SingleBlue(props: {}) {
     const parentsInitRef = useRef<any>(false);
 
     const _fetch = async ({ uri }: { uri?: any }) => {
-        const data = await agent.getPostThread({ uri: uri || `at://${repo}/app.bsky.feed.post/${cid}` });
-        return data;
+        if(repo?.startsWith('did')){
+            const data = await agent.getPostThread({ uri: uri || `at://${repo}/app.bsky.feed.post/${cid}` });
+            return data;
+        }else{
+            const did = await agent.resolveHandle({
+                handle: repo
+            });
+            const data = await agent.getPostThread({ uri: uri || `at://${did.data.did}/app.bsky.feed.post/${cid}` });
+            return data;
+        }
     };
     const { data, isLoading } = useQuery(["singlepost", cid, repo], () => _fetch({}), {
         onSuccess: d => {
-            if(!parents.length && !data?.data.thread.blocked){
+            if (!parents.length && !data?.data.thread.blocked) {
                 _generateParents(d.data.thread);
             }
         }
     });
     const post: ThreadViewPost | any = data?.data?.thread;
 
-    const [parents,setParents] = useState<React.ReactNode[]>([]);
+    const [parents, setParents] = useState<React.ReactNode[]>([]);
     const _generateParents = (p: any) => {
         parentsInitRef.current = true;
-        if(p.parent){
+        if (p.parent) {
             _generateParents(p.parent);
         }
         setParents(prev => ([...prev, <Blue isParent={true} key={prev.length + 1} post={p.post} />]));
@@ -37,16 +45,16 @@ export default function SingleBlue(props: {}) {
 
     return (
         <Layout className="single" backButton>
-            {isLoading ? <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div> : 
-            post.blocked ?  
-                <p className="p-5 d-flex align-items-center justify-content-center">You've blocked this account</p>
-            : <>
-                {post.parent ? (
-                    parents.length ? parents.slice(0,parents.length - 1) : <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div>
-                    ) : ''}
-                <Blue key={post?.post.uri} isSingle={true} post={post?.post} />
-                {post?.replies.filter(blacklist).filter(p => !p.blocked).map((p: any, index: number) => <Blue key={p.post.uri} post={p.post} />)}
-            </>
+            {isLoading ? <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div> :
+                post.blocked ?
+                    <p className="p-5 d-flex align-items-center justify-content-center">You've blocked this account</p>
+                    : <>
+                        {post.parent ? (
+                            parents.length ? parents.slice(0, parents.length - 1) : <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div>
+                        ) : ''}
+                        <Blue key={post?.post.uri} isSingle={true} post={post?.post} />
+                        {post?.replies.filter(blacklist).filter((p: any) => !p.blocked).map((p: any, index: number) => <Blue key={p.post.uri} post={p.post} />)}
+                    </>
             }
         </Layout>
     );
