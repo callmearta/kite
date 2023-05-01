@@ -76,11 +76,11 @@ export default function Blue(props: {
         deleted ? null :
             !post ? <p>Not Found</p> : <>
                 <div ref={elementRef} className={cn(styles.blue, className, { [styles.isReply]: isReply, [styles.parent]: isParent, [styles.single]: isSingle })} onClick={(e: any) => {
-                    if (isSingle) {
-                        return e.preventDefault();
-                    }
-
+                    
                     if (e.target.tagName != 'A' && e.target.tagName != 'IMG') {
+                        if (isSingle) {
+                            return e.preventDefault();
+                        }
                         if (e.ctrlKey) {
                             window.open(linkFromPost(post), "_blank");
                         } else {
