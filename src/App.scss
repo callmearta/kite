@@ -181,6 +181,18 @@ body {
     }
 }
 
+.skyline:not(.skycol) {
+    @media screen and (max-width: 800px) {
+        width: 100%;
+    }
+}
+
+body.hot-col .skyline:not(.skycol) {
+    @media screen and (max-width: 800px) {
+        width: calc(100vw - 70px);
+    }
+}
+
 .col-header {
     display: flex;
     align-items: center;

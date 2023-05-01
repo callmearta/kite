@@ -15,6 +15,12 @@
     @media screen and (max-width: 1440px) {
         margin-left: 0 !important;
     }
+    @media screen and (max-width:800px) {
+        padding: 40px 10px;
+        min-width: 60px;
+        width: 60px;
+        overflow: hidden;
+    }
 }
 
 .logo {
