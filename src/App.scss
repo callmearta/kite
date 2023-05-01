@@ -182,13 +182,13 @@ body {
 }
 
 .skyline:not(.skycol) {
-    @media screen and (max-width: 800px) {
+    @media screen and (max-width: 1040px) {
         width: 100%;
     }
 }
 
 body.hot-col .skyline:not(.skycol) {
-    @media screen and (max-width: 800px) {
+    @media screen and (max-width: 1040px) {
         width: calc(100vw - 70px);
     }
 }
