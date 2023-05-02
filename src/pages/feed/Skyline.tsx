@@ -1,8 +1,8 @@
-import { AppBskyFeedGetTimeline } from 'atproto/packages/api';
+import { AppBskyFeedGetTimeline } from '@atproto/api';
 // @ts-ignore
-import { FeedViewPost } from 'atproto/packages/api/src/client/types/app/bsky/feed/defs';
+import { FeedViewPost } from '@atproto/api/src/client/types/app/bsky/feed/defs';
 import cn from 'classnames';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import React, { SyntheticEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { useInfiniteQuery, useQuery } from 'react-query';
 import agent from '../../Agent';
@@ -11,11 +11,14 @@ import HotIcon from '../../assets/hot.png';
 import KiteIcon from '../../assets/kite.png';
 import Loading from '../../components/Loading';
 import PostsRenderer from '../../components/PostsRenderer';
+import Right from '../../components/Right';
 import { UI_STORAGE_KEY, uiAtom } from '../../store/ui';
+import { userAtom } from '../../store/user';
 import styles from './Feed.module.scss';
 import New from './New';
 
 export default function Skyline(props: {}) {
+    const user = useAtomValue(userAtom);
     const page = useRef<any>(null);
     const refetchRef = useRef<any>(null);
     const [newPosts, setNewPosts] = useState<Array<any>>([]);
@@ -152,23 +155,23 @@ export default function Skyline(props: {}) {
     }
 
     const _handleSticky = (e: any) => {
-        if(lastScrollPost.current && document.documentElement.scrollTop > headerRef.current.nextSibling.clientHeight){
+        if (lastScrollPost.current && document.documentElement.scrollTop > headerRef.current.nextSibling.clientHeight) {
             const diff = lastScrollPost.current - document.documentElement.scrollTop;
-            if(diff >= 0){
+            if (diff >= 0) {
                 headerRef.current.animate({
                     transform: "translateY(0)"
-                },{
+                }, {
                     duration: 750,
                     ease: "easeOut",
-                    fill:"forwards"
+                    fill: "forwards"
                 });
-            }else{
+            } else {
                 headerRef.current.animate({
                     transform: `translateY(-${headerRef.current.clientHeight}px)`
-                },{
+                }, {
                     duration: 750,
                     ease: "easeOut",
-                    fill:"forwards"
+                    fill: "forwards"
                 });
             }
         }
@@ -176,14 +179,14 @@ export default function Skyline(props: {}) {
     }
 
     useEffect(() => {
-        if(window.innerWidth < 1024){
-            document.addEventListener("scroll",_handleSticky);
+        if (window.innerWidth < 1024) {
+            document.addEventListener("scroll", _handleSticky);
         }
 
         return () => {
-            document.removeEventListener("scroll",_handleSticky);
+            document.removeEventListener("scroll", _handleSticky);
         };
-    },[window.innerWidth]);
+    }, [window.innerWidth]);
 
     return (
         <div className="skyline">
@@ -211,7 +214,15 @@ export default function Skyline(props: {}) {
                 </button> : ''}
             </div>
             <New />
-            <PostsRenderer isLoading={isLoading} feed={feed} />
+            {isLoading || feed.length ? <PostsRenderer isLoading={isLoading} feed={feed} /> :
+                <div>
+                    {/* <img src={} alt="" /> */}
+                    <p className="d-flex align-items-center justify-content-center p-5 text-grey text-center">Nothing to see here!<br/>Get in there and follow some people!</p>
+                    {!user?.followsCount ? <div>
+                            <Right isInSkyline />
+                        </div> : ''}
+                </div>
+            }
             {hasNextPage ? <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div> : ''}
         </div>
     );

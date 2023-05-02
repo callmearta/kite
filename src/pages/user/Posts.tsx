@@ -9,6 +9,7 @@ export default function Posts(props: {}) {
     const params = useParams();
     const { did } = params;
     const [blocked, setBlocked] = useState(false);
+    const [reachedEnd,setReachedEnd] = useState(false);
     const { data: postsData, isLoading: postsLoading, hasNextPage, fetchNextPage } = useInfiniteQuery(["userPosts", did], ({ pageParam }) => agent.getAuthorFeed({
         actor: did!,
         cursor: pageParam || undefined
@@ -25,6 +26,10 @@ export default function Posts(props: {}) {
 
     const [posts, setPosts] = useState<any[]>(postsData?.pages.map(p => p?.data.feed).flat() || []);
     useEffect(() => {
+        if(document.documentElement.scrollHeight <= window.innerHeight){
+            setReachedEnd(true);
+            return;
+        }
         let fetching = false;
         const handleScroll = async (e: any) => {
             const { scrollHeight, scrollTop, clientHeight } = e.target.scrollingElement;
@@ -46,7 +51,7 @@ export default function Posts(props: {}) {
                 {blocked ?
                     <p className="p-5 d-flex align-items-center justify-content-center">You've blocked this account</p>
                     : <PostsRenderer isLoading={false} feed={posts} />}
-                {hasNextPage ? <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div> : ''}
+                {hasNextPage && !reachedEnd ? <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div> : ''}
             </>
 
     );

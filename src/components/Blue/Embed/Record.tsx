@@ -1,4 +1,4 @@
-import { AppBskyActorDefs, AppBskyEmbedImages, AppBskyEmbedRecord, AppBskyEmbedRecordWithMedia } from 'atproto/packages/api';
+import { AppBskyActorDefs, AppBskyEmbedImages, AppBskyEmbedRecord, AppBskyEmbedRecordWithMedia } from '@atproto/api';
 import { Link, useNavigate } from 'react-router-dom';
 import AvatarPlaceholder from '../../../assets/placeholder.png';
 import linkFromPost from '../../../utils/linkFromPost';

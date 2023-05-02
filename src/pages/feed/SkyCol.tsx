@@ -1,6 +1,6 @@
-import { AppBskyFeedGetTimeline } from 'atproto/packages/api';
+import { AppBskyFeedGetTimeline } from '@atproto/api';
 // @ts-ignore
-import { FeedViewPost } from 'atproto/packages/api/src/client/types/app/bsky/feed/defs';
+import { FeedViewPost } from '@atproto/api/src/client/types/app/bsky/feed/defs';
 import cn from 'classnames';
 import { useAtom } from 'jotai';
 import React, { SyntheticEvent, useCallback, useEffect, useRef, useState } from 'react';

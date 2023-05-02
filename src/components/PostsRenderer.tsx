@@ -1,4 +1,4 @@
-import { FeedViewPost } from "atproto/packages/api/src/client/types/app/bsky/feed/defs";
+import { FeedViewPost } from "@atproto/api/src/client/types/app/bsky/feed/defs";
 import { useAtomValue } from "jotai";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -34,7 +34,7 @@ export default function PostsRenderer(props: {
 
     return (
         isLoading || !feed ? <div className='d-flex align-items-center justify-content-center p-5'><Loading isColored /></div> :
-            feed ? _sortPosts().filter((post:any) => !post?.blocked).map((post: FeedViewPost, index: number) => {
+            feed && feed.length ? _sortPosts().filter((post:any) => !post?.blocked).map((post: FeedViewPost, index: number) => {
                 if (!!post.reply) {
                     return <React.Fragment key={index}>
                         {post.reply.parent.cid != post.reply.root.cid ? <Blue key={post.reply.root.cid} post={post.reply.root} isParent={true} reason={post.reason} /> : ''}
@@ -45,6 +45,6 @@ export default function PostsRenderer(props: {
                 }
                 return <Blue key={post?.post?.cid} post={post?.post} isReply={!!post.reply} reason={post.reason} />
             }
-            ) : ''
+            ) : <p className="d-flex align-items-center justify-content-center p-5 text-grey">There are no posts here!</p>
     );
 }

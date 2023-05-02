@@ -1,4 +1,4 @@
-import { Record } from "atproto/packages/api/src/client/types/com/atproto/repo/listRecords";
+import { Record } from "@atproto/api/src/client/types/com/atproto/repo/listRecords";
 import { useEffect, useRef, useState } from "react";
 import { useInfiniteQuery, useQuery } from "react-query";
 import { useParams } from "react-router-dom";
@@ -15,7 +15,6 @@ export default function Likes(props: {}) {
             return lastPage?.data?.cursor ? lastPage.data.cursor : undefined;
         },
         onSuccess: async d => {
-            console.log(d.pages[d.pages.length - 1].data.cursor, data);
             // const result = await agent.api.app.bsky.feed.getPosts({
             //     uris: d.pages[d.pages.length - 1].data.records.map(record => (record.value as any).subject.uri)
             // });

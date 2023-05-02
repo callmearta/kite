@@ -1,5 +1,5 @@
-import { AppBskyEmbedRecord, RichText } from "atproto/packages/api";
-import { Record as RecordType } from "atproto/packages/api/src/client/types/app/bsky/feed/post";
+import { AppBskyEmbedRecord, RichText } from "@atproto/api";
+import { Record as RecordType } from "@atproto/api/src/client/types/app/bsky/feed/post";
 import cn from 'classnames';
 import { useAtom, useAtomValue } from "jotai";
 import { useState } from "react";

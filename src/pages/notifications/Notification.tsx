@@ -1,6 +1,6 @@
 // @ts-ignore
-import { PostView } from 'atproto/packages/api/src/client/types/app/bsky/feed/defs';
-import { Notification as NotificationType } from 'atproto/packages/api/src/client/types/app/bsky/notification/listNotifications';
+import { PostView } from '@atproto/api/src/client/types/app/bsky/feed/defs';
+import { Notification as NotificationType } from '@atproto/api/src/client/types/app/bsky/notification/listNotifications';
 import cn from 'classnames';
 import { SyntheticEvent } from 'react';
 import { useNavigate } from 'react-router-dom';

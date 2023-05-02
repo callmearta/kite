@@ -1,4 +1,4 @@
-import { Record } from "atproto/packages/api/src/client/types/com/atproto/repo/listRecords";
+import { Record } from "@atproto/api/src/client/types/com/atproto/repo/listRecords";
 import { useEffect, useRef, useState } from "react";
 import { useInfiniteQuery, useQuery } from "react-query";
 import { useParams } from "react-router-dom";

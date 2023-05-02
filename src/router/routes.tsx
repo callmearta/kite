@@ -2,6 +2,7 @@ import Feed from "../pages/feed";
 import Login from "../pages/login";
 import Logout from "../pages/logout";
 import Notifications from "../pages/notifications";
+import Register from "../pages/register";
 import Settings from "../pages/settings";
 import SingleBlue from "../pages/singleblue";
 import User from "../pages/user";
@@ -11,6 +12,10 @@ const Routes = [
     {
         path: '/login',
         element: <Login />
+    }, {
+        path: '/register',
+        element: <Register />
+    }, {
     }, {
         path: '/',
         element: <Auth><Feed /></Auth>

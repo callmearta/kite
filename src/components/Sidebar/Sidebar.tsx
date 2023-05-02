@@ -1,7 +1,7 @@
-import { ProfileRecord } from 'atproto/packages/api';
-import { ProfileView } from 'atproto/packages/api/src/client/types/app/bsky/actor/defs';
+import { ProfileRecord } from '@atproto/api';
+import { ProfileView } from '@atproto/api/src/client/types/app/bsky/actor/defs';
 import cn from 'classnames';
-import { useEffect } from 'react';
+import { SyntheticEvent, useEffect } from 'react';
 import { useQuery } from 'react-query';
 import { Link, useLocation } from 'react-router-dom';
 import agent, { SESSION_LOCAL_STORAGE_KEY } from '../../Agent';
@@ -23,10 +23,10 @@ export default function Sidebar(props: {
     data: ProfileView | any
 }) {
     const { data } = props;
-    const { data: notificationData } = useQuery(["notifications"], () => agent.listNotifications({}), {
+    const { data: notificationData } = useQuery(["unreadNotif"], () => agent.countUnreadNotifications({}), {
         refetchInterval: 5000
     });
-    const unreadCount = notificationData?.data.notifications.filter(i => !i.isRead).length || 0;
+    const unreadCount = notificationData?.data.count || 0;
     const location = useLocation();
 
     const ITEMS = [
@@ -62,6 +62,17 @@ export default function Sidebar(props: {
         }
     ];
 
+    const _handleHomeClick = (e:SyntheticEvent,index:number) => {
+        if(index === 0 && location.pathname === '/'){
+            e.preventDefault();
+            window.scrollTo({
+                top:0,
+                left:0,
+                behavior:'smooth'
+            });
+        }
+    };
+
     return (
         <div className={cn(styles.sidebar,"sidebar")}>
             <div className={styles.logo}>
@@ -82,7 +93,7 @@ export default function Sidebar(props: {
             </Link>
             <div className={styles.menu}>
                 {ITEMS.map((i, index) =>
-                    <Link key={index} to={i.path} className={cn(styles.menuItem, { [styles.menuActive]: i.path == location.pathname })}>
+                    <Link key={index} to={i.path} className={cn(styles.menuItem, { [styles.menuActive]: i.path == location.pathname })} onClick={e => _handleHomeClick(e,index)}>
                         <img alt="" src={i.path == location.pathname ? i.fillIcon : i.icon} />
                         <strong>
                             {i.text}

@@ -1,6 +1,6 @@
-import { AppBskyActorProfile, AppBskyEmbedExternal, AppBskyEmbedImages, AppBskyEmbedRecord, AppBskyEmbedRecordWithMedia, ProfileRecord } from "atproto/packages/api";
-import { FeedViewPost, PostView, ReasonRepost, isReasonRepost } from "atproto/packages/api/src/client/types/app/bsky/feed/defs";
-import { ReasonType } from "atproto/packages/api/src/client/types/com/atproto/moderation/defs";
+import { AppBskyActorProfile, AppBskyEmbedExternal, AppBskyEmbedImages, AppBskyEmbedRecord, AppBskyEmbedRecordWithMedia, ProfileRecord } from "@atproto/api";
+import { FeedViewPost, PostView, ReasonRepost, isReasonRepost } from "@atproto/api/src/client/types/app/bsky/feed/defs";
+import { ReasonType } from "@atproto/api/src/client/types/com/atproto/moderation/defs";
 import cn from 'classnames';
 import { useAtomValue } from "jotai";
 import Markdown from 'markdown-to-jsx';

@@ -1,4 +1,4 @@
-import { FeedViewPost, NotFoundPost, ReplyRef, ThreadViewPost } from "atproto/packages/api/src/client/types/app/bsky/feed/defs";
+import { FeedViewPost, NotFoundPost, ReplyRef, ThreadViewPost } from "@atproto/api/src/client/types/app/bsky/feed/defs";
 import React, { useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";

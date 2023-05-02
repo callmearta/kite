@@ -1,5 +1,5 @@
-import { AppBskyFeedGetTimeline } from 'atproto/packages/api';
-import { FeedViewPost } from 'atproto/packages/api/src/client/types/app/bsky/feed/defs';
+import { AppBskyFeedGetTimeline } from '@atproto/api';
+import { FeedViewPost } from '@atproto/api/src/client/types/app/bsky/feed/defs';
 import { useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';

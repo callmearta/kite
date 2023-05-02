@@ -1,4 +1,4 @@
-import { AppBskyEmbedImages, AppBskyEmbedRecordWithMedia } from 'atproto/packages/api';
+import { AppBskyEmbedImages, AppBskyEmbedRecordWithMedia } from '@atproto/api';
 import { useSetAtom } from 'jotai';
 import { lightboxAtom } from '../../../store/lightbox';
 import Lightbox from '../../Lightbox';

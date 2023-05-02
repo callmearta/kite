@@ -1,4 +1,4 @@
-import { ProfileViewDetailed } from 'atproto/packages/api/src/client/types/app/bsky/actor/defs';
+import { ProfileViewDetailed } from '@atproto/api/src/client/types/app/bsky/actor/defs';
 import cn from 'classnames';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import Markdown from 'markdown-to-jsx';
@@ -19,6 +19,7 @@ import { lightboxAtom } from '../../store/lightbox';
 import { userAtom } from '../../store/user';
 import renderMarkdown from "../../utils/renderMarkdown";
 import Blocks from './Blocks';
+import EditProfile from './EditProfile';
 import Likes from './Likes';
 import More from './More';
 import Posts from './Posts';
@@ -28,15 +29,19 @@ export default function User(props: {}) {
     const params = useParams();
     const { did } = params;
     const location = useLocation();
+    const [editProfileOpen,setEditProfileOpen] = useState(false);
     const pathname = location.pathname;
     const tabFromUrl = pathname.split('/')[pathname.split('/').length - 1];
-    const me = useAtomValue(userAtom);
+    const [me,setMe] = useAtom(userAtom);
     const [lightbox, setLightbox] = useAtom<any>(lightboxAtom);
     const { data, isLoading, refetch } = useQuery(["user", did], () => agent.getProfile({
         actor: did!
     }), {
         onSuccess: d => {
             setUser(d.data);
+            if(did == me?.did){
+                setMe(d.data);
+            }
         },
         onError: error => {
             console.error(error);
@@ -95,7 +100,7 @@ export default function User(props: {}) {
     const _handleUnblock = (e: SyntheticEvent) => {
         e.preventDefault();
         e.stopPropagation();
-        
+
         unblockMutate();
     }
 
@@ -119,17 +124,21 @@ export default function User(props: {}) {
                                     setLightbox(() => ({ show: true, images: [user?.avatar] }))}>
                                     <img src={user?.avatar || AvatarPlaceholder} alt={user?.displayName} />
                                 </div>
-                                {user.did == me?.did ? '' : <div className={styles.infoRight}>
-                                    {
-                                        user.viewer.blocking ?
-                                            <Button className="btn" text="Unblock" loading={unblockLoading} loadingColored onClick={_handleUnblock} />
-                                            :
-                                            user?.viewer?.following ?
-                                                <Button className="btn" text="Unfollow" loading={unfollowLoading} loadingColored onClick={_handleUnfollow} />
-                                                : <Button className="btn primary" text="Follow" loading={followLoading} onClick={_handleFollow} />
-                                    }
-                                    {user.viewer.blocking ? '' : <More refetch={refetch} user={user} me={me} />}
-                                </div>}
+                                {user.did == me?.did ?
+                                    <div className={styles.infoRight}>
+                                        <Button className="btn" text="Edit Profile" onClick={() => setEditProfileOpen(true)} />
+                                    </div>
+                                    : <div className={styles.infoRight}>
+                                        {
+                                            user.viewer.blocking ?
+                                                <Button className="btn" text="Unblock" loading={unblockLoading} loadingColored onClick={_handleUnblock} />
+                                                :
+                                                user?.viewer?.following ?
+                                                    <Button className="btn" text="Unfollow" loading={unfollowLoading} loadingColored onClick={_handleUnfollow} />
+                                                    : <Button className="btn primary" text="Follow" loading={followLoading} onClick={_handleFollow} />
+                                        }
+                                        {user.viewer.blocking ? '' : <More refetch={refetch} user={user} me={me} />}
+                                    </div>}
                             </div>
                             <div>
                                 <div className={cn("d-flex align-items-center", styles.nameWrapper)}>
@@ -172,6 +181,7 @@ export default function User(props: {}) {
             {lightbox.show ? <Portal>
                 <Lightbox />
             </Portal> : ''}
+            {editProfileOpen ? <EditProfile refetch={refetch} user={user} isOpen={editProfileOpen} setIsOpen={setEditProfileOpen} /> : ''}
         </>
     );
 }

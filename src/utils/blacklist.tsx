@@ -1,5 +1,5 @@
-import { ProfileViewDetailed } from "atproto/packages/api/src/client/types/app/bsky/actor/defs";
-import { FeedViewPost, PostView } from "atproto/packages/api/src/client/types/app/bsky/feed/defs";
+import { ProfileViewDetailed } from "@atproto/api/src/client/types/app/bsky/actor/defs";
+import { FeedViewPost, PostView } from "@atproto/api/src/client/types/app/bsky/feed/defs";
 import { getSettings } from "../store/settings";
 
 const list: string[] = [];

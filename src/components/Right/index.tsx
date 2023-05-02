@@ -1,4 +1,5 @@
-import { ProfileView, ProfileViewDetailed } from 'atproto/packages/api/src/client/types/app/bsky/actor/defs';
+import { ProfileView, ProfileViewDetailed } from '@atproto/api/src/client/types/app/bsky/actor/defs';
+import cn from 'classnames';
 import { useAtom, useAtomValue } from 'jotai';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
@@ -15,7 +16,10 @@ import styles from './Right.module.scss';
 import Search from './Search';
 import User from './User';
 
-export default function Right(props: {}) {
+export default function Right(props: {
+    isInSkyline?: boolean
+}) {
+    const { isInSkyline } = props;
     const user = useAtomValue(userAtom);
     const settings = useAtomValue(settingsAtom);
     const [suggested, setSuggested] = useAtom(SuggestedAtom);
@@ -62,7 +66,7 @@ export default function Right(props: {}) {
                 .sort((a, b) => a.sort - b.sort)
                 .map(({ value }) => value).splice(0, 6)
         );
-        
+
         setSuggested(prev => ({ ...prev, filteredList: sort, loading: false }));
     };
 
@@ -74,27 +78,43 @@ export default function Right(props: {}) {
 
 
     return (
-        <div className={styles.right}>
-            <Search />
-            <div className={styles.suggested}>
+        isInSkyline ?
+            <div className={cn(styles.suggested, { [styles.inSkyline]: isInSkyline })}>
                 <h4>Who To Follow?</h4>
                 <p>Here you'll see a list of new people to follow</p>
                 {suggested.loading || followingLoading || followingLoadingGlobal ?
                     <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div> :
-                    (settings.suggested == 'personalized' ? suggested.filteredList : suggested.data).map(p =>
-                        <User key={(p as any).did} user={p} />
-                    )}
+                    <div>
+                        {(settings.suggested == 'personalized' ? suggested.filteredList : suggested.data).map(p =>
+                            <User key={(p as any).did} user={p} />
+                        )}
+                    </div>
+                }
             </div>
-            <div className={styles.copy}>
-                <Donate />
-                <p>Version 0.0.1</p>
-                <p>Developed by <Link to="/user/arta.bsky.social">Arta</Link></p>
-                <div className={styles.icon}>
-                    <a href="https://github.com/callmearta/kite" title="Kite | BlueSky Web Client" target="_blank">
-                        <img src={GithubIcon} alt="" />
-                    </a>
+            : <div className={cn(styles.right)}>
+                <Search />
+                <div className={styles.suggested}>
+                    <h4>Who To Follow?</h4>
+                    <p>Here you'll see a list of new people to follow</p>
+                    {suggested.loading || followingLoading || followingLoadingGlobal ?
+                        <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div> :
+                        <div>
+                            {(settings.suggested == 'personalized' ? suggested.filteredList : suggested.data).map(p =>
+                                <User key={(p as any).did} user={p} />
+                            )}
+                        </div>
+                    }
+                </div>
+                <div className={styles.copy}>
+                    <Donate />
+                    <p>Version 0.0.1</p>
+                    <p>Developed by <Link to="/user/arta.bsky.social">Arta</Link></p>
+                    <div className={styles.icon}>
+                        <a href="https://github.com/callmearta/kite" title="Kite | BlueSky Web Client" target="_blank">
+                            <img src={GithubIcon} alt="" />
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
     );
 }

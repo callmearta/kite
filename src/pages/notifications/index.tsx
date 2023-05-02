@@ -25,24 +25,29 @@ export default function Notifications(props: {}) {
                     i.reason == 'repost'
             ).map(i => (i?.record as any)?.subject?.uri).filter(i => i && typeof i != 'undefined'))];
 
-            const chunkSize = 25;
-            for (let i = 0; i < uniqueUris.length; i += chunkSize) {
-                const chunk = uniqueUris.slice(i, i + chunkSize);
-                // do whatever
-                const result = await agent.api.app.bsky.feed.getPosts({
-                    uris: chunk
-                });
-    
-                let newNotifs = [...locNotifs];
-                for (let i = 0; i < newNotifs.length; i++) {
-                    const post = newNotifs[i];
-                    let notifIndex = result.data.posts.findIndex(i => (post.record as any).subject?.uri == i.uri);
-                    if (notifIndex > -1) {
-                        newNotifs[i].post = result.data.posts[notifIndex];
+            if(uniqueUris.length){
+                const chunkSize = 25;
+                for (let i = 0; i < uniqueUris.length; i += chunkSize) {
+                    const chunk = uniqueUris.slice(i, i + chunkSize);
+                    
+                    const result = await agent.api.app.bsky.feed.getPosts({
+                        uris: chunk
+                    });
+                    
+                    let newNotifs = [...locNotifs];
+                    for (let i = 0; i < newNotifs.length; i++) {
+                        const post = newNotifs[i];
+                        let notifIndex = result.data.posts.findIndex(i => (post.record as any).subject?.uri == i.uri);
+                        if (notifIndex > -1) {
+                            newNotifs[i].post = result.data.posts[notifIndex];
+                        }
                     }
+                    setNotifs(newNotifs);
+                    setLoading(false);
                 }
-                setNotifs(newNotifs);
+            }else{
                 setLoading(false);
+                setNotifs(locNotifs);
             }
         }
     });

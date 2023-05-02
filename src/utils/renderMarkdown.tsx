@@ -1,4 +1,4 @@
-import { RichText } from "atproto/packages/api";
+import { RichText } from "@atproto/api";
 import agent from "../Agent";
 
 export default function renderMarkdown(text: string) {

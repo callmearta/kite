@@ -16,7 +16,7 @@
         "@atproto/uri": "latest",
         "@atproto/xrpc": "^0.1.0",
         "@rollup/plugin-replace": "^5.0.2",
-        "atproto": "bluesky-social/atproto#main",
+        "@atproto/api": "latest",
         "graphemer": "^1.4.0",
         "jotai": "^2.0.4",
         "markdown-to-jsx": "^7.2.0",

@@ -1,4 +1,4 @@
-import { FeedViewPost, PostView } from 'atproto/packages/api/src/client/types/app/bsky/feed/defs';
+import { FeedViewPost, PostView } from '@atproto/api/src/client/types/app/bsky/feed/defs';
 import { useSetAtom } from 'jotai';
 import { SyntheticEvent, useCallback, useEffect, useState } from 'react';
 import { Portal } from 'react-portal';

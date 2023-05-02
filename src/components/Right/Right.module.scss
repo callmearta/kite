@@ -27,6 +27,26 @@
         font-size: .8rem;
         color: #888;
     }
+    &.inSkyline {
+        width: calc(100% - 3rem) !important;
+        margin: 1.5rem;
+        margin-top: 0rem;
+        &>div {
+            display: flex;
+            flex-wrap: wrap;
+            .user {
+                width: auto;
+                flex: 30%;
+                margin: 1rem 0;
+                flex-direction: column;
+                .avatar {
+                    width: 150px;
+                    height: 150px;
+                    margin-bottom: .5rem;
+                }
+            }
+        }
+    }
 }
 
 .user {
