@@ -23,7 +23,7 @@ export default function Image(props: {
             <div className={styles.image}>
                 {
                 // @ts-ignore
-                (embed.images || embed.media.images)?.map((img, index) => <img onClick={_showLightbox} key={index} src={img.thumb} alt={img.alt} />)}
+                (embed.images || embed.media.images)?.map((img, index) => <div key={index}><img onClick={_showLightbox} src={img.thumb} alt={img.alt} /></div>)}
             </div>
             {/* <Lightbox /> */}
         </>

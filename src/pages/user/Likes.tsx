@@ -9,37 +9,56 @@ import PostsRenderer from "../../components/PostsRenderer";
 export default function Likes(props: {}) {
     const params = useParams();
     const { did } = params;
-    const { data, isLoading: postsLoading, fetchNextPage, hasNextPage } = useInfiniteQuery(["userLikes", did], ({ pageParam }) => {
-        return agent.api.com.atproto.repo.listRecords({
-            collection: "app.bsky.feed.like",
-            repo: did!,
-            cursor: pageParam || undefined,
-            limit: 25
-        })
-    }, {
+    const { data, isLoading: postsLoading, fetchNextPage, hasNextPage } = useInfiniteQuery(["userLikes", did], ({ pageParam }) => _fetchPosts(pageParam), {
         retryOnMount: true,
         getNextPageParam: (lastPage, allPages) => {
             return lastPage?.data?.cursor ? lastPage.data.cursor : undefined;
         },
         onSuccess: async d => {
-            const result = await agent.api.app.bsky.feed.getPosts({
-                uris: d.pages[d.pages.length - 1].data.records.map(record => (record.value as any).subject.uri)
-            });
-            let newPosts = d ? [...d?.pages[d.pages.length - 1].data.records!] : [];
-            for (let i = 0; i < result.data.posts.length; i++) {
-                const post = result.data.posts[i];
-                const indexInPostsData = newPosts.findIndex(i => (i.value as any).subject.uri == post.uri);
-                if (indexInPostsData > -1) {
-                    newPosts[indexInPostsData].post = post;
-                }
+            console.log(d.pages[d.pages.length - 1].data.cursor, data);
+            // const result = await agent.api.app.bsky.feed.getPosts({
+            //     uris: d.pages[d.pages.length - 1].data.records.map(record => (record.value as any).subject.uri)
+            // });
+            // let newPosts = d ? [...d?.pages[d.pages.length - 1].data.records!] : [];
+            // for (let i = 0; i < result.data.posts.length; i++) {
+            //     const post = result.data.posts[i];
+            //     const indexInPostsData = newPosts.findIndex(i => (i.value as any).subject.uri == post.uri);
+            //     if (indexInPostsData > -1) {
+            //         newPosts[indexInPostsData].post = post;
+            //     }
+            // }
+            // newPosts = newPosts.filter(p => p.post);
+            if(d.pages[d.pages.length - 1].data.cursor != data?.pages[data.pages.length - 1].data.cursor){
+                setPostsData([...postsData, ...d.pages[d.pages.length - 1].data.records]);
+            }else{
+                setPostsData([...d.pages.map(p => p.data.records).flat()]);
             }
-            newPosts = newPosts.filter(p => p.post);
-            setPostsData([...postsData, ...newPosts]);
             setLoading(false);
         }
     });
+    const _fetchPosts = async (pageParam: any) => {
+        const records = await agent.api.com.atproto.repo.listRecords({
+            collection: "app.bsky.feed.like",
+            repo: did!,
+            cursor: pageParam || undefined,
+            limit: 25
+        })
+        const posts = await agent.api.app.bsky.feed.getPosts({
+            uris: records.data.records.map(record => (record.value as any).subject.uri)
+        });
+        let newPosts = records ? [...records.data.records!] : [];
+        for (let i = 0; i < posts.data.posts.length; i++) {
+            const post = posts.data.posts[i];
+            const indexInPostsData = newPosts.findIndex(i => (i.value as any).subject.uri == post.uri);
+            if (indexInPostsData > -1) {
+                newPosts[indexInPostsData].post = post;
+            }
+        }
+        newPosts = newPosts.filter(p => p.post);
+        return { data: { records: newPosts, cursor: records.data.cursor } };
+    };
     const [loading, setLoading] = useState(true);
-    const [postsData, setPostsData] = useState<Record[]>([]);
+    const [postsData, setPostsData] = useState<Record[]>(data?.pages.map(p => p.data.records).flat() || []);
 
     useEffect(() => {
         let fetching = false;
@@ -58,7 +77,7 @@ export default function Likes(props: {}) {
     }, [fetchNextPage, hasNextPage])
 
     return (
-        loading ? <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div> :
+        postsLoading ? <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div> :
             <>
                 {postsData.length ? <PostsRenderer isLoading={postsLoading} feed={postsData} /> :
                     <p className="text-center p-5 text-grey">There are no likes!</p>

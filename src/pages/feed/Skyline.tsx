@@ -8,6 +8,7 @@ import { useInfiniteQuery, useQuery } from 'react-query';
 import agent from '../../Agent';
 import ArrowIcon from '../../assets/back.svg';
 import HotIcon from '../../assets/hot.png';
+import KiteIcon from '../../assets/kite.png';
 import Loading from '../../components/Loading';
 import PostsRenderer from '../../components/PostsRenderer';
 import { UI_STORAGE_KEY, uiAtom } from '../../store/ui';
@@ -19,6 +20,8 @@ export default function Skyline(props: {}) {
     const refetchRef = useRef<any>(null);
     const [newPosts, setNewPosts] = useState<Array<any>>([]);
     const [ui, setUi] = useAtom(uiAtom);
+    const headerRef = useRef<any>(null);
+    const lastScrollPost = useRef<any>(null);
 
     const _fetchFeed = async (pageParam: any) => {
         // if(pageParam)
@@ -138,12 +141,56 @@ export default function Skyline(props: {}) {
         localStorage.setItem(UI_STORAGE_KEY, JSON.stringify({ ...ui, hot: true }));
     };
 
+    const _scrollToTop = (e: SyntheticEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: "smooth"
+        })
+    }
+
+    const _handleSticky = (e: any) => {
+        if(lastScrollPost.current && document.documentElement.scrollTop > headerRef.current.nextSibling.clientHeight){
+            const diff = lastScrollPost.current - document.documentElement.scrollTop;
+            if(diff >= 0){
+                headerRef.current.animate({
+                    transform: "translateY(0)"
+                },{
+                    duration: 750,
+                    ease: "easeOut",
+                    fill:"forwards"
+                });
+            }else{
+                headerRef.current.animate({
+                    transform: `translateY(-${headerRef.current.clientHeight}px)`
+                },{
+                    duration: 750,
+                    ease: "easeOut",
+                    fill:"forwards"
+                });
+            }
+        }
+        lastScrollPost.current = document.documentElement.scrollTop;
+    }
+
+    useEffect(() => {
+        if(window.innerWidth < 1024){
+            document.addEventListener("scroll",_handleSticky);
+        }
+
+        return () => {
+            document.removeEventListener("scroll",_handleSticky);
+        };
+    },[window.innerWidth]);
+
     return (
         <div className="skyline">
             {newPosts.length ? <button onClick={_handleNewPostsClick} className={cn("btn primary", styles.newPosts)}>
                 <div className={styles.newAvatars}>
                     {newPosts.filter((i, index) => i.post && i.post.author && newPosts.findIndex(p => p.post?.author.did == i.post?.author.did) == index).slice(0, 3).map(post =>
-                        <div className={styles.newAvatar} key={post?.post?.author.cid}>
+                        <div className={styles.newAvatar} key={post?.post?.author.did}>
                             <img src={post.post?.author?.avatar} alt="" />
                         </div>
                     )}
@@ -153,8 +200,12 @@ export default function Skyline(props: {}) {
                 </strong>
                 <img src={ArrowIcon} alt="" />
             </button> : ''}
-            <div className="col-header">
-                <h1>Skyline</h1>
+            <div className="col-header" ref={headerRef}>
+                {window.innerWidth < 1024 ?
+                    <>
+                        <img src={KiteIcon} height={32} alt="" />
+                        <h1 onClick={_scrollToTop}>Kite</h1>
+                    </> : <h1>Skyline</h1>}
                 {!ui.hot ? <button className="icon-btn" onClick={_handleHot}>
                     <img src={HotIcon} alt="Hot Column" />
                 </button> : ''}

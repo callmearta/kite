@@ -7,6 +7,9 @@
     display: flex;
     padding: 1rem 1.5rem;
     border-bottom: 1px solid var(--stroke-color);
+    @media screen and (max-width: 1040px) {
+        padding: 1rem;
+    }
 }
 
 .left {
@@ -14,6 +17,10 @@
     align-items: center;
     margin-right: 1rem;
     gap: 1rem;
+    @media screen and (max-width: 1040px) {
+        gap: .25rem;
+        align-items: flex-start;
+    }
 }
 
 .right {

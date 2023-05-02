@@ -67,6 +67,10 @@
         border-radius: 14px;
         padding: 2rem;
         border: 1px solid var(--stroke-color);
+        @media screen and (max-width: 1040px) {
+            max-width: 95%;
+            padding: 1rem;
+        }
         .postWrapper {
             width: 100%;
             .post {

@@ -57,7 +57,7 @@ export default function More(props: {
 
         const split = (post?.uri as string)?.split('/');
         const rkey = split[split.length - 1];
-        const url = `https://staging.bsky.app/profile/${post.author.handle}/post/${rkey}`;
+        const url = `https://staging.bsky.app/profile/${(post?.author as any)?.handle}/post/${rkey}`;
         navigator.clipboard.writeText(url);
         setDropdownOpen(false);
     }
@@ -68,7 +68,7 @@ export default function More(props: {
     
         const split = (post?.uri as string)?.split('/');
         const rkey = split[split.length - 1];
-        const url = `https://psky.app/profile/${post.author.handle}/post/${rkey}`;
+        const url = `https://psky.app/profile/${(post?.author as any)?.handle}/post/${rkey}`;
         navigator.clipboard.writeText(url);
         setDropdownOpen(false);
     }
@@ -83,7 +83,7 @@ export default function More(props: {
                     <div className={styles.repostDropdown}>
                         {(post.author as any)?.did == user?.did ?
                             <p className="font-weight-bold" onClick={_handleDeletePost}>
-                                {deleteLoading ? <Loading /> : <img src={DeleteIcon} alt="" />}
+                                {deleteLoading ? <Loading isColored /> : <img src={DeleteIcon} alt="" />}
                                 <span>Delete Post</span>
                             </p>
                             : ''}
