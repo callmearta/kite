@@ -5,7 +5,7 @@ export const SESSION_LOCAL_STORAGE_KEY = "arta";
 export const SERVICE_LOCAL_STORAGE_KEY = "service";
 
 const agent = new BskyAgent({
-    service: await (async () => {
+    service: (() => {
         const serviceUrl = localStorage.getItem(SERVICE_LOCAL_STORAGE_KEY) || "https://bsky.social";
         return serviceUrl
     })(),

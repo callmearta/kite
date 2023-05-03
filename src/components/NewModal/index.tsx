@@ -116,7 +116,7 @@ export default function NewModal(props: {}) {
     const _handleFileUpload = async (file: { file: File }) => {
         const buffer = await file.file.arrayBuffer();
         const result = await agent.uploadBlob(buffer as any, {
-            encoding: 'image/jpeg'
+            encoding: file.file.type
         });
         return result;
     }

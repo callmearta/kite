@@ -107,7 +107,7 @@ export default function EditProfile(props: {
                         <form onSubmit={_handleSubmit}>
                             <h3>Edit Profile</h3>
                             <div className="edit-image">
-                                <img src={form.banner.preview} alt="" />
+                                <img src={form.banner.preview!} alt="" />
                                 <span>
                                     <input onChange={_handleBannerChange} type="file" />
                                     <img src={EditIcon} alt="" />
