@@ -161,7 +161,15 @@ export default function NewModal(props: {}) {
                     </div>
                     <div className={styles.right}>
                         <form onSubmit={_handleSubmit}>
-                            <textarea dir="auto" className={cn({ [styles.open]: text.length })} placeholder="What's on your mind?" onKeyDown={_handleCtrlEnter} onChange={e => setText(e.target.value.substring(0, 254))} value={text} maxLength={254}></textarea>
+                            <textarea
+                                className={cn({ [styles.open]: text.length })}
+                                dir="auto"
+                                maxLength={254}
+                                onKeyDown={_handleCtrlEnter}
+                                onChange={e => setText(e.target.value.substring(0, 254))}
+                                placeholder="What's on your mind?"
+                                resize="vertical"
+                                value={text}></textarea>
                             {newModal.quotePost ? <Record isQuote embed={newModal.quotePost as any} uri={newModal.quotePost.uri as string} author={newModal.quotePost.author as any} /> : ''}
                             {files.length ?
                                 <div className={styles.files}>
