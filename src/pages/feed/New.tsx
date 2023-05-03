@@ -107,7 +107,7 @@ export default function New(props: {}) {
             </div>
             <div className={styles.right}>
                 <form onSubmit={_handleSubmit}>
-                    <textarea dir="auto" className={cn({ [styles.open]: text.length })} placeholder="What's on your mind?" onKeyDown={_handleCtrlEnter} onChange={e => setText(e.target.value.substring(0, 254))} value={text}></textarea>
+                    <textarea style={{resize:'vertical'}} dir="auto" className={cn({ [styles.open]: text.length })} placeholder="What's on your mind?" onKeyDown={_handleCtrlEnter} onChange={e => setText(e.target.value.substring(0, 254))} value={text}></textarea>
                     {files.length ?
                         <div className={styles.files}>
                             {files.map((file,index) =>

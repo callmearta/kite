@@ -50,6 +50,7 @@ export default function Notification(props: {
 
     const displayName = useMemo(() => {
         if (notifGroup.datas.length && notifGroup.datas.length - 1 > 0) {
+            // @ts-ignore
             return `${notifGroup.datas[0]?.author.displayName || notifGroup.datas[0]?.author.handle}${', '+notifGroup.datas.slice(1,Math.min(5,notifGroup.datas.length)).map(notif => (notif.author.displayName || '@'+notif.author.handle)).join(',') } and ${notifGroup.datas.length - 1} others`;
         } else {
             return notifGroup.datas[0]?.author.displayName || notifGroup.datas[0]?.author.handle;

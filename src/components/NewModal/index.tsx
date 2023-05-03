@@ -168,7 +168,7 @@ export default function NewModal(props: {}) {
                                 onKeyDown={_handleCtrlEnter}
                                 onChange={e => setText(e.target.value.substring(0, 254))}
                                 placeholder="What's on your mind?"
-                                resize="vertical"
+                                style={{resize:'vertical'}}
                                 value={text}></textarea>
                             {newModal.quotePost ? <Record isQuote embed={newModal.quotePost as any} uri={newModal.quotePost.uri as string} author={newModal.quotePost.author as any} /> : ''}
                             {files.length ?
