@@ -4,9 +4,11 @@ import AvatarPlaceholder from '../../assets/placeholder.png';
 import styles from './Right.module.scss';
 
 export default function User(props: {
-    user: any
+    user: any,
+    hideFollowIndicator?: boolean,
+    className?:string
 }) {
-    const { user } = props;
+    const { user, hideFollowIndicator, className } = props;
     const navigate = useNavigate();
 
     const _handleClick = (e: any) => {
@@ -21,7 +23,7 @@ export default function User(props: {
     };
 
     return (
-        <div className={cn('user', styles.user)} onClick={_handleClick}>
+        <div className={cn('user', styles.user, className)} onClick={_handleClick}>
             <div className={styles.avatar}>
                 <img src={user.avatar || AvatarPlaceholder} alt="" />
             </div>
@@ -30,7 +32,7 @@ export default function User(props: {
                     {user.displayName}
                 </p>
                 <span>@{user.handle}</span>
-                {user.viewer.followedBy ? <span className={styles.tag}>Follows You</span> : ''}
+                {user.viewer.followedBy && !hideFollowIndicator ? <span className={styles.tag}>Follows You</span> : ''}
             </div>
         </div>
     );

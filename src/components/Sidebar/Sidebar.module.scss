@@ -15,6 +15,9 @@
     @media screen and (max-width: 1440px) {
         margin-left: 0 !important;
     }
+    @media screen and (min-width:1981px) {
+        margin-left: -350px !important;
+    }
     @media screen and (max-width: 1040px) {
         padding: 40px 10px;
         min-width: 60px;

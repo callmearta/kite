@@ -291,11 +291,12 @@ body.hot-col .skyline:not(.skycol) {
     display: flex;
     justify-content: center;
     min-width: 100%;
-    // @media screen and (max-width: 1440px) {
-    //     padding-left: 120px;
-    //     width: auto !important;
-    //     max-width: 700px;
-    // }
+}
+
+body.hot-col .feed:not(.home) {
+    @media screen and (max-width: 1980px) {
+        justify-content: flex-start;
+    }
 }
 
 .d-block {

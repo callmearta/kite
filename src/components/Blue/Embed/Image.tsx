@@ -23,9 +23,9 @@ export default function Image(props: {
             <div className={styles.image}>
                 {
                 // @ts-ignore
-                (embed.images || embed.media.images)?.map((img, index) => <div key={index}><img onClick={_showLightbox} src={img.thumb} alt={img.alt} /></div>)}
+                (embed.images || embed.media?.images)?.map((img, index) => <div key={index}><img onClick={_showLightbox} src={img.thumb ? img.thumb : img.image} alt={img.alt} /></div>)
+                }
             </div>
-            {/* <Lightbox /> */}
         </>
     );
 }
