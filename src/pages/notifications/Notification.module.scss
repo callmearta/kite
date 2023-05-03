@@ -14,9 +14,13 @@
 
 .left {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     margin-right: 1rem;
     gap: 1rem;
+    &>div:first-child {
+        position: relative;
+        top: 4px;
+    }
     @media screen and (max-width: 1040px) {
         gap: .25rem;
         align-items: flex-start;
@@ -27,7 +31,6 @@
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    ;
 }
 
 .type {

@@ -10,9 +10,10 @@ export default function Record(props: {
     embed: AppBskyEmbedRecord.View | AppBskyEmbedRecordWithMedia.View,
     author?: AppBskyActorDefs.ProfileView,
     uri?: string,
-    isQuote?: boolean
+    isQuote?: boolean,
+    isNotif?:boolean
 }) {
-    const { author: propsAuthor, uri: propsUri, isQuote } = props;
+    const { author: propsAuthor, uri: propsUri, isQuote, isNotif } = props;
     let embed = isQuote ? props.embed : (props.embed.record?.author ? props.embed : props.embed.record);
     // @ts-ignore
     const author = propsAuthor || embed.record.author || embed.author as AppBskyActorDefs.ProfileView | any;
@@ -21,6 +22,7 @@ export default function Record(props: {
     const navigate = useNavigate();
 
     const _handleLink = (e: any) => {
+        if(isNotif) return true;
         e.preventDefault();
         e.stopPropagation();
         if (e.target.tagName == 'IMG') return;

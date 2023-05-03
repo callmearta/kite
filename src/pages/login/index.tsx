@@ -10,22 +10,34 @@ export default function Login(props: {}) {
         identifier: '',
         password: '',
         loading: false,
-        error: null
+        error: null,
+        service: ''
     });
+    const [advanced,setAdvanced] = useState(false);
     const theme = store.get("theme");
     const navigate = useNavigate();
 
     useEffect(() => {
-        if(theme == 'dark'){
+        if (theme == 'dark') {
             document.body.classList.add('dark');
         }
-    },[]);
+    }, []);
 
     const _handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         if (!form.identifier.length || !form.password.length) return;
         setForm(prev => ({ ...prev, loading: true }));
         try {
+            if (form.service.length) {
+                if (!form.service.startsWith('https://')) {
+                    // @ts-ignore
+                    setForm(prev => ({ ...prev, error: "Service Url is not valid" }));
+                    return;
+                }
+                // @ts-ignore
+                agent.changeService(form.service);
+            }
+
             const result = await agent.login({
                 identifier: form.identifier.includes(".") ? form.identifier : `${form.identifier}.bsky.social`,
                 password: form.password
@@ -40,6 +52,10 @@ export default function Login(props: {}) {
         }
     }
 
+    const _handleServiceChange = (e: any) => {
+        setForm(prev => ({ ...prev, service: e.target.value }));
+    };
+
     return (
         <div className="login-page">
             <img src={KiteLogo} alt="Kite | A Better BlueSky Client" />
@@ -52,7 +68,13 @@ export default function Login(props: {}) {
                 <div className="input-wrapper">
                     <input type="password" placeholder="Password" value={form.password} onChange={e => setForm(prev => ({ ...prev, password: e.target.value }))} />
                 </div>
+                {advanced ? <div className="input-wrapper">
+                    <input type="text" placeholder="Service URL, Leave empty if you don't know what this is" value={form.service} onChange={_handleServiceChange} />
+                </div> : 
+                    <strong style={{display:'block', marginBottom:'2rem'}} className="text-grey pointer" onClick={() => setAdvanced(true)}>+ Advanced</strong>
+                }
                 <Button text="Login" className="btn" loading={form.loading} />
+                <Button onClick={() => navigate('/register')} text="Register" className="btn outline" />
                 {form.error ? <p className="error text-center">{form.error}</p> : ''}
             </form>
         </div>

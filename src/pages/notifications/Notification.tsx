@@ -7,9 +7,11 @@ import { useNavigate } from 'react-router-dom';
 import HeartFillIcon from '../../assets/like-fill.svg';
 import AvatarPlaceholder from '../../assets/placeholder.png';
 import UserFillIcon from '../../assets/profile-fill.svg';
+import UserIcon from '../../assets/profile.svg';
 import ReplyFillIcon from '../../assets/reply-fill.svg';
 import RepostFillIcon from '../../assets/repost-fill.svg';
 import RepostIcon from '../../assets/repost.svg';
+import Record from '../../components/Blue/Embed/Record';
 import linkFromPost from '../../utils/linkFromPost';
 import styles from './Notification.module.scss';
 
@@ -30,7 +32,7 @@ export default function Notification(props: {
         if(notif.reason == 'follow'){
             navigate(`/user/${notif.author.handle}`);
         }
-        if(notif.reason == 'quote'){
+        if(notif.reason == 'quote' || notif.reason == 'mention'){
             navigate(linkFromPost(notif));
         }
     };
@@ -48,7 +50,7 @@ export default function Notification(props: {
                 <div className={styles.type}>
                     <img src={
                         // @ts-ignore
-                        { like: HeartFillIcon, repost: RepostFillIcon, follow: UserFillIcon, reply: ReplyFillIcon, quote: RepostIcon }[notif.reason]} alt="" />
+                        { like: HeartFillIcon, repost: RepostFillIcon, follow: UserFillIcon, reply: ReplyFillIcon, quote: RepostIcon, mention: UserIcon }[notif.reason]} alt="" />
                 </div>
                 <div className={styles.avatar} onClick={_linkToProfile}>
                     <img src={notif.author.avatar || AvatarPlaceholder} alt="" />
@@ -67,7 +69,8 @@ export default function Notification(props: {
                     </>
                     : ''}
                 {(notif.post as any)?.record?.text ? <p dir="auto" className={styles.text}>{(notif.post as any)?.record?.text}</p> : ''}
-                {notif.reason == 'quote' ? <p dir="auto" className={styles.text}>{(notif as any)?.record?.text}</p> : ''}
+                {/* {notif.reason == 'quote' || notif.reason == 'mention' ? <p dir="auto" className={styles.text}>{(notif as any)?.record?.text}</p> : ''} */}
+                {notif.reason == 'mention' || notif.reason == 'quote' ? <Record isNotif isQuote embed={(notif as any)} /> : ''}
             </div>
         </div>
     );
