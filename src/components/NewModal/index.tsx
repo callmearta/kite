@@ -191,7 +191,7 @@ export default function NewModal(props: {}) {
                                     <div className="file-input">
                                         <input multiple type='file' accept='image/jpeg,image/png' onChange={_handleFile} title="Upload Media" />
                                         <label>
-                                            <img src={ImageIcon} alt="" />
+                                            <img src={ImageIcon} height={28} alt="" />
                                         </label>
                                     </div>
                                     <Button type="submit" loading={isLoading || fileUploadLoading} className="btn primary" text='Post' />

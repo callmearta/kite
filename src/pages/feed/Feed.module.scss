@@ -47,3 +47,11 @@
         object-fit: cover;
     }
 }
+
+.search {
+    width: 100%;
+    padding: .5rem 1rem;
+    &>div {
+        margin: 0;
+    }
+}

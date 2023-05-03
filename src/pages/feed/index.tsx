@@ -9,6 +9,7 @@ import Layout from '../../components/Layout';
 import Loading from '../../components/Loading';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import { uiAtom } from '../../store/ui';
+import Firehose from './Firehose';
 import SkyCol from './SkyCol';
 import Skyline from './Skyline';
 
@@ -31,6 +32,7 @@ export default function Feed(props: {}) {
         <Layout className='home'>
             <Skyline />
             {ui.hot ? <SkyCol /> : ''}
+            {ui.firehose ? <Firehose /> : ''}
         </Layout>
     );
 }

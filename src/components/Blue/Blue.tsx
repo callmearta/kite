@@ -28,9 +28,10 @@ export default function Blue(props: {
     isSingle?: boolean,
     reason?: ReasonType | any,
     className?: string,
-    isCompose?: boolean
+    isCompose?: boolean,
+    firehose?: boolean
 }) {
-    const { post, isReply, isParent, isSingle, reason, className, isCompose } = props;
+    const { post, isReply, isParent, isSingle, reason, className, isCompose, firehose } = props;
     const elementRef = useRef<any>(null);
     const [deleted, setDeleted] = useState(false);
     if (!post) return <div ref={elementRef} className={cn(styles.blue, styles.deleted, className, { [styles.isReply]: isReply, [styles.parent]: isParent, [styles.single]: isSingle })}>
@@ -75,8 +76,11 @@ export default function Blue(props: {
     return (
         deleted ? null :
             !post ? <p>Not Found</p> : <>
-                <div ref={elementRef} className={cn(styles.blue, className, { [styles.isReply]: isReply, [styles.parent]: isParent, [styles.single]: isSingle })} onClick={(e: any) => {
-                    
+                <div ref={elementRef} className={cn(styles.blue, className, { [styles.isReply]: isReply, [styles.parent]: isParent, [styles.single]: isSingle, [styles.firehose]: firehose })} onClick={(e: any) => {
+                    if(firehose){
+                        // @ts-ignore
+                        return navigate(`/blue/${post.author.handle}/${post.id}`);
+                    }
                     if (e.target.tagName != 'A' && e.target.tagName != 'IMG') {
                         if (isSingle) {
                             return e.preventDefault();
@@ -118,7 +122,7 @@ export default function Blue(props: {
                             }
                         }}>{markdown?.replace(/\n/g, ' <br/> ') || ''}</Markdown> : <p>{(post?.record as any)?.text}</p>}
                         {/* </p> */}
-                        {isCompose ? '' :
+                        {isCompose || firehose ? '' :
                             <>
                                 {embed ? <div>
                                     {embed.external ? <External embed={(embed as AppBskyEmbedExternal.View)} /> : ''}

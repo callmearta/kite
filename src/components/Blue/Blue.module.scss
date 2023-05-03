@@ -21,6 +21,18 @@
         padding: 1rem;
         padding-bottom: .5rem;
     }
+    &.firehose {
+        .avatar {
+            width: 35px;
+            height: 35px;
+        }
+        .header {
+            margin-bottom: 0;
+        }
+        .body {
+            padding-bottom: .25rem;
+        }
+    }
 }
 
 .footer {

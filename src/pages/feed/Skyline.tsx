@@ -7,6 +7,7 @@ import React, { SyntheticEvent, useCallback, useEffect, useRef, useState } from 
 import { useInfiniteQuery, useQuery } from 'react-query';
 import agent from '../../Agent';
 import ArrowIcon from '../../assets/back.svg';
+import FirehoseIcon from '../../assets/firehose.svg';
 import HotIcon from '../../assets/hot.png';
 import KiteIcon from '../../assets/kite.png';
 import Loading from '../../components/Loading';
@@ -136,12 +137,24 @@ export default function Skyline(props: {}) {
         setNewPosts([]);
     };
 
+    useEffect(() => {
+        // const ws = new WebSocket("wss://bsky.social/xrpc/com.atproto.sync.subscribeRepos");
+    }, []);
+
     const _handleHot = (e: SyntheticEvent) => {
         e.preventDefault();
         e.stopPropagation();
 
         setUi(prev => ({ ...prev, hot: true }));
         localStorage.setItem(UI_STORAGE_KEY, JSON.stringify({ ...ui, hot: true }));
+    };
+
+    const _handleFirehose = (e: SyntheticEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        setUi(prev => ({ ...prev, firehose: true }));
+        localStorage.setItem(UI_STORAGE_KEY, JSON.stringify({ ...ui, firehose: true }));
     };
 
     const _scrollToTop = (e: SyntheticEvent) => {
@@ -209,18 +222,25 @@ export default function Skyline(props: {}) {
                         <img src={KiteIcon} height={32} alt="" />
                         <h1 onClick={_scrollToTop}>Kite</h1>
                     </> : <h1>Skyline</h1>}
-                {!ui.hot ? <button className="icon-btn" onClick={_handleHot}>
-                    <img src={HotIcon} alt="Hot Column" />
-                </button> : ''}
+                <div>
+                    {!ui.hot ?
+                        <button className="icon-btn" onClick={_handleHot}>
+                            <img src={HotIcon} alt="Hot Column" />
+                        </button> : ''}
+                    {!ui.firehose ?
+                        <button className="icon-btn" onClick={_handleFirehose}>
+                            <img src={FirehoseIcon} alt="Firehose Column" />
+                        </button> : ''}
+                </div>
             </div>
             <New />
             {isLoading || feed.length ? <PostsRenderer isLoading={isLoading} feed={feed} /> :
                 <div>
                     {/* <img src={} alt="" /> */}
-                    <p className="d-flex align-items-center justify-content-center p-5 text-grey text-center">Nothing to see here!<br/>Get in there and follow some people!</p>
+                    <p className="d-flex align-items-center justify-content-center p-5 text-grey text-center">Nothing to see here!<br />Get in there and follow some people!</p>
                     {!user?.followsCount ? <div>
-                            <Right isInSkyline />
-                        </div> : ''}
+                        <Right isInSkyline />
+                    </div> : ''}
                 </div>
             }
             {hasNextPage ? <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div> : ''}
