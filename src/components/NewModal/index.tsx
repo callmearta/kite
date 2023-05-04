@@ -16,6 +16,7 @@ import Blue from "../Blue/Blue";
 import { lightboxAtom } from "../../store/lightbox";
 import Record from "../Blue/Embed/Record";
 import Button from "../Button";
+import Composer from "../Composer";
 import styles from './New.module.scss';
 
 export default function NewModal(props: {}) {
@@ -38,11 +39,10 @@ export default function NewModal(props: {}) {
         }
     });
 
-    const _handleSubmit = async (e: any) => {
-        e.preventDefault();
-        
-        if ((!text.length && !files.length) || isLoading || fileUploadLoading) return;
-        const filesUpload = await _handleFilesUpload();
+    const _handleSubmit = async (filesData: any[], text: string) => {
+
+        // if ((!text.length && !files.length) || isLoading || fileUploadLoading) return;
+        const filesUpload = filesData;
         const rt = new RichText({ text });
         await rt.detectFacets(agent);
 
@@ -105,46 +105,6 @@ export default function NewModal(props: {}) {
         mutate(data)
     };
 
-    const _handleFilesUpload = async () => {
-        setFileUploadLoading(true);
-        const results = await Promise.all(
-            files.map(_handleFileUpload)
-        )
-        return results;
-    };
-
-    const _handleFileUpload = async (file: { file: File }) => {
-        const buffer = await file.file.arrayBuffer();
-        const result = await agent.uploadBlob(buffer as any, {
-            encoding: file.file.type
-        });
-        return result;
-    }
-
-    const _handleCtrlEnter = (e: any) => {
-        if (e.ctrlKey && e.keyCode == 13) {
-            _handleSubmit(e);
-        }
-    };
-
-    const _handleFile = async (e: any) => {
-        const selectedFiles = e.target.files;
-        let filesArray = Array.from(selectedFiles);
-        for (let i = 0; i < filesArray.length; i++) {
-            const file = filesArray[i];
-            filesArray[i] = { file: file, preview: URL.createObjectURL(file as Blob) };
-        }
-        setFiles(filesArray);
-    };
-
-    const _handleRemoveFile = (e: any, index: number) => {
-        e.preventDefault();
-        e.stopPropagation();
-        let newFiles = [...files];
-        newFiles.splice(index, 1);
-        setFiles(newFiles);
-    };
-
     return (
 
         <div className={styles.modal}>
@@ -160,7 +120,7 @@ export default function NewModal(props: {}) {
                         </div>
                     </div>
                     <div className={styles.right}>
-                        <form onSubmit={_handleSubmit}>
+                        {/* <form onSubmit={_handleSubmit}>
                             <textarea
                                 className={cn({ [styles.open]: text.length })}
                                 dir="auto"
@@ -197,7 +157,8 @@ export default function NewModal(props: {}) {
                                     <Button type="submit" loading={isLoading || fileUploadLoading} className="btn primary" text='Post' />
                                 </div>
                             </div>
-                        </form>
+                        </form> */}
+                        <Composer quotePost={newModal.quotePost} onSubmit={_handleSubmit} inModal submitLoading={isLoading} />
                     </div>
                 </div>
             </div>

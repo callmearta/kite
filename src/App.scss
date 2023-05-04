@@ -43,7 +43,7 @@ body.dark {
     img[src*="placeholder.png"] {
         filter: invert(1);
     }
-    img[src*="close.svg"]:not(textarea+div span img) {
+    img[src*="close.svg"]:not([contenteditable]+div span img) {
         filter: invert(1) !important;
     }
     textarea {
