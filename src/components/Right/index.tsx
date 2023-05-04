@@ -107,7 +107,7 @@ export default function Right(props: {
                 </div>
                 <div className={styles.copy}>
                     <Donate />
-                    <p>Version 0.0.1</p>
+                    <p>Version 0.1.0</p>
                     <p>Developed by <Link to="/user/arta.bsky.social">Arta</Link></p>
                     <div className={styles.icon}>
                         <a href="https://github.com/callmearta/kite" title="Kite | BlueSky Web Client" target="_blank">
