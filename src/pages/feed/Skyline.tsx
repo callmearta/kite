@@ -16,6 +16,7 @@ import Right from '../../components/Right';
 import { UI_STORAGE_KEY, uiAtom } from '../../store/ui';
 import { userAtom } from '../../store/user';
 import styles from './Feed.module.scss';
+import Fleets from './Fleet';
 import New from './New';
 
 export default function Skyline(props: {}) {
@@ -203,6 +204,7 @@ export default function Skyline(props: {}) {
 
     return (
         <div className="skyline">
+            <Fleets />
             {newPosts.length ? <button onClick={_handleNewPostsClick} className={cn("btn primary", styles.newPosts)}>
                 <div className={styles.newAvatars}>
                     {newPosts.filter((i, index) => i.post && i.post.author && newPosts.findIndex(p => p.post?.author.did == i.post?.author.did) == index).slice(0, 3).map(post =>

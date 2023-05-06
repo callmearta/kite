@@ -30,15 +30,36 @@
     z-index: 2;
     gap: 2px;
     div {
-        // width: 100%;
-        display: flex;
+        width: 100%;
+        display: flex !important;
         max-height: 90vh;
         align-items: center;
         justify-content: center;
+        position: relative;
+        &>span {
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            right: 1rem;
+            margin: auto;
+            width: 105px;
+            text-align: center;
+            padding: .75rem 1.5rem;
+            border-radius: 14px;
+            background: rgba(0, 0, 0, 0.9);
+            color: #FFF;
+            cursor: pointer;
+            transition: transform .25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid var(--stroke-color);
+            &:hover {
+                transform: scale(1.02);
+            }
+        }
     }
     img {
-        max-width: 100%;
-        max-height: 90vh;
+        width: auto;
+        min-width: 400px;
+        height: 90vh;
         // flex:1;
         object-fit: contain;
     }

@@ -1,4 +1,4 @@
-import { AppBskyEmbedImages, AppBskyEmbedRecordWithMedia } from '@atproto/api';
+import { AppBskyEmbedImages, AppBskyEmbedRecordWithMedia, BlobRef } from '@atproto/api';
 import { useSetAtom } from 'jotai';
 import { lightboxAtom } from '../../../store/lightbox';
 import Lightbox from '../../Lightbox';
@@ -8,6 +8,8 @@ export default function Image(props: {
     embed: AppBskyEmbedImages.View | AppBskyEmbedRecordWithMedia.View
 }) {
     const { embed } = props;
+    const hasUri = (embed.images || (embed.media as any)?.images).filter((img: any) => (img.image instanceof BlobRef));
+    if (hasUri.length) return null;
     const setLightbox = useSetAtom(lightboxAtom);
 
     const _showLightbox = () => {
@@ -22,8 +24,8 @@ export default function Image(props: {
         <>
             <div className={styles.image}>
                 {
-                // @ts-ignore
-                (embed.images || embed.media?.images)?.map((img, index) => <div key={index}><img onClick={_showLightbox} src={img.thumb ? img.thumb : img.image} alt={img.alt} /></div>)
+                    // @ts-ignore
+                    (embed.images || embed.media?.images)?.map((img, index) => <div key={index}><img onClick={_showLightbox} src={img.thumb ? img.thumb : img.image} alt={img.alt} /></div>)
                 }
             </div>
         </>

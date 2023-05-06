@@ -7,6 +7,7 @@ import Feed from './pages/feed';
 import Routes from './router/routes';
 
 import Graphemer from 'graphemer';
+import { Toaster } from 'react-hot-toast';
 import ReloadPrompt from './Prompt';
 const splitter = new Graphemer()
 window.Intl = window.Intl || {}
@@ -35,6 +36,7 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <Toaster />
       <div className="App">
         <RouterProvider router={Router} />
       </div>

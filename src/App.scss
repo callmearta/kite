@@ -1,5 +1,7 @@
 @import url('./assets/scss/vazir.css');
 @import url('./assets/scss/lato.css');
+@import url('./assets/scss/slick.css');
+@import url('./assets/scss/slick-theme.css');
 * {
     box-sizing: border-box;
     outline: none;
@@ -19,6 +21,13 @@
     height: 10px;
     background: var(--primary-color);
     border-radius: 24px;
+}
+
+a.text-primary {
+    color: var(--primary-color) !important;
+    &:hover {
+        text-decoration: underline !important;
+    }
 }
 
 :root {
@@ -535,6 +544,9 @@ textarea {
     align-items: center;
     justify-content: center;
     z-index: 9;
+    h1 {
+        font-size: 1.5rem !important;
+    }
 }
 
 body.hot-col .sidebar {
@@ -551,16 +563,25 @@ body.hot-col .sidebar {
     z-index: 1;
 }
 
+.repost-modal,
+.follows-modal {
+    .modal-content {
+        width: 500px;
+    }
+}
+
 .modal-content {
     background: var(--white-color);
     padding: 2rem;
     border-radius: 14px;
     position: relative;
     z-index: 2;
+    max-height: 80vh;
     width: 700px;
     border: 1px solid var(--stroke-color);
     max-width: 90%;
-    box-shadow: 0px 14px 24px -4px rgba(0, 0, 0, .4);
+    overflow: auto;
+    box-shadow: 0px 14px 24px -4px rgba(0, 0, 0, .2);
     h1 {
         font-size: 3rem;
     }
@@ -760,4 +781,9 @@ button {
         height: 100%;
         object-fit: cover;
     }
+}
+
+.slick-next:before,
+.slick-prev:before {
+    font-size: 48px !important;
 }

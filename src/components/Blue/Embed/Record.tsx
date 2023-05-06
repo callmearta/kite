@@ -17,7 +17,7 @@ export default function Record(props: {
     const { author: propsAuthor, uri: propsUri, isQuote, isNotif, post } = props;
     let embed = isQuote ? props.embed : (props.embed.record?.author ? props.embed : props.embed.record);
     // @ts-ignore
-    const author = propsAuthor || embed.record.author || embed.author as AppBskyActorDefs.ProfileView | any;
+    const author = propsAuthor || embed?.record?.author || embed?.author as AppBskyActorDefs.ProfileView | any;
     // @ts-ignore
     const uri = propsUri || embed?.record?.uri || embed.uri as string;
     const navigate = useNavigate();
@@ -35,14 +35,14 @@ export default function Record(props: {
     };
 
     return (
-        embed && uri ? <div onClick={_handleLink} className={styles.record}>
+        embed && uri && author ? <div onClick={_handleLink} className={styles.record}>
             <div className={styles.recordHeader}>
                 <div className={styles.recordAvatar}>
-                    <img src={(author as AppBskyActorDefs.ProfileView)?.avatar || AvatarPlaceholder} alt={author.displayName} />
+                    <img src={(author as AppBskyActorDefs.ProfileView)?.avatar || AvatarPlaceholder} alt={author?.displayName} />
                 </div>
                 <div>
                     <p className="font-weight-bold">{(author as AppBskyActorDefs.ProfileView)?.displayName}</p>
-                    <span className="text-grey">{(author as AppBskyActorDefs.ProfileView).handle}</span>
+                    <span className="text-grey">{(author as AppBskyActorDefs.ProfileView)?.handle}</span>
                 </div>
             </div>
             <div className={styles.recordBody}>

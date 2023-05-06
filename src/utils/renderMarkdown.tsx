@@ -1,18 +1,22 @@
 import { RichText } from "@atproto/api";
+import { Link } from "react-router-dom";
 import agent from "../Agent";
+
 
 export default function renderMarkdown(text: string) {
     const rt = new RichText({ text })
     rt.detectFacets(agent);
-    let markdown = ''
+    let markdown = []
     for (const segment of rt.segments()) {
         if (segment.isLink()) {
-            markdown += `<a href="${segment.link?.uri}" target="_blank">${segment.text}</a>`
+            markdown.push(<a href={segment.link?.uri} className="text-primary" target="_blank">{segment.text}</a>)
         } else if (segment.isMention()) {
-            markdown += `[${segment.text}](/#/user/${segment.text.substring(1, segment.text.length)})`
+            markdown.push(<Link className="text-primary" to={`/user/${segment.text.substring(1, segment.text.length)}`}>{segment.text}</Link>)
+
         } else {
-            markdown += segment.text
+            markdown.push(segment.text.split('\n').map((item, index) => <span key={index}>{item}<br /></span>))
         }
     }
-    return markdown;
+
+    return (markdown);
 }

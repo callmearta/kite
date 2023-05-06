@@ -83,6 +83,15 @@ export default function Notifications(props: {}) {
                     return [...p1, newData];
                 }
             } else {
+                if (p2.reason == 'follow') {
+                    // @ts-ignore
+                    const exists = p1.findIndex(i => i.reason == 'follow');
+                    if (exists > -1) {
+                        // @ts-ignore
+                        p1[exists].datas.push(p2);
+                        return p1;
+                    }
+                }
                 return [...p1, {
                     subjectUri: p2.uri,
                     reason: p2.reason,

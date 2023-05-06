@@ -51,7 +51,7 @@ export default function Notification(props: {
     const displayName = useMemo(() => {
         if (notifGroup.datas.length && notifGroup.datas.length - 1 > 0) {
             // @ts-ignore
-            return `${notifGroup.datas[0]?.author.displayName || notifGroup.datas[0]?.author.handle}${', '+notifGroup.datas.slice(1,Math.min(5,notifGroup.datas.length)).map(notif => (notif.author.displayName || '@'+notif.author.handle)).join(',') } and ${notifGroup.datas.length - 1} others`;
+            return `${notifGroup.datas[0]?.author.displayName || notifGroup.datas[0]?.author.handle}${', ' + notifGroup.datas.slice(1, Math.min(3, notifGroup.datas.length)).map(notif => (notif.author.displayName || '@' + notif.author.handle)).join(',')} and ${notifGroup.datas.length > 3 ? notifGroup.datas.length - 3 : notifGroup.datas.length - 1} others`;
         } else {
             return notifGroup.datas[0]?.author.displayName || notifGroup.datas[0]?.author.handle;
         }
@@ -67,7 +67,7 @@ export default function Notification(props: {
     return (
         <div className={cn(styles.notification, { "pointer": true, [styles.hover]: true, [styles.new]: !notifGroup.datas[0]?.isRead })} onClick={_handleClick}>
             <div className={styles.left}>
-                <div className={styles.type}>
+                <div className={styles.type} onClick={_handleOpen}>
                     <img src={
                         // @ts-ignore
                         { like: HeartFillIcon, repost: RepostFillIcon, follow: UserFillIcon, reply: ReplyFillIcon, quote: RepostIcon, mention: UserIcon }[notifGroup.reason]} alt="" />
@@ -77,12 +77,11 @@ export default function Notification(props: {
                 </div>
                 {isOpen ?
                     <div className={styles.openAvatars}>
-
                         {notifGroup.datas.map((notif: any) => <User className={styles.user} hideFollowIndicator key={notif.author.did} user={notif.author} />)}
                     </div>
                     : <div className={styles.avatars}>
 
-                        {[...notifGroup.datas].slice(0, 4).map(notif => <div className={styles.avatar} onClick={e => notifGroup.datas.length > 1 ? _handleOpen(e) : _linkToProfile(e)}>
+                        {[...notifGroup.datas].slice(0, 4).map(notif => <div key={notif.author.did + '-closed'} className={styles.avatar} onClick={e => notifGroup.datas.length > 1 ? _handleOpen(e) : _linkToProfile(e)}>
                             <img src={notif?.author.avatar || AvatarPlaceholder} alt="" />
                         </div>
                         )}

@@ -199,7 +199,7 @@ export default function Composer(props: {
         if (e.ctrlKey && e.keyCode == 13) {
             return;
         }
-        if (e.code.toLocaleLowerCase() == 'enter') {
+        if (e.code.toLocaleLowerCase() == 'enter' && autoComplete.show) {
             e.preventDefault();
             e.stopPropagation();
             _handleMention(null, autoComplete.data[autoComplete.index]);
@@ -234,6 +234,12 @@ export default function Composer(props: {
         newFiles.splice(index, 1);
         setFiles(newFiles);
     };
+
+    useEffect(() => {
+        if(textareaRef.current && inModal){
+            textareaRef.current.focus();
+        }
+    },[textareaRef.current,inModal]);
 
     return (
         <>

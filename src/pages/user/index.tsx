@@ -23,23 +23,24 @@ import EditProfile from './EditProfile';
 import Likes from './Likes';
 import More from './More';
 import Posts from './Posts';
+import Stats from './Stats';
 import styles from './User.module.scss';
 
 export default function User(props: {}) {
     const params = useParams();
     const { did } = params;
     const location = useLocation();
-    const [editProfileOpen,setEditProfileOpen] = useState(false);
+    const [editProfileOpen, setEditProfileOpen] = useState(false);
     const pathname = location.pathname;
     const tabFromUrl = pathname.split('/')[pathname.split('/').length - 1];
-    const [me,setMe] = useAtom(userAtom);
+    const [me, setMe] = useAtom(userAtom);
     const [lightbox, setLightbox] = useAtom<any>(lightboxAtom);
     const { data, isLoading, refetch } = useQuery(["user", did], () => agent.getProfile({
         actor: did!
     }), {
         onSuccess: d => {
             setUser(d.data);
-            if(did == me?.did){
+            if (did == me?.did) {
                 setMe(d.data);
             }
         },
@@ -146,21 +147,13 @@ export default function User(props: {}) {
                                     {user?.viewer?.followedBy ? <span className="tag">Follows You</span> : ''}
                                 </div>
                                 <span className="text-grey">@{user?.handle}</span>
-                                <p dir="auto"><Markdown>{renderMarkdown(user?.description?.replace(/\n/g, ' <br/> ') || '')}</Markdown></p>
-                                <div className={styles.followStats}>
-                                    <p>
-                                        <strong>{user?.followersCount}</strong>
-                                        <span>Followers</span>
-                                    </p>
-                                    <p>
-                                        <strong>{user?.followsCount}</strong>
-                                        <span>Followings</span>
-                                    </p>
-                                    <p>
-                                        <strong>{user?.postsCount}</strong>
-                                        <span>Posts</span>
-                                    </p>
-                                </div>
+                                <p dir="auto">
+                                    {/* <Markdown> */}
+                                    {/* {renderMarkdown(user?.description?.replace(/\n/g, ' <br/> ') || '')} */}
+                                    {[...renderMarkdown(user?.description)?.map((i, index) => <div key={index} dir="auto">{i}</div>)]}
+                                    {/* </Markdown> */}
+                                </p>
+                                <Stats user={user} />
                             </div>
                         </div>
                         {user.viewer.blocking ?

@@ -23,6 +23,7 @@ export default function Layout(props: {
     const newModal = useAtomValue(newAtom);
 
     const _getProfile = async () => {
+        
         const localData = localStorage.getItem(SESSION_LOCAL_STORAGE_KEY);
         if (localData) {
             const parsedData = JSON.parse(localData);
@@ -50,7 +51,7 @@ export default function Layout(props: {
                     {children}
                 </div>
                 <Right />
-            </> : <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div>}
+            </> : <div className="d-flex align-items-center justify-content-center p-5 w-100"><Loading isColored /></div>}
             {newModal.show ? <Portal><NewModal /></Portal> : ''}
             <Lightbox />
         </div>

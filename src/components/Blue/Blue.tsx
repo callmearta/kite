@@ -5,6 +5,7 @@ import cn from 'classnames';
 import { useAtomValue } from "jotai";
 import Markdown from 'markdown-to-jsx';
 import React, { SyntheticEvent, useEffect, useReducer, useRef, useState } from "react";
+import { renderToString } from 'react-dom/server';
 import { Link, useNavigate } from "react-router-dom";
 import AvatarPlaceholder from '../../assets/placeholder.png';
 import RepostIcon from '../../assets/repost-fill.svg';
@@ -20,6 +21,8 @@ import Record from "./Embed/Record";
 import Like from "./Like";
 import More from "./More";
 import Repost from "./Repost";
+import Stats from "./Stats";
+
 
 export default function Blue(props: {
     post: FeedViewPost | PostView,
@@ -43,7 +46,7 @@ export default function Blue(props: {
     const author = post?.author as AppBskyActorProfile.Record;
     const user = useAtomValue(userAtom);
 
-    const [markdown, setMarkdown] = useState('');
+    const [markdown, setMarkdown] = useState<any>([]);
     const markdownText = () => {
         const res = renderMarkdown((post?.record as any)?.text);
         setMarkdown(res);
@@ -77,7 +80,7 @@ export default function Blue(props: {
         deleted ? null :
             !post ? <p>Not Found</p> : <>
                 <div ref={elementRef} className={cn(styles.blue, className, { [styles.isReply]: isReply, [styles.parent]: isParent, [styles.single]: isSingle, [styles.firehose]: firehose })} onClick={(e: any) => {
-                    if(firehose){
+                    if (firehose) {
                         // @ts-ignore
                         return navigate(`/blue/${post.author.handle}/${post.id}`);
                     }
@@ -94,7 +97,7 @@ export default function Blue(props: {
                 }}>
                     {reason ? <div className={styles.reasonRepost}>
                         <div>
-                            <img src={RepostIcon} />
+                            <img src={RepostIcon} alt="Repost" />
                             Reposted By {(reason as ReasonRepost).by.displayName}
                         </div>
                     </div>
@@ -105,22 +108,36 @@ export default function Blue(props: {
                     <div className={styles.body}>
                         <div className={styles.header}>
                             <div>
-                                <strong>{author.displayName}</strong>
-                                <span>@{(author.handle as string)}</span>
+                                <strong onClick={_linkToUserProfile}>{author.displayName}</strong>
+                                <span onClick={_linkToUserProfile}>@{(author.handle as string)}</span>
                             </div>
                             {post.indexedAt ? <span>{fromNow(new Date((post.indexedAt as string)))}</span> : ''}
                         </div>
-                        {/* <p dir="auto"> */}
-                        {markdown ? <Markdown options={{
-                            forceBlock: true,
-                            overrides: {
-                                p: {
-                                    props: {
-                                        dir: "auto"
-                                    }
-                                }
-                            }
-                        }}>{markdown?.replace(/\n/g, ' <br/> ') || ''}</Markdown> : <p>{(post?.record as any)?.text}</p>}
+                        <div dir="auto">
+                            {/* <p dir="auto"> */}
+                            {markdown ?
+                                //  <Markdown options={{
+                                //     forceBlock: true,
+                                //     disableParsingRawHTML: true,
+                                //     overrides: {
+                                //         a: {
+                                //             component: (d) => d.href.startsWith('http') ?
+                                //                 <a href={d.href} target="_blank">{d.children[0]}</a>
+                                //                 : <Link to={d.href}>{d.children[0]}</Link>,
+                                //             props: {
+                                //                 target: "_blank"
+                                //             }
+                                //         },
+                                //         p: {
+                                //             props: {
+                                //                 dir: "auto"
+                                //             }
+                                //         }
+                                //     }
+                                // }}>{markdown?.replace(/\n/g, ' \n\n ') || ''}</Markdown>
+                                [...markdown.map((i: any, index: number) => <React.Fragment key={index}>{i}</React.Fragment>)]
+                                : <p>{(post?.record as any)?.text}</p>}
+                        </div>
                         {/* </p> */}
                         {isCompose || firehose ? '' :
                             <>
@@ -130,6 +147,9 @@ export default function Blue(props: {
                                     {embed.media ? <Image embed={(embed as AppBskyEmbedImages.View)} /> : ''}
                                     {embed.record ? <Record embed={(embed as AppBskyEmbedRecord.View)} /> : ''}
                                 </div> : ''}
+                                {isSingle ?
+                                    <Stats post={post} />
+                                    : ''}
                                 <div className={styles.footer}>
                                     <Comments post={post} />
                                     <Repost post={post} />

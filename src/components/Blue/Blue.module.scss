@@ -112,6 +112,14 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        &:hover {
+            text-decoration: underline;
+        }
+        +span {
+            &:hover {
+                text-decoration: underline;
+            }
+        }
     }
     &>span {
         font-size: .8rem !important;
@@ -136,6 +144,24 @@
                 transform: scale(1.02);
             }
         }
+    }
+}
+
+.stats {
+    width: calc(100% + 3rem);
+    margin-left: -1.5rem;
+    margin-right: -1.5rem;
+    display: flex;
+    align-items: center;
+    border-top: 1px solid var(--stroke-color);
+    padding: 2.5rem;
+    padding-top: 1.25rem;
+    padding-bottom: 0;
+    margin-top: 1rem;
+    gap: 2rem;
+    font-weight: bold;
+    div {
+        cursor: pointer;
     }
 }
 
