@@ -147,10 +147,10 @@ export default function User(props: {}) {
                                     {user?.viewer?.followedBy ? <span className="tag">Follows You</span> : ''}
                                 </div>
                                 <span className="text-grey">@{user?.handle}</span>
-                                <p dir="auto">
+                                <p dir="auto" style={{whiteSpace:'pre-wrap'}}>
                                     {/* <Markdown> */}
                                     {/* {renderMarkdown(user?.description?.replace(/\n/g, ' <br/> ') || '')} */}
-                                    {[...renderMarkdown(user?.description)?.map((i, index) => <div key={index} dir="auto">{i}</div>)]}
+                                    {[...renderMarkdown(user?.description)?.map((i, index) => <>{i}</>)]}
                                     {/* </Markdown> */}
                                 </p>
                                 <Stats user={user} />

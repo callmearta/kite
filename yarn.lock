@@ -65,9 +65,12 @@
   integrity sha512-t5M6/CzWBVYoBbIvfKDpqPj/+ZmyoK9ydZSStcTXosJ27XXwOPhz0VDUGKK2SM9G5Y7TPes8S5KTAU0UdVYFCw==
 
 "@atproto/uri@*", "@atproto/uri@latest":
-  version "0.0.1"
-  resolved "https://registry.npmjs.org/@atproto/uri/-/uri-0.0.1.tgz"
-  integrity sha512-Tm+20Bxdie+a4yvberrfWaDhrze/p3AvA5v5IV6XyZJYu2+fnionUrufUjkcs3PIWeSd6VMgVcRp3GaoiUvSvQ==
+  version "0.0.2"
+  resolved "https://registry.npmjs.org/@atproto/uri/-/uri-0.0.2.tgz"
+  integrity sha512-/6otLZF7BLpT9suSdHuXLbL12nINcWPsLmcOI+dctqovWUjH+XIRVNXDQgBYSrPVetxMiknuEwWelmnA33AEXg==
+  dependencies:
+    "@atproto/identifier" "*"
+    "@atproto/nsid" "*"
 
 "@atproto/xrpc@*", "@atproto/xrpc@^0.1.0":
   version "0.1.0"
@@ -1104,10 +1107,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@remix-run/router@1.4.0":
-  version "1.4.0"
-  resolved "https://registry.npmjs.org/@remix-run/router/-/router-1.4.0.tgz"
-  integrity sha512-BJ9SxXux8zAg991UmT8slpwpsd31K1dHHbD3Ba4VzD+liLQ4WAMSxQp2d2ZPRPfN0jN2NPRowcSSoM7lCaF08Q==
+"@remix-run/router@1.6.1":
+  version "1.6.1"
+  resolved "https://registry.npmjs.org/@remix-run/router/-/router-1.6.1.tgz"
+  integrity sha512-YUkWj+xs0oOzBe74OgErsuR3wVn+efrFhXBWrit50kOiED+pvQe2r6MWY0iJMQU/mSVKxvNzL4ZaYvjdX+G7ZA==
 
 "@rollup/plugin-babel@^5.2.0":
   version "5.3.1"
@@ -1220,9 +1223,9 @@
   integrity sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==
 
 "@types/react-dom@^18.0.10":
-  version "18.0.11"
-  resolved "https://registry.npmjs.org/@types/react-dom/-/react-dom-18.0.11.tgz"
-  integrity sha512-O38bPbI2CWtgw/OoQoY+BRelw7uysmXbWvw3nLWO21H1HSh+GOlqPuXshJfjmpNlKiiSDG9cc1JZAaMmVdcTlw==
+  version "18.2.4"
+  resolved "https://registry.npmjs.org/@types/react-dom/-/react-dom-18.2.4.tgz"
+  integrity sha512-G2mHoTMTL4yoydITgOGwWdWMVd8sNgyEP85xVmMKAPUBwQWm9wBPQUmvbeF4V3WBY1P7mmL4BkjQ0SqUpf1snw==
   dependencies:
     "@types/react" "*"
 
@@ -1241,9 +1244,9 @@
     "@types/react" "*"
 
 "@types/react@*", "@types/react@^18.0.27", "@types/react@>=16":
-  version "18.0.28"
-  resolved "https://registry.npmjs.org/@types/react/-/react-18.0.28.tgz"
-  integrity sha512-RD0ivG1kEztNBdoAK7lekI9M+azSnitIn85h4iOiaLjaTrMjzslhaqCGaI4IyCJ1RljWiLCEu4jyrLLgqxBTew==
+  version "18.2.6"
+  resolved "https://registry.npmjs.org/@types/react/-/react-18.2.6.tgz"
+  integrity sha512-wRZClXn//zxCFW+ye/D2qY65UsYP1Fpex2YXorHc8awoNamkMZSvBxwxdYVInsHOZZd2Ppq8isnSzJL5Mpf8OA==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -2338,9 +2341,9 @@ jest-worker@^26.2.1:
     supports-color "^7.0.0"
 
 jotai@^2.0.4:
-  version "2.0.4"
-  resolved "https://registry.npmjs.org/jotai/-/jotai-2.0.4.tgz"
-  integrity sha512-XkR1Jtm4a2iKV/7fdB3rNHjJz8FkkDMVczqiAok7lt8W4F69l/ZQkPGWSEV+hJOJXRn27k6XYKOoKEQIwBuAMA==
+  version "2.1.0"
+  resolved "https://registry.npmjs.org/jotai/-/jotai-2.1.0.tgz"
+  integrity sha512-fR82PtHAmEQrc/daMEYGc4EteW96/b6wodtDSCzLvoJA/6y4YG70er4hh2f8CYwYjqwQ0eZUModGfG4DmwkTyQ==
 
 js-sha3@0.8.0:
   version "0.8.0"
@@ -3066,19 +3069,19 @@ react-refresh@^0.14.0:
   integrity sha512-wViHqhAd8OHeLS/IRMJjTSDHF3U9eWi62F/MledQGPdJGDhodXJ9PBLNGr6WWL7qlH12Mt3TyTpbS+hGXMjCzQ==
 
 react-router-dom@^6.9.0:
-  version "6.9.0"
-  resolved "https://registry.npmjs.org/react-router-dom/-/react-router-dom-6.9.0.tgz"
-  integrity sha512-/seUAPY01VAuwkGyVBPCn1OXfVbaWGGu4QN9uj0kCPcTyNYgL1ldZpxZUpRU7BLheKQI4Twtl/OW2nHRF1u26Q==
+  version "6.11.1"
+  resolved "https://registry.npmjs.org/react-router-dom/-/react-router-dom-6.11.1.tgz"
+  integrity sha512-dPC2MhoPeTQ1YUOt5uIK376SMNWbwUxYRWk2ZmTT4fZfwlOvabF8uduRKKJIyfkCZvMgiF0GSCQckmkGGijIrg==
   dependencies:
-    "@remix-run/router" "1.4.0"
-    react-router "6.9.0"
+    "@remix-run/router" "1.6.1"
+    react-router "6.11.1"
 
-react-router@6.9.0:
-  version "6.9.0"
-  resolved "https://registry.npmjs.org/react-router/-/react-router-6.9.0.tgz"
-  integrity sha512-51lKevGNUHrt6kLuX3e/ihrXoXCa9ixY/nVWRLlob4r/l0f45x3SzBvYJe3ctleLUQQ5fVa4RGgJOTH7D9Umhw==
+react-router@6.11.1:
+  version "6.11.1"
+  resolved "https://registry.npmjs.org/react-router/-/react-router-6.11.1.tgz"
+  integrity sha512-OZINSdjJ2WgvAi7hgNLazrEV8SGn6xrKA+MkJe9wVDMZ3zQ6fdJocUjpCUCI0cNrelWjcvon0S/QK/j0NzL3KA==
   dependencies:
-    "@remix-run/router" "1.4.0"
+    "@remix-run/router" "1.6.1"
 
 react-slick@^0.29.0:
   version "0.29.0"
@@ -3272,9 +3275,9 @@ safe-regex-test@^1.0.0:
     is-regex "^1.1.4"
 
 sass@*, sass@^1.59.2:
-  version "1.59.2"
-  resolved "https://registry.npmjs.org/sass/-/sass-1.59.2.tgz"
-  integrity sha512-jJyO6SmbzkJexF8MUorHx5tAilcgabioYxT/BHbY4+OvoqmbHxsYlrjZ8Adhqcgl6Zqwie0TgMXLCAmPFxXOuw==
+  version "1.62.1"
+  resolved "https://registry.npmjs.org/sass/-/sass-1.62.1.tgz"
+  integrity sha512-NHpxIzN29MXvWiuswfc1W3I0N8SXBd8UR26WntmDlRYf0bSADnwnOjsyMZ3lMezSlArD33Vs3YFhp7dWvL770A==
   dependencies:
     chokidar ">=3.0.0 <4.0.0"
     immutable "^4.0.0"
@@ -3738,9 +3741,9 @@ vite-plugin-pwa@^0.14.7:
     workbox-window "^6.5.4"
 
 "vite@^3.1.0 || ^4.0.0", vite@^4.1.0, vite@^4.1.0-beta.0:
-  version "4.3.3"
-  resolved "https://registry.npmjs.org/vite/-/vite-4.3.3.tgz"
-  integrity sha512-MwFlLBO4udZXd+VBcezo3u8mC77YQk+ik+fbc0GZWGgzfbPP+8Kf0fldhARqvSYmtIWoAJ5BXPClUbMTlqFxrA==
+  version "4.3.5"
+  resolved "https://registry.npmjs.org/vite/-/vite-4.3.5.tgz"
+  integrity sha512-0gEnL9wiRFxgz40o/i/eTBwm+NEbpUeTWhzKrZDSdKm6nplj+z4lKz8ANDgildxHm47Vg8EUia0aicKbawUVVA==
   dependencies:
     esbuild "^0.17.5"
     postcss "^8.4.23"

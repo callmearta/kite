@@ -4,6 +4,7 @@ import agent from "../Agent";
 
 
 export default function renderMarkdown(text: string) {
+    if(!text || !text.length) return [];
     const rt = new RichText({ text })
     rt.detectFacets(agent);
     let markdown = []
@@ -14,7 +15,8 @@ export default function renderMarkdown(text: string) {
             markdown.push(<Link className="text-primary" to={`/user/${segment.text.substring(1, segment.text.length)}`}>{segment.text}</Link>)
 
         } else {
-            markdown.push(segment.text.split('\n').map((item, index) => <span key={index}>{item}<br /></span>))
+            
+            markdown.push(segment.text)
         }
     }
 

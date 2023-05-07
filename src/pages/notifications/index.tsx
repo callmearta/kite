@@ -15,15 +15,15 @@ export default function Notifications(props: {}) {
         refetchOnWindowFocus: false,
         refetchInterval: 5000,
         onSuccess: async d => {
-            if (d.data.notifications.filter(i => !i.isRead).length)
+            if (d.data?.notifications?.filter(i => !i.isRead).length)
                 _updateSeen();
-            const locNotifs = d.data.notifications;
-            const uniqueUris = [...new Set(locNotifs.filter(
+            const locNotifs = d.data?.notifications;
+            const uniqueUris = [...new Set(locNotifs?.filter(
                 i => i.reason == 'mention' ||
                     i.reason == 'like' ||
                     i.reason == 'reply' ||
                     i.reason == 'repost'
-            ).map(i => (i?.record as any)?.subject?.uri).filter(i => i && typeof i != 'undefined'))];
+            ).map(i => (i?.record as any)?.subject?.uri)?.filter(i => i && typeof i != 'undefined'))];
 
             if (uniqueUris.length) {
                 const chunkSize = 25;
@@ -101,8 +101,9 @@ export default function Notifications(props: {}) {
             }
         }, [])
 
+        if (!groups || groups.length) return groups;
         // @ts-ignore
-        groups = groups.filter((i, index) => i.subjectUri && groups.findIndex(p => p.subjectUri && p.subjectUri == i.subjectUri) == index);
+        groups = groups?.filter((i, index) => i.subjectUri && groups.findIndex(p => p.subjectUri && p.subjectUri == i.subjectUri) == index);
         return groups;
     }, [notifs]);
 

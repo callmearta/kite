@@ -61,6 +61,14 @@
     &:last-child {
         margin-bottom: 0;
     }
+    span,
+    strong {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: block;
+    }
 }
 
 .avatar {
@@ -81,6 +89,7 @@
 }
 
 .userRight {
+    width: calc(100% - 50px);
     p {
         margin: 0;
         display: flex;

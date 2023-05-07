@@ -22,9 +22,9 @@ export default function PostsRenderer(props: {
             // @ts-ignore
             const postExists = p1.find(i => i.post.cid == p2.post.cid
                 // @ts-ignore
-                || i.post?.record?.reply?.root?.cid == p2.post?.record?.reply?.root?.cid
+                // || i.post?.record?.reply?.root?.cid == p2.post?.record?.reply?.root?.cid
                 // || i.reply?.root.cid == p2.reply?.root.cid
-                // || ((p2 as FeedViewPost).reply && (p2?.post as any).likeCount <= 1)
+                || ((p2 as FeedViewPost).reply && (p2?.post as any).likeCount <= 1)
             );
             if (postExists) {
                 return [...p1];
@@ -38,7 +38,7 @@ export default function PostsRenderer(props: {
             feed && feed.length ? _sortPosts().filter((post:any) => !post?.blocked).map((post: FeedViewPost, index: number) => {
                 if (!!post.reply && !post.reason ) {
                     return <React.Fragment key={index}>
-                        {post.reply.parent.cid != post.reply.root.cid ? <Blue key={post.reply.root.cid} post={post.reply.root} isParent={true} reason={post.reason} /> : ''}
+                        {/* {post.reply.parent.cid != post.reply.root.cid ? <Blue key={post.reply.root.cid} post={post.reply.root} isParent={true} reason={post.reason} /> : ''} */}
                         {(post.reply.parent.record as any)?.reply?.parent.cid != (post.reply.parent.record as any)?.reply?.root.cid ? <p className="view-thread"><Link to={linkFromPost(post.reply.parent)} title="View Thread">+ View Thread</Link></p> : ''}
                         <Blue post={post.reply.parent} key={post.reply.parent.cid} isReply={true} isParent={true} reason={post.reason} />
                         <Blue post={post.post} key={post.post.cid} isReply={true} reason={post.reason} />

@@ -113,28 +113,9 @@ export default function Blue(props: {
                             </div>
                             {post.indexedAt ? <span>{fromNow(new Date((post.indexedAt as string)))}</span> : ''}
                         </div>
-                        <div dir="auto">
+                        <div dir="auto" style={{ whiteSpace: 'pre-wrap' }}>
                             {/* <p dir="auto"> */}
                             {markdown ?
-                                //  <Markdown options={{
-                                //     forceBlock: true,
-                                //     disableParsingRawHTML: true,
-                                //     overrides: {
-                                //         a: {
-                                //             component: (d) => d.href.startsWith('http') ?
-                                //                 <a href={d.href} target="_blank">{d.children[0]}</a>
-                                //                 : <Link to={d.href}>{d.children[0]}</Link>,
-                                //             props: {
-                                //                 target: "_blank"
-                                //             }
-                                //         },
-                                //         p: {
-                                //             props: {
-                                //                 dir: "auto"
-                                //             }
-                                //         }
-                                //     }
-                                // }}>{markdown?.replace(/\n/g, ' \n\n ') || ''}</Markdown>
                                 [...markdown.map((i: any, index: number) => <React.Fragment key={index}>{i}</React.Fragment>)]
                                 : <p>{(post?.record as any)?.text}</p>}
                         </div>

@@ -8,8 +8,8 @@ export default function Image(props: {
     embed: AppBskyEmbedImages.View | AppBskyEmbedRecordWithMedia.View
 }) {
     const { embed } = props;
-    const hasUri = (embed.images || (embed.media as any)?.images).filter((img: any) => (img.image instanceof BlobRef));
-    if (hasUri.length) return null;
+    const hasUri = (embed?.images || (embed?.media as any)?.images)?.filter((img: any) => (img?.image instanceof BlobRef));
+    if (hasUri && hasUri.length) return null;
     const setLightbox = useSetAtom(lightboxAtom);
 
     const _showLightbox = () => {
