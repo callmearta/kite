@@ -7,7 +7,7 @@
     outline: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, .2);
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 ::-webkit-scrollbar {
@@ -210,7 +210,7 @@ body {
         &>div:last-child {
             display: flex;
             button {
-                margin: 0 .5rem;
+                margin: 0 .25rem;
             }
         }
     }
@@ -240,6 +240,12 @@ body.hot-col .skyline:not(.skycol) {
         background: var(--white-color);
         z-index: 3;
         padding: .75rem 1.5rem !important;
+        &>img:first-child {
+            display: none;
+        }
+        h1 {
+            text-transform: uppercase;
+        }
     }
 }
 
@@ -567,6 +573,32 @@ body.hot-col .sidebar {
 .follows-modal {
     .modal-content {
         width: 500px;
+    }
+}
+
+.header-btn {
+    display: flex;
+    align-items: center;
+    padding: .5rem 1rem;
+    border-radius: 50px;
+    border: 1px solid var(--stroke-color);
+    font-weight: bold;
+    background: none;
+    color: var(--text-color);
+    cursor: pointer;
+    &:hover {
+        background: var(--light-color);
+    }
+    &:first-child {
+        img {
+            position: relative;
+            top: -3px;
+        }
+    }
+    img {
+        // width: 24px;
+        height: 20px;
+        margin-left: .5rem;
     }
 }
 

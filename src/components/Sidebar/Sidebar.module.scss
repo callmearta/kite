@@ -49,7 +49,15 @@
                 display: none;
             }
             strong {
-                display: none;
+                width: 0;
+                display: block;
+                position: relative;
+                z-index: -1;
+                color: var(--white-color);
+                span {
+                    left: -1.5rem;
+                    top: -.75rem;
+                }
             }
         }
         .logo {

@@ -177,6 +177,9 @@
         left: 3rem;
         top: 0;
         z-index: -1;
+        @media screen and (max-width: 1040px) {
+            left: 2.25rem;
+        }
     }
 }
 
@@ -193,6 +196,9 @@
         left: 3rem;
         top: 1rem;
         z-index: -1;
+        @media screen and (max-width: 1040px) {
+            left: 2.25rem;
+        }
     }
     &.isReply {
         &::before {
