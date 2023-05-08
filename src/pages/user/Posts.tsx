@@ -50,7 +50,7 @@ export default function Posts(props: {}) {
             <>
                 {blocked ?
                     <p className="p-5 d-flex align-items-center justify-content-center">You've blocked this account</p>
-                    : <PostsRenderer isLoading={false} feed={posts} />}
+                    : <PostsRenderer isLoading={false} feed={posts} isProfile={true} />}
                 {hasNextPage && !reachedEnd ? <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div> : ''}
             </>
 

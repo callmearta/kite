@@ -11,12 +11,13 @@ import Loading from "./Loading";
 export default function PostsRenderer(props: {
     isLoading?: boolean,
     feed?: any,
+    isProfile?: boolean
 }) {
-    const { isLoading, feed } = props;
+    const { isLoading, feed, isProfile } = props;
     const settings = useAtomValue(settingsAtom);
 
     const _sortPosts: any | FeedViewPost = useCallback(() => {
-        
+
         // @ts-ignore
         return feed?.reduce((p1, p2: FeedViewPost) => {
             // @ts-ignore
@@ -26,23 +27,24 @@ export default function PostsRenderer(props: {
                 // || i.reply?.root.cid == p2.reply?.root.cid
                 // || p1[p1.length - 1].post.author.did == p2.post.author.did
             );
-            if(p2.reply && !p2.randomness){
+            if (p2.reply && !p2.randomness) {
                 p2.randomness = Math.random();
             }
 
-            if (postExists 
-                // || ((p2 as FeedViewPost).reply && (p2?.post as any).likeCount <= 1) 
-                || (p2.reply && p2.reply.parent.cid != p2.reply.root.cid && (p2.randomness as number) < .9)) {
+            if (postExists
+                || (!isProfile && ((p2 as FeedViewPost).reply && (p2?.post as any).likeCount <= 1))
+                || (!isProfile && p2.reply && p2.reply.parent.cid != p2.reply.root.cid && (p2.randomness as number) < .2)
+            ) {
                 return [...p1];
             }
             return [...p1, p2];
-        }, []).filter((p:FeedViewPost) => blacklist(p, settings.blacklist))
-    },[feed])
+        }, []).filter((p: FeedViewPost) => blacklist(p, settings.blacklist))
+    }, [feed])
 
     return (
         isLoading || !feed ? <div className='d-flex align-items-center justify-content-center p-5'><Loading isColored /></div> :
-            feed && feed.length ? _sortPosts().filter((post:any) => !post?.blocked).map((post: FeedViewPost, index: number) => {
-                if (!!post.reply && !post.reason ) {
+            feed && feed.length ? _sortPosts().filter((post: any) => !post?.blocked).map((post: FeedViewPost, index: number) => {
+                if (!!post.reply && !post.reason) {
                     return <React.Fragment key={index}>
                         {/* {post.reply.parent.cid != post.reply.root.cid ? <Blue key={post.reply.root.cid} post={post.reply.root} isParent={true} reason={post.reason} /> : ''} */}
                         {(post.reply.parent.record as any)?.reply?.parent.cid != (post.reply.parent.record as any)?.reply?.root.cid ? <p className="view-thread"><Link to={linkFromPost(post.reply.parent)} title="View Thread">+ View Thread</Link></p> : ''}
