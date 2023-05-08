@@ -1,5 +1,5 @@
 const linkFromPost = (post: any, uri: string | null = null) => {
-    if (!post || !uri) return '';
+    if (!post && !uri) return '';
     if (uri) {
         return `/blue/${uri?.split('/')[2]}/${uri?.split('/')[uri?.split('/').length - 1]}`;
     }

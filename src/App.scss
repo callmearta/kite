@@ -740,7 +740,8 @@ button {
             display: block;
         }
         input,
-        textarea {
+        textarea,
+        select {
             border: 1px solid var(--stroke-color);
             padding: 1rem;
             color: var(--text-color) !important;
@@ -749,6 +750,29 @@ button {
         textarea {
             min-height: 150px;
         }
+    }
+    select {
+        border-radius: 50px;
+        width: 100%;
+        appearance: none;
+        -webkit-appearance: none;
+        position: relative;
+    }
+}
+
+.select-wrapper {
+    position: relative;
+    &::after {
+        width: 14px;
+        height: 14px;
+        background: url('./assets/arrow.svg') no-repeat center center;
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 1rem;
+        bottom: 0;
+        margin: auto;
     }
 }
 

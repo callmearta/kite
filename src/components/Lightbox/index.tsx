@@ -46,7 +46,11 @@ export default function Lightbox(props: {}) {
             if (!newImages.length) {
                 setLightbox(prev => ({ ...prev, images: newImages, show: false, meta: null }));
             } else {
-                setLightbox(prev => ({ ...prev, images: newImages }));
+                setLightbox(prev => {
+                    let newMeta = [...prev.meta];
+                    newMeta.splice(index, 1);
+                    return { ...prev, images: newImages, meta: newMeta }
+                });
             }
             queryClient.invalidateQueries("fleets");
         }

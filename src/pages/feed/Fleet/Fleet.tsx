@@ -31,7 +31,11 @@ export default function Fleet(props: {
             record.data.map(async image => {
                 if (!image.value.kiteType || image.value.kiteType != 'fleet') return;
                 if (image.value.kiteImageUrl) {
-                    newUrls.push({ url: image.kiteImageUrl, createdAt: image.value.createdAt });
+                    newUrls.push({ url: image.value.kiteImageUrl, createdAt: image.value.createdAt });
+                    return;
+                }
+                if (image.value.kiteImageString) {
+                    newUrls.push({ url: image.value.kiteImageString, createdAt: image.value.createdAt });
                     return;
                 }
                 const cid = image.value.avatar?.ref.toString();
@@ -56,7 +60,6 @@ export default function Fleet(props: {
         let meta = { ...record };
         meta.data = record.data.sort((a: any, b: any) => new Date(a.value.createdAt).valueOf() - new Date(b.value.createdAt).valueOf())
         setLoading(false);
-
         if (newUrls.length) {
             setImage(newUrls);
             setLightbox({

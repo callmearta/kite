@@ -16,6 +16,7 @@ import Blue from '../../components/Blue/Blue';
 import Loading from '../../components/Loading';
 import PostsRenderer from '../../components/PostsRenderer';
 import { UI_STORAGE_KEY, uiAtom } from '../../store/ui';
+import detectLang from '../../utils/detectLang';
 import styles from './Feed.module.scss';
 
 addExtension({
@@ -41,6 +42,8 @@ export default function Firehose(props: {}) {
 
     const [feed, setFeed] = useState<any>([]);
     const [keyword, setKeyword] = useState<string>('');
+    const lang = useRef('');
+    const [displayLang,setDisplayLang] = useState('');
 
     const _handleMessage = useCallback(async (e: any) => {
         if (e.data instanceof Blob) {
@@ -60,24 +63,35 @@ export default function Firehose(props: {}) {
                     if (record.text.length > 0) {
                         const rkey = op.path.split("/").at(-1);
 
-                        const userRepo = await agent.getProfile({
-                            actor: body.repo
-                        }).then(d => d.data);
-                        const newItem = {
-                            author: userRepo,
-                            ...record,
-                            id: rkey,
-                            record: record,
-                        };
-                        // @ts-ignore
-                        setFeed(prev => [newItem, ...prev.splice(0, 100)]);
-
+                        await _appendToFeed(body.repo, record, rkey);
                     }
                 }
             }
         }
 
-    }, [feed, keyword]);
+    }, [feed, keyword, lang]);
+
+    const _appendToFeed = useCallback(async (repo: any, record: any, rkey: any) => {
+        if (lang.current && lang.current.length) {
+            const detect = await detectLang(record.text);
+            if (detect != lang.current) {
+                return false;
+            }
+        }
+
+        const userRepo = await agent.getProfile({
+            actor: repo
+        }).then(d => d.data);
+        const newItem = {
+            author: userRepo,
+            ...record,
+            id: rkey,
+            record: record,
+        };
+        // @ts-ignore
+        setFeed(prev => [newItem, ...prev.splice(0, 100)]);
+        return true;
+    }, [feed, keyword, lang.current]);
 
     useEffect(() => {
         const ws = new WebSocket("wss://bsky.social/xrpc/com.atproto.sync.subscribeRepos");
@@ -105,15 +119,36 @@ export default function Firehose(props: {}) {
                     <img src={CloseIcon} alt="Close" />
                 </button>
             </div>
-            <div className={styles.search}>
-                <div className="input-wrapper bordered">
-                    <input type="text" value={keyword} onChange={e => setKeyword(e.target.value)} placeholder="Search..." />
+            <div className="d-flex align-items-center">
+                <div className={styles.search}>
+                    <div className="input-wrapper bordered">
+                        <input type="text" value={keyword} onChange={e => setKeyword(e.target.value)} placeholder="Search..." />
+                    </div>
+                </div>
+                <div className={styles.search}>
+                    <div className="input-wrapper select-wrapper bordered">
+                        <select title="Language" value={displayLang} onChange={e => {
+                            lang.current = (e.target.value);
+                            setDisplayLang(e.target.value);
+                        }}>
+                            <option value="">Any</option>
+                            <option value="en">English</option>
+                            <option value="kr">Korean</option>
+                            <option value="jp">Japanese</option>
+                            <option value="ar">Persian & Arabic</option>
+                        </select>
+                    </div>
                 </div>
             </div>
             {/* <PostsRenderer feed={feed} /> */}
             {keyword.length ?
-                feed.filter((p: any) => p && p.author).filter((p: any) => p.text.toLowerCase().indexOf(keyword) > -1).map((p: any) => <Blue key={p.id} firehose post={p} />)
-                : feed.filter((p: any) => p && p.author).map((p: any) => <Blue key={p.id} firehose post={p} />)}
+                feed
+                    .filter((p: any) => p && p.author)
+                    .filter((p: any) => p.text.toLowerCase().indexOf(keyword) > -1)
+                    .map((p: any) => <Blue key={p.id} firehose post={p} />)
+                : feed
+                    .filter((p: any) => p && p.author)
+                    .map((p: any) => <Blue key={p.id} firehose post={p} />)}
         </div>
     );
 }

@@ -2,7 +2,7 @@ import { ProfileViewDetailed } from '@atproto/api/src/client/types/app/bsky/acto
 import cn from 'classnames';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import Markdown from 'markdown-to-jsx';
-import { SyntheticEvent, useEffect, useState } from 'react';
+import React, { SyntheticEvent, useEffect, useState } from 'react';
 import { Portal } from 'react-portal';
 import { useMutation, useQuery } from "react-query";
 import { Link, useLocation, useParams } from "react-router-dom";
@@ -150,7 +150,7 @@ export default function User(props: {}) {
                                 <p dir="auto" style={{whiteSpace:'pre-wrap'}}>
                                     {/* <Markdown> */}
                                     {/* {renderMarkdown(user?.description?.replace(/\n/g, ' <br/> ') || '')} */}
-                                    {[...renderMarkdown(user?.description)?.map((i, index) => <>{i}</>)]}
+                                    {[...renderMarkdown(user?.description)?.map((i, index) => <React.Fragment key={index}>{i}</React.Fragment>)]}
                                     {/* </Markdown> */}
                                 </p>
                                 <Stats user={user} />

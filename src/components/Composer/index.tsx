@@ -41,6 +41,7 @@ export default function Composer(props: {
     const autoCompleteRef = useRef<HTMLElement>(null);
     const lastPos = useRef<any>(null);
     const typeAheadTimeoutRef = useRef<any>(null);
+    const [isFocus, setIsFocus] = useState(false);
 
     const _handlePublished = () => {
         setFiles([]);
@@ -217,14 +218,19 @@ export default function Composer(props: {
         }
     }, [autoComplete]);
 
-    const _handleFile = async (e: any) => {
-        const selectedFiles = e.target.files;
+    const _handleFile = async (e: any, file?: null) => {
+        const selectedFiles = file ? [file] : e.target.files;
         let filesArray: any[] = Array.from(selectedFiles);
         for (let i = 0; i < filesArray.length; i++) {
             const file = filesArray[i];
             filesArray[i] = { file: file, preview: URL.createObjectURL(file as Blob) };
         }
-        setFiles(filesArray);
+        setFiles(prev => {
+            if (prev.length + selectedFiles.length <= 4) {
+                return [...prev, ...filesArray]
+            }
+            return prev;
+        });
     };
 
     const _handleRemoveFile = (e: any, index: number) => {
@@ -236,10 +242,37 @@ export default function Composer(props: {
     };
 
     useEffect(() => {
-        if(textareaRef.current && inModal){
+        if (textareaRef.current && inModal) {
             textareaRef.current.focus();
         }
-    },[textareaRef.current,inModal]);
+    }, [textareaRef.current, inModal]);
+
+    const _handlePasteImage = (e: any) => {
+        var items = (e.clipboardData || e.originalEvent.clipboardData).items;
+
+        for (var index in items) {
+            var item = items[index];
+            if (item.kind === 'file') {
+                e.preventDefault();
+                e.stopPropagation();
+                var blob = item.getAsFile();
+                _handleFile(null, blob);
+                return false;
+            }
+        }
+    };
+
+    useEffect(() => {
+        if (isFocus) {
+            document.addEventListener('paste', _handlePasteImage);
+        } else {
+            document.removeEventListener('paste', _handlePasteImage);
+        }
+
+        return () => {
+            document.removeEventListener('paste', _handlePasteImage);
+        }
+    }, [isFocus]);
 
     return (
         <>
@@ -256,6 +289,8 @@ export default function Composer(props: {
                     spellCheck="false"
                     contentEditable
                     suppressContentEditableWarning
+                    onFocus={() => setIsFocus(true)}
+                    onBlur={() => setIsFocus(false)}
                     onKeyDown={_handleKeyDown}
                     onKeyUp={_handleCtrlEnter}
                     dir="auto"

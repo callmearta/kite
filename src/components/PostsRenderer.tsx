@@ -1,6 +1,6 @@
 import { FeedViewPost } from "@atproto/api/src/client/types/app/bsky/feed/defs";
 import { useAtomValue } from "jotai";
-import React from "react";
+import React, { useCallback } from "react";
 import { Link } from "react-router-dom";
 import { settingsAtom } from "../store/settings";
 import blacklist from "../utils/blacklist";
@@ -15,7 +15,7 @@ export default function PostsRenderer(props: {
     const { isLoading, feed } = props;
     const settings = useAtomValue(settingsAtom);
 
-    const _sortPosts: any | FeedViewPost = () => {
+    const _sortPosts: any | FeedViewPost = useCallback(() => {
         
         // @ts-ignore
         return feed?.reduce((p1, p2: FeedViewPost) => {
@@ -24,14 +24,20 @@ export default function PostsRenderer(props: {
                 // @ts-ignore
                 // || i.post?.record?.reply?.root?.cid == p2.post?.record?.reply?.root?.cid
                 // || i.reply?.root.cid == p2.reply?.root.cid
-                || ((p2 as FeedViewPost).reply && (p2?.post as any).likeCount <= 1)
+                // || p1[p1.length - 1].post.author.did == p2.post.author.did
             );
-            if (postExists) {
+            if(p2.reply && !p2.randomness){
+                p2.randomness = Math.random();
+            }
+
+            if (postExists 
+                // || ((p2 as FeedViewPost).reply && (p2?.post as any).likeCount <= 1) 
+                || (p2.reply && p2.reply.parent.cid != p2.reply.root.cid && (p2.randomness as number) < .9)) {
                 return [...p1];
             }
             return [...p1, p2];
         }, []).filter((p:FeedViewPost) => blacklist(p, settings.blacklist))
-    }
+    },[feed])
 
     return (
         isLoading || !feed ? <div className='d-flex align-items-center justify-content-center p-5'><Loading isColored /></div> :

@@ -35,7 +35,7 @@ export default function Fleets(props: {}) {
                     const diffTime = Math.abs(new Date(record.value.createdAt).valueOf() - Date.now());
                     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60));
                     // @ts-ignore
-                    return record.value.kiteType && record.value.avatar && record.value.kiteType == 'fleet' && record.value.createdAt && diffDays <= 24
+                    return record.value.kiteType && (record.value.avatar || record.value.kiteImageString) && record.value.kiteType == 'fleet' && record.value.createdAt && diffDays <= 24
                 });
                 if (!userFleets.length) return;
                 fleets.push({

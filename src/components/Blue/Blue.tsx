@@ -84,6 +84,7 @@ export default function Blue(props: {
                         // @ts-ignore
                         return navigate(`/blue/${post.author.handle}/${post.id}`);
                     }
+                    
                     if (e.target.tagName != 'A' && e.target.tagName != 'IMG') {
                         if (isSingle) {
                             return e.preventDefault();
