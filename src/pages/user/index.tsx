@@ -2,7 +2,7 @@ import { ProfileViewDetailed } from '@atproto/api/src/client/types/app/bsky/acto
 import cn from 'classnames';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import Markdown from 'markdown-to-jsx';
-import React, { SyntheticEvent, useEffect, useState } from 'react';
+import React, { SyntheticEvent, useEffect, useMemo, useState } from 'react';
 import { Portal } from 'react-portal';
 import { useMutation, useQuery } from "react-query";
 import { Link, useLocation, useParams } from "react-router-dom";
@@ -21,6 +21,7 @@ import renderMarkdown from "../../utils/renderMarkdown";
 import Blocks from './Blocks';
 import EditProfile from './EditProfile';
 import Likes from './Likes';
+import Media from './Media';
 import More from './More';
 import Posts from './Posts';
 import Stats from './Stats';
@@ -105,6 +106,11 @@ export default function User(props: {}) {
         unblockMutate();
     }
 
+    const joinDate = useMemo(() => {
+        const date = new Date(user?.indexedAt).toDateString().split(' ');
+        return `${date[2]} ${date[1]} ${date[3]}`;
+    },[user]);
+
     return (
         <>
             <Layout key={user?.did}>
@@ -147,12 +153,13 @@ export default function User(props: {}) {
                                     {user?.viewer?.followedBy ? <span className="tag">Follows You</span> : ''}
                                 </div>
                                 <span className="text-grey">@{user?.handle}</span>
-                                <p dir="auto" style={{whiteSpace:'pre-wrap'}}>
+                                <p dir="auto" style={{ whiteSpace: 'pre-wrap' }}>
                                     {/* <Markdown> */}
                                     {/* {renderMarkdown(user?.description?.replace(/\n/g, ' <br/> ') || '')} */}
                                     {[...renderMarkdown(user?.description)?.map((i, index) => <React.Fragment key={index}>{i}</React.Fragment>)]}
                                     {/* </Markdown> */}
                                 </p>
+                                <p className="text-grey">Joined at {joinDate}</p>
                                 <Stats user={user} />
                             </div>
                         </div>
@@ -163,9 +170,16 @@ export default function User(props: {}) {
                                     <Link to={`/user/${did}/posts`} title="" target="_self" className={cn(styles.tab, { [styles.active]: tabFromUrl == 'posts' || tabFromUrl == did })}>Posts</Link>
                                     <Link to={`/user/${did}/likes`} title="" target="_self" className={cn(styles.tab, { [styles.active]: tabFromUrl == 'likes' })}>Likes</Link>
                                     <Link to={`/user/${did}/blocks`} title="" target="_self" className={cn(styles.tab, { [styles.active]: tabFromUrl == 'blocks' })}>Blocks</Link>
+                                    {/* <Link to={`/user/${did}/media`} title="" target="_self" className={cn(styles.tab, { [styles.active]: tabFromUrl == 'media' })}>Media</Link> */}
                                 </div>
                                 <div className={styles.posts}>
-                                    {{ posts: <Posts />, likes: <Likes />, blocks: <Blocks />, [did as string]: <Posts /> }[tabFromUrl]}
+                                    {{
+                                        posts: <Posts />,
+                                        likes: <Likes />,
+                                        // media: <Media />, 
+                                        blocks: <Blocks />,
+                                        [did as string]: <Posts />
+                                    }[tabFromUrl]}
                                 </div>
                             </>}
                     </>

@@ -81,15 +81,18 @@ export default function Blue(props: {
             !post ? <p>Not Found</p> : <>
                 <div ref={elementRef} className={cn(styles.blue, className, { [styles.isReply]: isReply, [styles.parent]: isParent, [styles.single]: isSingle, [styles.firehose]: firehose })} onClick={(e: any) => {
                     if (firehose) {
-                        // @ts-ignore
-                        return navigate(`/blue/${post.author.handle}/${post.id}`);
+                        if (e.ctrlKey || e.which == 2) {
+                            return window.open(`/#/blue/${(post.author as any).handle}/${post.id}`, "_blank");
+                        } else {
+                            return navigate(`/#/blue/${(post.author as any).handle}/${post.id}`);
+                        }
                     }
                     
                     if (e.target.tagName != 'A' && e.target.tagName != 'IMG') {
                         if (isSingle) {
                             return e.preventDefault();
                         }
-                        if (e.ctrlKey) {
+                        if (e.ctrlKey || e.which == 2) {
                             window.open(linkFromPost(post), "_blank");
                         } else {
                             navigate(linkFromPost(post));

@@ -35,6 +35,10 @@ const Routes = [
         element: <Auth><User /></Auth>
     }, {
     }, {
+        path: '/user/:did/media',
+        element: <Auth><User /></Auth>
+    }, {
+    }, {
         path: '/user/:did/blocks',
         element: <Auth><User /></Auth>
     }, {

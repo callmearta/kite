@@ -27,7 +27,7 @@ export default function Record(props: {
         e.preventDefault();
         e.stopPropagation();
         if (e.target.tagName == 'IMG') return;
-        if (e.ctrlKey) {
+        if (e.ctrlKey || e.which == 2) {
             window.open(linkFromPost(embed.record), "_blank");
         } else {
             navigate(linkFromPost(embed.record));

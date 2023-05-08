@@ -15,7 +15,7 @@ export default function User(props: {
         e.preventDefault();
         e.stopPropagation();
         const userLink = `/user/${user.handle}`;
-        if (e.ctrlKey) {
+        if (e.ctrlKey || e.which == 2) {
             window.open(userLink, "_blank");
         } else {
             navigate(userLink);
