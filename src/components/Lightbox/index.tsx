@@ -1,3 +1,4 @@
+import cn from 'classnames';
 import { useAtom } from "jotai";
 import { SyntheticEvent, useState } from "react";
 import { Portal } from "react-portal";
@@ -60,7 +61,7 @@ export default function Lightbox(props: {}) {
         lightbox.show ? <Portal>
             <div className={styles.lightbox}>
                 <div className={styles.backdrop} onClick={_handleClose}></div>
-                <div className={styles.content}>
+                <div className={cn(styles.content, { [styles.fleetContent]: lightbox.isFleet })}>
                     {lightbox.images.length > 1 ? <Slider {...settings}>
                         {lightbox.images?.map((img, index) => <div key={index} onClick={_handleClose}>
                             {lightbox.isFleet ? <span onClick={(e) => _handleRemoveFleet(e, index)}>{fleetRemoveLoading ? <Loading isColored /> : "Remove"}</span> : ''}
