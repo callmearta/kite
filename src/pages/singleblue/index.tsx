@@ -1,5 +1,5 @@
 import { FeedViewPost, NotFoundPost, ReplyRef, ThreadViewPost } from "@atproto/api/src/client/types/app/bsky/feed/defs";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import agent from "../../Agent";
@@ -12,6 +12,12 @@ export default function SingleBlue(props: {}) {
     const params = useParams();
     const { repo, cid } = params;
     const parentsInitRef = useRef<any>(false);
+
+    useEffect(() => {
+        return () => {
+            setParents([]);
+        }
+    },[]);
 
     const _fetch = async ({ uri }: { uri?: any }) => {
         if(repo?.startsWith('did')){
@@ -35,16 +41,16 @@ export default function SingleBlue(props: {}) {
     const post: ThreadViewPost | any = data?.data?.thread;
 
     const [parents, setParents] = useState<React.ReactNode[]>([]);
-    const _generateParents = (p: any) => {
+    const _generateParents = useCallback((p: any) => {
         parentsInitRef.current = true;
         if (p.parent) {
             _generateParents(p.parent);
         }
         setParents(prev => ([...prev, <Blue isParent={true} key={prev.length + 1} post={p.post} />]));
-    };
+    },[cid]);
 
     return (
-        <Layout className="single" backButton>
+        <Layout key={cid} className="single" backButton>
             {isLoading ? <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div> :
                 post.blocked ?
                     <p className="p-5 d-flex align-items-center justify-content-center">You've blocked this account</p>

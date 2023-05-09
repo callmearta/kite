@@ -14,20 +14,22 @@ export default function Media(props: {}) {
     const { data, isLoading, hasNextPage } = useInfiniteQuery(["media", did], ({ pageParam }) => _fetchMedia(pageParam));
 
     const _fetchMedia = async (pageParam: any) => {
-        
-        
-        // const d = await agent.com.atproto.sync.getBlob({
-        //     cid:result.data.cids[0],
-        //     did: user?.did!
-        // })
-        // console.log(d);
-        // const result = await agent.com.atproto.repo.listRecords({
-        //     collection: 'app.bsky.embed.images#view',
-        //     repo: did!,
-        //     cursor: pageParam
-        // });
-        
-        // return result;
+        const blobs = await agent.com.atproto.sync.listBlobs({
+            did: user?.did!
+        });
+
+        const d = await agent.com.atproto.sync.getBlob({
+            cid: blobs.data.cids[0],
+            did: user?.did!
+        })
+        console.log(d);
+        const result = await agent.com.atproto.repo.listRecords({
+            collection: 'app.bsky.embed.images#view',
+            repo: did!,
+            cursor: pageParam
+        });
+
+        return result;
     };
 
     return (

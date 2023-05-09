@@ -63,8 +63,8 @@ export default function Composer(props: {
         if (selection) {
             const pos = selection.anchorOffset;
             const currentChar = text.charAt(pos - 1);
-
-            if (currentChar == '@') {
+            
+            if (currentChar == '@' || e.which == 50) {
                 lastPos.current = pos;
                 let range = selection.getRangeAt(0),
                     rect = range.getClientRects()[0];
@@ -78,37 +78,41 @@ export default function Composer(props: {
                     fill: "forwards",
                     easing: "ease-out"
                 });
+
                 setAutoComplete((prev: any) => ({ ...prev, fetch: true }));
+                setTimeout(() => {
+                    _fetchTypeAhead();
+                }, 10);
             } else if (pos < lastPos.current && autoComplete.show) {
                 setAutoComplete((prev: any) => ({ ...prev, fetch: false, show: false }));
             }
         }
-    }, [autoComplete, autoCompleteRef.current, text, lastPos.current, typeAheadTimeoutRef.current]);
+    }, [autoComplete, autoCompleteRef.current, text, lastPos.current, typeAheadTimeoutRef.current, window.getSelection()]);
 
     function SetCaretPosition(el: any, pos: number) {
 
         // Loop through all child nodes
-        for (var node of el.childNodes) {
-            if (node.nodeType == 3) { // we have a text node
-                if (node.length >= pos) {
-                    // finally add our range
-                    var range = document.createRange(),
-                        sel = window.getSelection();
-                    range.setStart(node, pos);
-                    range.collapse(true);
-                    sel?.removeAllRanges();
-                    sel?.addRange(range);
-                    return -1; // we are done
-                } else {
-                    pos -= node.length;
-                }
-            } else {
-                pos = SetCaretPosition(node, pos);
-                if (pos == -1) {
-                    return -1; // no need to finish the for loop
-                }
-            }
+        // for (var node of el.childNodes) {
+        //     if (node.nodeType == 3) { // we have a text node
+        if (el.length >= pos) {
+            // finally add our range
+            var range = document.createRange(),
+                sel = window.getSelection();
+            range.setStart(el, pos);
+            range.collapse(true);
+            sel?.removeAllRanges();
+            sel?.addRange(range);
+            return -1; // we are done
+        } else {
+            pos -= el.length;
         }
+        // } else {
+        //     pos = SetCaretPosition(el, pos);
+        //     if (pos == -1) {
+        //         return -1; // no need to finish the for loop
+        //     }
+        //     }
+        // }
         return pos; // needed because of recursion stuff
     }
 
@@ -117,7 +121,10 @@ export default function Composer(props: {
             e.preventDefault();
             e.stopPropagation();
         }
-        let currentText = textareaRef.current.innerText;
+        const selection = window.getSelection();
+
+
+        let currentText = selection?.focusNode?.textContent!;
         let nextSpacePos = currentText.substring(lastPos.current, currentText.length).indexOf(' ');
         if (nextSpacePos <= -1) {
             nextSpacePos = currentText.length;
@@ -125,27 +132,32 @@ export default function Composer(props: {
             nextSpacePos += lastPos.current;
         }
         let newText = '';
-        newText += currentText.substring(0, lastPos.current) + `${user.handle}` + '\u00a0' + currentText.substring(nextSpacePos, currentText.length);
+        newText += currentText.substring(0, lastPos.current) + `${user.handle}` + ' ' + currentText.substring(nextSpacePos, currentText.length);
         setText(newText);
-        textareaRef.current.textContent = newText;
+        if (selection && selection.focusNode) {
+            selection.focusNode.textContent = newText;
+        }
+        // textareaRef.current.textContent = newText;
         if (e) {
             textareaRef.current.focus();
         }
-        SetCaretPosition(textareaRef.current, Math.min((lastPos.current + user.handle.length + 1), newText.length));
-        setAutoComplete((prev: any) => ({ ...prev, show: false }));
-    }, [lastPos.current, text, textareaRef.current])
+        SetCaretPosition(selection?.focusNode, Math.min((lastPos.current + user.handle.length + 1), newText.length));
+        setAutoComplete((prev: any) => ({ ...prev, show: false, fetch: false, data: null }));
+    }, [lastPos.current, text, textareaRef.current, window.getSelection()])
 
     const _fetchTypeAhead = useCallback(async () => {
+
         if (!autoComplete.fetch) return;
-        const text = textareaRef.current.innerText;
+        const selection = window.getSelection();
+        const text = selection?.focusNode?.textContent!;
         let nextSpacePos = text.substring(lastPos.current, text.length).indexOf(' ');
 
         const term = text.substring(lastPos.current, nextSpacePos > -1 ? nextSpacePos + lastPos.current : text.length);
         const typeAhead = await agent.searchActorsTypeahead({
             term: term
         });
-        setAutoComplete((prev: any) => ({ ...prev, data: typeAhead.data.actors.slice(0, 10), term: '', show: true, index: 0 }));
-    }, [typeAheadTimeoutRef.current, lastPos.current, text, autoComplete]);
+        setAutoComplete((prev: any) => ({ ...prev, data: typeAhead.data.actors.slice(0, 10), show: true, index: 0 }));
+    }, [typeAheadTimeoutRef.current, lastPos.current, text, autoComplete, window.getSelection()]);
 
     const _handleTextarea = (e: any) => {
         setText(e.currentTarget.textContent.substring(0, 300));
@@ -161,7 +173,7 @@ export default function Composer(props: {
         if ((!text.length && !files.length) || fileUploadLoading || submitLoading) return;
         const filesData = await _handleFilesUpload();
 
-        onSubmit(filesData, text);
+        onSubmit(filesData, textareaRef.current.innerHTML.replace(/<div>/gi, '\n').replace(/<\/div>/gi, '').replace(/<br\/>/gi, '\n').substring(0, 300));
     }
 
     const _handleFilesUpload = async () => {

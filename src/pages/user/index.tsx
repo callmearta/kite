@@ -112,8 +112,8 @@ export default function User(props: {}) {
     },[user]);
 
     return (
-        <>
-            <Layout key={user?.did}>
+        <React.Fragment key={user?.did}>
+            <Layout>
                 <div className="back-button-wrapper">
                     <BackButton />
                 </div>
@@ -189,6 +189,6 @@ export default function User(props: {}) {
                 <Lightbox />
             </Portal> : ''}
             {editProfileOpen ? <EditProfile refetch={refetch} user={user} isOpen={editProfileOpen} setIsOpen={setEditProfileOpen} /> : ''}
-        </>
+        </React.Fragment>
     );
 }

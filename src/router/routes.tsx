@@ -1,3 +1,4 @@
+import { RouteObject } from "react-router-dom";
 import Feed from "../pages/feed";
 import Login from "../pages/login";
 import Logout from "../pages/logout";
@@ -8,10 +9,10 @@ import SingleBlue from "../pages/singleblue";
 import User from "../pages/user";
 import Auth from "./Auth";
 
-const Routes = [
+const Routes: RouteObject[] = [
     {
         path: '/login',
-        element: <Login />
+        element: <Login />,
     }, {
         path: '/register',
         element: <Register />

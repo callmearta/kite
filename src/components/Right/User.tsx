@@ -1,12 +1,12 @@
 import cn from 'classnames';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import AvatarPlaceholder from '../../assets/placeholder.png';
 import styles from './Right.module.scss';
 
 export default function User(props: {
     user: any,
     hideFollowIndicator?: boolean,
-    className?:string
+    className?: string
 }) {
     const { user, hideFollowIndicator, className } = props;
     const navigate = useNavigate();
@@ -15,15 +15,18 @@ export default function User(props: {
         e.preventDefault();
         e.stopPropagation();
         const userLink = `/user/${user.handle}`;
-        if (e.ctrlKey || e.which == 2) {
-            window.open(userLink, "_blank");
+        if (e.ctrlKey || e.button == 1) {
+            window.open('/#' + userLink, "_blank");
         } else {
             navigate(userLink);
         }
     };
 
     return (
-        <div className={cn('user', styles.user, className)} onClick={_handleClick}>
+        <Link to={`/user/${user.handle}`} className={cn('user', styles.user, className)} 
+        // onClick={_handleClick} 
+        // onMouseDown={_handleClick}
+        >
             <div className={styles.avatar}>
                 <img src={user.avatar || AvatarPlaceholder} alt="" />
             </div>
@@ -34,6 +37,6 @@ export default function User(props: {
                 <span>@{user.handle}</span>
                 {user.viewer.followedBy && !hideFollowIndicator ? <span className={styles.tag}>Follows You</span> : ''}
             </div>
-        </div>
+        </Link>
     );
 }

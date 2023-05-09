@@ -69,36 +69,38 @@ export default function Blue(props: {
         e.preventDefault();
         e.stopPropagation();
         const userLink = `/user/${(post.author as any).handle}`;
-        if (e.ctrlKey) {
-            window.open(userLink, "_blank");
+        if (e.ctrlKey || e.button == 1) {
+            window.open('/#'+userLink, "_blank");
         } else {
             navigate(userLink);
+        }
+    };
+
+    const _handleClick = (e:any) => {
+        if (firehose) {
+            if (e.ctrlKey || e.button == 1) {
+                return window.open(`/#/blue/${(post.author as any).handle}/${post.id}`, "_blank");
+            } else {
+                return navigate(`/#/blue/${(post.author as any).handle}/${post.id}`);
+            }
+        }
+        
+        if (e.target.tagName != 'A' && e.target.tagName != 'IMG') {
+            if (isSingle) {
+                return e.preventDefault();
+            }
+            if (e.ctrlKey || e.button == 1) {
+                window.open('/#'+linkFromPost(post), "_blank");
+            } else {
+                navigate(linkFromPost(post));
+            }
         }
     };
 
     return (
         deleted ? null :
             !post ? <p>Not Found</p> : <>
-                <div ref={elementRef} className={cn(styles.blue, className, { [styles.isReply]: isReply, [styles.parent]: isParent, [styles.single]: isSingle, [styles.firehose]: firehose })} onClick={(e: any) => {
-                    if (firehose) {
-                        if (e.ctrlKey || e.which == 2) {
-                            return window.open(`/#/blue/${(post.author as any).handle}/${post.id}`, "_blank");
-                        } else {
-                            return navigate(`/#/blue/${(post.author as any).handle}/${post.id}`);
-                        }
-                    }
-                    
-                    if (e.target.tagName != 'A' && e.target.tagName != 'IMG') {
-                        if (isSingle) {
-                            return e.preventDefault();
-                        }
-                        if (e.ctrlKey || e.which == 2) {
-                            window.open(linkFromPost(post), "_blank");
-                        } else {
-                            navigate(linkFromPost(post));
-                        }
-                    }
-                }}>
+                <div ref={elementRef} className={cn(styles.blue, className, { [styles.isReply]: isReply, [styles.parent]: isParent, [styles.single]: isSingle, [styles.firehose]: firehose })} onClick={_handleClick} onMouseDown={_handleClick}>
                     {reason ? <div className={styles.reasonRepost}>
                         <div>
                             <img src={RepostIcon} alt="Repost" />
@@ -106,7 +108,7 @@ export default function Blue(props: {
                         </div>
                     </div>
                         : ''}
-                    <div className={styles.avatar} onClick={_linkToUserProfile}>
+                    <div className={styles.avatar} onClick={_linkToUserProfile} onMouseDown={_linkToUserProfile}>
                         <img src={author.avatar || AvatarPlaceholder as any} />
                     </div>
                     <div className={styles.body}>
