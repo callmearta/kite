@@ -14,9 +14,9 @@ export default function SingleBlue(props: {}) {
     const parentsInitRef = useRef<any>(false);
 
     useEffect(() => {
-        return () => {
-            setParents([]);
-        }
+        // return () => {
+        //     setParents([]);
+        // }
     },[]);
 
     const _fetch = async ({ uri }: { uri?: any }) => {

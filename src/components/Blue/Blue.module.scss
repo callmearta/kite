@@ -406,6 +406,28 @@
     }
 }
 
+.pin {
+    width: 100%;
+    flex: 0 0 auto;
+    display: flex;
+    margin-bottom: .5rem;
+    align-items: center;
+    padding-left: 4rem;
+    @media screen and (max-width: 1040px) {
+        padding-left: 3.5rem;
+    }
+    img {
+        width: 18px;
+        height: 18px;
+        margin-right: .5rem;
+    }
+    span {
+        font-size: .8rem;
+        font-weight: bold;
+        color: var(--grey-color);
+    }
+}
+
 .deleted {
     padding-bottom: 2rem;
     padding-top: 2rem;
@@ -474,6 +496,7 @@
     }
     p {
         font-size: .9rem !important;
+        width: 100%;
         span {
             color: var(--text-color);
         }

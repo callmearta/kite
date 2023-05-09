@@ -174,11 +174,11 @@ export default function User(props: {}) {
                                 </div>
                                 <div className={styles.posts}>
                                     {{
-                                        posts: <Posts />,
+                                        posts: <Posts user={user} />,
                                         likes: <Likes />,
                                         // media: <Media />, 
                                         blocks: <Blocks />,
-                                        [did as string]: <Posts />
+                                        [did as string]: <Posts user={user} />
                                     }[tabFromUrl]}
                                 </div>
                             </>}

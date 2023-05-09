@@ -27,15 +27,15 @@ export default function Record(props: {
         e.preventDefault();
         e.stopPropagation();
         if (e.target.tagName == 'IMG') return;
-        if (e.ctrlKey || e.which == 2) {
-            window.open(linkFromPost(embed.record), "_blank");
+        if (e.ctrlKey || e.button == 1) {
+            window.open('/#'+linkFromPost(embed.record), "_blank");
         } else {
             navigate(linkFromPost(embed.record));
         }
     };
 
     return (
-        embed && uri && author ? <div onClick={_handleLink} className={styles.record}>
+        embed && uri && author ? <div onClick={_handleLink} onMouseDown={_handleLink} className={styles.record}>
             <div className={styles.recordHeader}>
                 <div className={styles.recordAvatar}>
                     <img src={(author as AppBskyActorDefs.ProfileView)?.avatar || AvatarPlaceholder} alt={author?.displayName} />
