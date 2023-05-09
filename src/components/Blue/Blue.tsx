@@ -7,6 +7,7 @@ import Markdown from 'markdown-to-jsx';
 import React, { SyntheticEvent, useEffect, useReducer, useRef, useState } from "react";
 import { renderToString } from 'react-dom/server';
 import { Link, useNavigate } from "react-router-dom";
+import PinIcon from '../../assets/pin.svg';
 import AvatarPlaceholder from '../../assets/placeholder.png';
 import RepostIcon from '../../assets/repost-fill.svg';
 import { userAtom } from "../../store/user";
@@ -32,13 +33,14 @@ export default function Blue(props: {
     reason?: ReasonType | any,
     className?: string,
     isCompose?: boolean,
-    firehose?: boolean
+    firehose?: boolean,
+    isPin?: boolean
 }) {
-    const { post, isReply, isParent, isSingle, reason, className, isCompose, firehose } = props;
+    const { post, isReply, isParent, isSingle, reason, className, isCompose, firehose, isPin } = props;
     const elementRef = useRef<any>(null);
     const [deleted, setDeleted] = useState(false);
     if (!post) return <div ref={elementRef} className={cn(styles.blue, styles.deleted, className, { [styles.isReply]: isReply, [styles.parent]: isParent, [styles.single]: isSingle })}>
-        <p>This Skeet Is Deleted</p>
+        <p>This Post Is Deleted</p>
     </div>;
 
     const navigate = useNavigate();
@@ -70,27 +72,28 @@ export default function Blue(props: {
         e.stopPropagation();
         const userLink = `/user/${(post.author as any).handle}`;
         if (e.ctrlKey || e.button == 1) {
-            window.open('/#'+userLink, "_blank");
+            window.open('/#' + userLink, "_blank");
         } else {
             navigate(userLink);
         }
     };
 
-    const _handleClick = (e:any) => {
+    const _handleClick = (e: any, isMouseDown: any = null) => {
+        if (e.button == 0 && e.target != elementRef.current && isMouseDown) return;
         if (firehose) {
             if (e.ctrlKey || e.button == 1) {
                 return window.open(`/#/blue/${(post.author as any).handle}/${post.id}`, "_blank");
             } else {
-                return navigate(`/#/blue/${(post.author as any).handle}/${post.id}`);
+                return navigate(`/blue/${(post.author as any).handle}/${post.id}`);
             }
         }
-        
+
         if (e.target.tagName != 'A' && e.target.tagName != 'IMG') {
             if (isSingle) {
                 return e.preventDefault();
             }
             if (e.ctrlKey || e.button == 1) {
-                window.open('/#'+linkFromPost(post), "_blank");
+                window.open('/#' + linkFromPost(post), "_blank");
             } else {
                 navigate(linkFromPost(post));
             }
@@ -100,13 +103,19 @@ export default function Blue(props: {
     return (
         deleted ? null :
             !post ? <p>Not Found</p> : <>
-                <div ref={elementRef} className={cn(styles.blue, className, { [styles.isReply]: isReply, [styles.parent]: isParent, [styles.single]: isSingle, [styles.firehose]: firehose })} onClick={_handleClick} onMouseDown={_handleClick}>
+                <div ref={elementRef} className={cn(styles.blue, className, { [styles.isReply]: isReply, [styles.parent]: isParent, [styles.single]: isSingle, [styles.firehose]: firehose })} onClick={_handleClick} onMouseDown={e => _handleClick(e, true)}>
                     {reason ? <div className={styles.reasonRepost}>
                         <div>
                             <img src={RepostIcon} alt="Repost" />
                             Reposted By {(reason as ReasonRepost).by.displayName}
                         </div>
                     </div>
+                        : ''}
+                    {isPin ?
+                        <div className={styles.pin}>
+                            <img src={PinIcon} alt="Pin" />
+                            <span>Pinned Post</span>
+                        </div>
                         : ''}
                     <div className={styles.avatar} onClick={_linkToUserProfile} onMouseDown={_linkToUserProfile}>
                         <img src={author.avatar || AvatarPlaceholder as any} />
@@ -141,7 +150,7 @@ export default function Blue(props: {
                                     <Comments post={post} />
                                     <Repost post={post} />
                                     <Like post={post} />
-                                    <More post={post} setDeleted={setDeleted} />
+                                    <More isPin={isPin} post={post} setDeleted={setDeleted} />
                                 </div>
                             </>
                         }
