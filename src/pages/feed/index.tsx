@@ -17,7 +17,7 @@ export default function Feed(props: {}) {
     const ui = useAtomValue(uiAtom);
 
     useEffect(() => {
-        if(ui.hot){
+        if(ui.hot || ui.firehose){
             document.body.classList.add('hot-col');
         }else if(document.body.classList.contains('hot-col')){
             document.body.classList.remove('hot-col');
