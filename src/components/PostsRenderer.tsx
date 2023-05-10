@@ -16,7 +16,7 @@ export default function PostsRenderer(props: {
     hideReplies?: boolean,
     onlyReplies?: boolean
 }) {
-    const { isLoading, feed, isProfile, hideReplies,onlyReplies } = props;
+    const { isLoading, feed, isProfile, hideReplies, onlyReplies } = props;
     const settings = useAtomValue(settingsAtom);
     const user = useAtomValue(userAtom);
 
@@ -48,8 +48,15 @@ export default function PostsRenderer(props: {
             }
             return [...p1, p2];
         }, [])
-        .filter((p: FeedViewPost) => blacklist(p, settings.blacklist))
-        .filter((value:any,index:number,self:any[]) => index === self.findIndex(p => p.post.cid == value.post.cid || p.reply?.root.cid == value.post.cid || p.reply?.parent.cid == value.post.cid))
+            .filter((p: FeedViewPost) => blacklist(p, settings.blacklist))
+            .filter((value: any, index: number, self: any[]) =>
+                index === self.findIndex(p =>
+                    p.post.cid == value.post.cid
+                    || p.reply?.root.cid == value.post.cid
+                    || p.reply?.parent.cid == value.post.cid
+                    || (p.reply?.root.cid == value.reply?.root.cid && p.reply?.parent.cid != value.reply?.parent.cid)
+                )
+            )
     }, [feed])
 
     return (
