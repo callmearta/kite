@@ -27,6 +27,8 @@ export default function PostsRenderer(props: {
             // @ts-ignore
             const postExists = p1.find(i => i.post.cid == p2.post.cid
                 // @ts-ignore
+                // || i.post.cid == p2.reply?.root.cid
+                // || i.post.cid == p2.reply?.parent.cid
                 // || i.post?.record?.reply?.root?.cid == p2.post?.record?.reply?.root?.cid
                 // || i.reply?.root.cid == p2.reply?.root.cid
                 // || p1[p1.length - 1].post.author.did == p2.post.author.did
@@ -36,15 +38,18 @@ export default function PostsRenderer(props: {
             }
 
             if (postExists
-                || (!isProfile && p2.post.author.did != user?.did && ((p2 as FeedViewPost).reply && (p2?.post as any).likeCount <= 1))
-                || (!isProfile && p2.post.author.did != user?.did && p2.reply && p2.reply.parent.cid != p2.reply.root.cid && p2.reply.parent.author.did != p2.reply.root.author.did && (p2.randomness as number) < .2)
+                // || (!isProfile && p2.post.author.did != user?.did && ((p2 as FeedViewPost).reply && (p2?.post as any).likeCount <= 1))
+                // || (!isProfile && p2.post.author.did != user?.did && p2.reply && p2.reply.parent.cid != p2.reply.root.cid && p2.reply.parent.author.did != p2.reply.root.author.did && (p2.randomness as number) < .2)
+                || (!isProfile && p2.post.author.did != user?.did && p2.reply && p2.reply.parent.cid == p2.reply.root.cid && p2.reply.parent.author.did == p2.reply.root.author.did)
                 || (hideReplies && p2.reply)
                 || (onlyReplies && !p2.reply)
             ) {
                 return [...p1];
             }
             return [...p1, p2];
-        }, []).filter((p: FeedViewPost) => blacklist(p, settings.blacklist))
+        }, [])
+        .filter((p: FeedViewPost) => blacklist(p, settings.blacklist))
+        .filter((value:any,index:number,self:any[]) => index === self.findIndex(p => p.post.cid == value.post.cid || p.reply?.root.cid == value.post.cid || p.reply?.parent.cid == value.post.cid))
     }, [feed])
 
     return (
