@@ -47,21 +47,22 @@ export default function New(props: {}) {
 
         setLoading(true);
 
+        const compressedImage = await compressImage(file);
+        const compressImageString = await filetoDataURL(compressedImage as Blob);
+
         // @ts-ignore
-        // const uploadResult = await agent.uploadBlob(await file.arrayBuffer(), {
-        //     encoding: 'image/jpeg'
-        // });
+        const uploadResult = await agent.uploadBlob(compressedImage, {
+            encoding: 'image/jpeg'
+        });
 
         try {
-            const compressedImage = await compressImage(file);
-            const compressImageString = await filetoDataURL(compressedImage as Blob);
             const createResult = await agent.api.com.atproto.repo.createRecord({
                 repo: user?.handle!,
                 collection: "app.bsky.actor.profile",
                 record: {
                     kiteType: 'fleet',
-                    // avatar: uploadResult.data.blob,
-                    kiteImageString: compressImageString,
+                    avatar: uploadResult.data.blob,
+                    // kiteImageString: compressImageString,
                     // kiteImageUrl: postImageUrl,
                     createdAt: new Date().toISOString()
                 }
@@ -82,8 +83,9 @@ export default function New(props: {}) {
 
     const compressImage = (file: File) => (new Promise((resolve, reject) => {
         const c = new Compressor(file, {
-            quality: .65,
-            height: 1000,
+            // quality: .65,
+            quality: .85,
+            height: 1500,
             success: blob => resolve(blob),
             error: err => reject(err)
         })

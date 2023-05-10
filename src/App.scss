@@ -117,7 +117,10 @@ a:hover {
     }
 }
 
-html {}
+html {
+    --font-size: 95%;
+    font-size: var(--font-size);
+}
 
 body {
     margin: 0;
@@ -126,8 +129,6 @@ body {
     color: var(--text-color);
     background: var(--white-color);
     overflow-anchor: auto;
-    --font-size: 16px;
-    font-size: var(--font-size);
 }
 
 .input-wrapper {
@@ -846,4 +847,25 @@ button {
 .slick-next:before,
 .slick-prev:before {
     font-size: 48px !important;
+}
+
+.medias {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    .media {
+        width: calc(100% / 3);
+        flex: 1 1 25%;
+        font-size: 0;
+        aspect-ratio: 1/1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
 }

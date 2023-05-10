@@ -100,19 +100,21 @@ h1 {
     width: 100%;
     display: flex;
     align-items: center;
-    padding: 0 1.5rem;
+    // padding: 0 1.5rem;
     border-bottom: 1px solid var(--stroke-color);
 }
 
 .tab {
-    padding: 1rem 1rem;
+    padding: 1rem 0rem;
     position: relative;
     display: block;
-    font-size: 1.1rem;
+    text-align: center;
+    font-size: 1rem;
+    flex: 1;
     &.active {
         font-weight: bold;
         &::after {
-            width: 50px;
+            width: 100%;
             background: var(--primary-color);
             height: 3px;
             border-radius: 40px;

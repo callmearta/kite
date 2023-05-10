@@ -68,6 +68,10 @@
 .fleetContent {
     img {
         max-height: 90vh;
-        height: 500px;
+        /*
+        *
+        *   Comment below out for when getBlob is disabled
+        */
+        // height: 500px;
     }
 }

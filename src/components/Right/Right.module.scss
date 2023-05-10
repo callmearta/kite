@@ -1,8 +1,8 @@
 .right {
-    width: 400px;
+    width: 325px;
     margin-right: -400px;
     height: 100vh;
-    padding: 1.5rem;
+    padding: 1rem;
     position: sticky;
     z-index: 9;
     top: 0;
@@ -17,7 +17,7 @@
 .suggested {
     background: var(--light-color);
     border-radius: 24px;
-    padding: 2rem;
+    padding: 1.5rem;
     width: 100%;
     h4 {
         font-size: 1.3rem;

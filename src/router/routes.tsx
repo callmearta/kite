@@ -32,6 +32,10 @@ const Routes: RouteObject[] = [
         element: <Auth><User /></Auth>
     }, {
     }, {
+        path: '/user/:did/replies',
+        element: <Auth><User /></Auth>
+    }, {
+    }, {
         path: '/user/:did/likes',
         element: <Auth><User /></Auth>
     }, {

@@ -12,9 +12,11 @@ import Loading from "./Loading";
 export default function PostsRenderer(props: {
     isLoading?: boolean,
     feed?: any,
-    isProfile?: boolean
+    isProfile?: boolean,
+    hideReplies?: boolean,
+    onlyReplies?: boolean
 }) {
-    const { isLoading, feed, isProfile } = props;
+    const { isLoading, feed, isProfile, hideReplies,onlyReplies } = props;
     const settings = useAtomValue(settingsAtom);
     const user = useAtomValue(userAtom);
 
@@ -35,7 +37,9 @@ export default function PostsRenderer(props: {
 
             if (postExists
                 || (!isProfile && p2.post.author.did != user?.did && ((p2 as FeedViewPost).reply && (p2?.post as any).likeCount <= 1))
-                || (!isProfile && p2.post.author.did != user?.did  && p2.reply && p2.reply.parent.cid != p2.reply.root.cid && p2.reply.parent.author.did != p2.reply.root.author.did && (p2.randomness as number) < .2)
+                || (!isProfile && p2.post.author.did != user?.did && p2.reply && p2.reply.parent.cid != p2.reply.root.cid && p2.reply.parent.author.did != p2.reply.root.author.did && (p2.randomness as number) < .2)
+                || (hideReplies && p2.reply)
+                || (onlyReplies && !p2.reply)
             ) {
                 return [...p1];
             }

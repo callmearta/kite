@@ -8,9 +8,11 @@ import Loading from "../../components/Loading";
 import PostsRenderer from "../../components/PostsRenderer";
 
 export default function Posts(props: {
-    user: any
+    user: any,
+    hideReplies?: boolean,
+    onlyReplies?: boolean
 }) {
-    const { user } = props;
+    const { user, hideReplies, onlyReplies } = props;
 
     const params = useParams();
     const { did } = params;
@@ -44,7 +46,7 @@ export default function Posts(props: {
                     uri: (result.data.value as any).kitePinPost
                 });
                 setPinPost(pinPost.data.thread);
-            }else{
+            } else {
                 setPinPost(null);
             }
         }
@@ -54,7 +56,9 @@ export default function Posts(props: {
         }
     };
 
-    const { data: pinPostdata, isLoading: pinPostLoading } = useQuery(["pin-post", did], _fetchPinPost);
+    const { data: pinPostdata, isLoading: pinPostLoading } = useQuery(["pin-post", did], _fetchPinPost,{
+        cacheTime: Infinity
+    });
 
     const [pinPost, setPinPost] = useState<any>((pinPostdata as any)?.data?.thread || null);
 
@@ -85,7 +89,7 @@ export default function Posts(props: {
                     <p className="p-5 d-flex align-items-center justify-content-center">You've blocked this account</p>
                     : <>
                         {pinPost ? <Blue isPin post={pinPost.post} /> : ''}
-                        <PostsRenderer isLoading={false} feed={posts} isProfile={true} />
+                        <PostsRenderer onlyReplies={onlyReplies} hideReplies={hideReplies} isLoading={false} feed={posts} isProfile={true} />
                     </>}
                 {hasNextPage && !reachedEnd ? <div className="d-flex align-items-center justify-content-center p-5"><Loading isColored /></div> : ''}
             </>

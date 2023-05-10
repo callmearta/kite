@@ -168,17 +168,19 @@ export default function User(props: {}) {
                             : <>
                                 <div className={styles.tabs}>
                                     <Link to={`/user/${did}/posts`} title="" target="_self" className={cn(styles.tab, { [styles.active]: tabFromUrl == 'posts' || tabFromUrl == did })}>Posts</Link>
+                                    <Link to={`/user/${did}/replies`} title="" target="_self" className={cn(styles.tab, { [styles.active]: tabFromUrl == 'replies' })}>Replies</Link>
                                     <Link to={`/user/${did}/likes`} title="" target="_self" className={cn(styles.tab, { [styles.active]: tabFromUrl == 'likes' })}>Likes</Link>
                                     <Link to={`/user/${did}/blocks`} title="" target="_self" className={cn(styles.tab, { [styles.active]: tabFromUrl == 'blocks' })}>Blocks</Link>
-                                    {/* <Link to={`/user/${did}/media`} title="" target="_self" className={cn(styles.tab, { [styles.active]: tabFromUrl == 'media' })}>Media</Link> */}
+                                    <Link to={`/user/${did}/media`} title="" target="_self" className={cn(styles.tab, { [styles.active]: tabFromUrl == 'media' })}>Media</Link>
                                 </div>
                                 <div className={styles.posts}>
                                     {{
-                                        posts: <Posts user={user} />,
+                                        posts: <Posts key={`posts-${user.did}`} hideReplies user={user} />,
+                                        replies: <Posts key={`replies-${user.did}`} onlyReplies user={user} />,
                                         likes: <Likes />,
-                                        // media: <Media />, 
+                                        media: <Media user={user} />, 
                                         blocks: <Blocks />,
-                                        [did as string]: <Posts user={user} />
+                                        [did as string]: <Posts key={`posts-${user.did}`} hideReplies user={user} />
                                     }[tabFromUrl]}
                                 </div>
                             </>}

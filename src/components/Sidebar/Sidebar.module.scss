@@ -1,12 +1,12 @@
 .sidebar {
-    min-width: 350px;
+    min-width: 260px;
     padding: 2rem 0;
-    margin-left: -350px;
+    margin-left: calc(-1 * calc(260px + 6rem));
     position: sticky;
     top: 0;
     left: 0;
-    padding-left: 4rem;
-    padding-right: 4rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
     background: var(--white-color);
     z-index: 9;
     padding-top: 3rem;
@@ -140,7 +140,7 @@
     a {
         display: flex;
         align-items: center;
-        margin: 2rem 0;
+        margin: 1.5rem 0;
         color: var(--text-color);
         opacity: .7;
         text-decoration: none;
@@ -154,6 +154,17 @@
         }
         strong {
             font-size: 1.1rem;
+        }
+    }
+    @media screen and (min-width:1025px) {
+        height: calc(100% - 10rem);
+        display: flex;
+        flex-direction: column;
+        a {
+            margin: 1rem 0;
+        }
+        a:last-child {
+            margin-top: auto;
         }
     }
 }
