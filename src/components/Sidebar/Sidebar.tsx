@@ -43,7 +43,7 @@ export default function Sidebar(props: {
             text: 'Notifications'
         },
         {
-            path: `/user/${data.handle}`,
+            path: `/user/${data?.handle}`,
             icon: ProfileIcon,
             fillIcon: ProfileFillIcon,
             text: 'Profile'

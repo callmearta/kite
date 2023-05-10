@@ -63,10 +63,10 @@ export default function Posts(props: {
     const [pinPost, setPinPost] = useState<any>((pinPostdata as any)?.data?.thread || null);
 
     useEffect(() => {
-        if (document.documentElement.scrollHeight <= window.innerHeight) {
-            setReachedEnd(true);
-            return;
-        }
+        // if (document.documentElement.scrollHeight <= window.innerHeight) {
+        //     setReachedEnd(true);
+        //     return;
+        // }
         let fetching = false;
         const handleScroll = async (e: any) => {
             const { scrollHeight, scrollTop, clientHeight } = e.target.scrollingElement;

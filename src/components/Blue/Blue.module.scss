@@ -319,13 +319,32 @@
     justify-content: center;
     flex-wrap: wrap;
     gap: 2px;
+    &.multipleImage {
+        &>div {
+            aspect-ratio: 1/1;
+            &:last-child {
+                aspect-ratio: initial;
+            }
+        }
+    }
+    &.fourImages {
+        &>div:last-child {
+            aspect-ratio: 1/1 !important;
+        }
+    }
     &>div {
+        font-size: 0 !important;
+        display: flex;
         border-radius: 14px;
         overflow: hidden;
-        aspect-ratio: 1/1;
+        // aspect-ratio: 16/10;
         border: 1px solid var(--stroke-color);
         flex: 1 1 calc(50% - 2px);
-        max-height: 250px;
+        &:first-child {
+            max-width: 85%;
+            margin-right: auto;
+        }
+        max-height: 47.5vh;
     }
     img {
         width: 100%;
