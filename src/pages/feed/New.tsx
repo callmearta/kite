@@ -3,6 +3,7 @@ import { Record } from '@atproto/api/src/client/types/app/bsky/feed/post';
 import cn from 'classnames';
 import { useAtom, useAtomValue } from 'jotai';
 import { useState } from 'react';
+import { toast } from 'react-hot-toast';
 import { useMutation, useQueryClient } from 'react-query';
 import agent from '../../Agent';
 import CloseIcon from '../../assets/close.svg';
@@ -28,10 +29,11 @@ export default function New(props: {}) {
         },
         onError: error => {
             console.error(error);
+            toast("Something went wrong");
         }
     });
 
-    const _handleSubmit = async (filesData: any[], text: string) => {
+    const _handleSubmit = async (filesData: any[], text: string, audio: any = null) => {
         const filesUpload = filesData;
         const rt = new RichText({ text });
         await rt.detectFacets(agent);
@@ -49,6 +51,16 @@ export default function New(props: {}) {
                 images: filesUpload.length ? filesUpload.map(i => ({ alt: "", image: i.data.blob.original })) : undefined
             }
         }
+        if (audio) {
+            // @ts-ignore
+            data.kiteAudio = audio;
+            const newRt = new RichText({ text: 'Unsupported audio message. To view this message you need to use Kite 🪁\n\nhttps://kite.black' });
+            await newRt.detectFacets(agent);
+            data.text = newRt.text;
+            data.facets = newRt.facets;
+            // @ts-ignore
+            data.kiteText = rt.text || '\n';
+        }
 
         mutate(data)
     };
@@ -61,35 +73,6 @@ export default function New(props: {}) {
                 </div>
             </div>
             <div className={styles.right}>
-                {/* <form onSubmit={_handleSubmit}>
-                    <textarea style={{resize:'vertical'}} dir="auto" className={cn({ [styles.open]: text.length })} placeholder="What's on your mind?" onKeyDown={_handleCtrlEnter} onChange={e => setText(e.target.value.substring(0, 254))} value={text}></textarea>
-                    {files.length ?
-                        <div className={styles.files}>
-                            {files.map((file,index) =>
-                                <div className={styles.file} onClick={() => setLightbox({ images: [file.preview], show: true })} key={index}>
-                                    <span className={styles.fileRemove} onClick={(e) => _handleRemoveFile(e,index)}>
-                                        <img src={CloseIcon} alt="" />
-                                    </span>
-                                    <img src={file.preview} alt="" />
-                                </div>
-                            )}
-                        </div>
-                        : ''}
-                    <div className={styles.footer}>
-                        <div>
-                            {text.length ? <span>{text.length}/254</span> : ''}
-                        </div>
-                        <div className="d-flex align-items-center">
-                            <div className="file-input">
-                                <input multiple type='file' accept='image/jpeg,image/png' onChange={_handleFile} title="Upload Media" />
-                                <label>
-                                    <img src={ImageIcon} height="28" alt="" />
-                                </label>
-                            </div>
-                            <Button type="submit" loading={isLoading || fileUploadLoading} className="btn primary" text='Post' />
-                        </div>
-                    </div>
-                </form> */}
                 <Composer onSubmit={_handleSubmit} submitLoading={isLoading} />
             </div>
         </div>

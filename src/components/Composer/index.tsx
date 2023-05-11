@@ -18,7 +18,10 @@ import AvatarPlaceholder from '../../assets/placeholder.png';
 import { lightboxAtom } from "../../store/lightbox";
 import Record from '../Blue/Embed/Record';
 import Button from "../Button";
+import Wave from '../Wave';
+import Audio from './Audio';
 import styles from './Composer.module.scss';
+
 
 export default function Composer(props: {
     onSubmit: Function,
@@ -28,6 +31,7 @@ export default function Composer(props: {
 }) {
     const { onSubmit, submitLoading, quotePost, inModal } = props;
     const setLightbox = useSetAtom(lightboxAtom);
+    const [audio,setAudio] = useState(null);
     const [fileUploadLoading, setFileUploadLoading] = useState(false);
     const [files, setFiles] = useState<{
         file: File | null,
@@ -177,6 +181,7 @@ export default function Composer(props: {
         setFiles([]);
         setText('');
         setRichText((prev: any) => ({ ...prev, text: '' }));
+        setAudio(null);
         _clearEditor();
         // textareaRef.current.textContent = '';
     };
@@ -309,14 +314,12 @@ export default function Composer(props: {
         if (e)
             e.preventDefault();
 
-        if (!rt && ((!richtext.text.length && !files.length) || fileUploadLoading || submitLoading || richtext.graphemeLength > 300)) return;
-        if (rt && ((!rt.text.length && !files.length) || fileUploadLoading || submitLoading || rt.graphemeLength > 300)) return;
+        if (!rt && !audio && ((!richtext.text.length && !files.length) || fileUploadLoading || submitLoading || richtext.graphemeLength > 300)) return;
+        if (rt && !audio && ((!rt.text.length && !files.length) || fileUploadLoading || submitLoading || rt.graphemeLength > 300)) return;
         const filesData = await _handleFilesUpload();
 
-        // onSubmit(filesData, textareaRef.current.innerHTML.replace(/<div>/gi, '\n').replace(/<\/div>/gi, '').replace(/<br\/>/gi, '\n').replace(/<br>/gi, '\n').substring(0, 300));
-
-        onSubmit(filesData, rt ? rt.text : richtext.text);
-    }, [richtext])
+        onSubmit(filesData, rt ? rt.text : richtext.text,audio);
+    }, [richtext,audio])
 
     const _handleFilesUpload = async () => {
         setFileUploadLoading(true);
@@ -519,6 +522,7 @@ export default function Composer(props: {
                         )}
                     </div>
                     : ''}
+                    {audio ? <Wave onRemove={() => setAudio(null)} audioUrl={audio}/> : ''}
                 <div className={styles.footer}>
                     <div>
                         {richtext.text.length ? <span className={cn({ "span-error": richtext.graphemeLength > 300 })}>{richtext.graphemeLength}/300</span> : ''}
@@ -530,6 +534,7 @@ export default function Composer(props: {
                                 <img src={ImageIcon} height="28" alt="" />
                             </label>
                         </div>
+                        <Audio setAudio={setAudio} />
                         <Button type="submit" loading={submitLoading || fileUploadLoading} className={cn("btn primary", { disabled: richtext.graphemeLength > 300 })} text='Post' />
                     </div>
                 </div>

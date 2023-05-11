@@ -167,3 +167,60 @@ form {
 .autocompleteOpen {
     display: block;
 }
+
+.voice {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    margin-right: .5rem;
+    margin-left: -.5rem;
+    cursor: pointer;
+    background: none;
+    position: relative;
+    &::before {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        content: '';
+        display: block;
+        z-index: -1;
+        transform: scale(0);
+        transition: transform .25s ease-out;
+        background: var(--light-color);
+    }
+    &.voiceActive {
+        &::before {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            content: '';
+            display: block;
+            z-index: -1;
+            animation: breathe 1s ease-in-out;
+            animation-iteration-count: infinite;
+            animation-direction: alternate;
+            animation-delay: .25s;
+            transform: scale(1);
+            transition: transform .25s ease-out;
+        }
+    }
+}
+
+@keyframes breathe {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.2);
+    }
+}
