@@ -432,6 +432,11 @@ textarea {
     background: var(--white-color);
 }
 
+.span-error {
+    color: rgb(214, 61, 61) !important;
+    font-weight: bold;
+}
+
 .btn {
     padding: .75rem 1.5rem;
     font-weight: bold;
@@ -439,6 +444,10 @@ textarea {
     border: none;
     font-family: Lato;
     cursor: pointer;
+    &.disabled {
+        // background: var(--grey-color) !important;
+        opacity: .5;
+    }
     &:hover {
         background: #4db7f5 !important;
     }
@@ -868,4 +877,12 @@ button {
             object-fit: cover;
         }
     }
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+    color: #adb5bd;
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
 }

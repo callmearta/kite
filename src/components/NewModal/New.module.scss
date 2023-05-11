@@ -27,6 +27,7 @@
 
 .right {
     flex: 1;
+    width: calc(100% - 65px);
     textarea {
         font-size: 1.1rem;
         min-height: 50px;

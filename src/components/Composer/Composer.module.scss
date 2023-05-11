@@ -4,10 +4,24 @@
     min-height: 50px;
     transition: all .15s ease-out;
     color: var(--text-color);
+    width: 100%;
+    &>div {
+        min-height: 50px;
+    }
+    p {
+        margin: .25rem 0;
+    }
     &.open {
+        &>div {
+            min-height: 150px;
+            width: 100%;
+        }
         min-height: 150px;
     }
     strong {
+        color: var(--primary-color);
+    }
+    .mention {
         color: var(--primary-color);
     }
 }
@@ -96,6 +110,10 @@
             object-fit: cover;
         }
     }
+}
+
+form {
+    width: 100%;
 }
 
 .autoComplete {

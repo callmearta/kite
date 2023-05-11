@@ -1,4 +1,13 @@
-import { AppBskyActorSearchActorsTypeahead } from '@atproto/api';
+import { RichText } from '@atproto/api';
+import { Document } from '@tiptap/extension-document';
+import Hardbreak from '@tiptap/extension-hard-break';
+import History from '@tiptap/extension-history';
+import { Link } from '@tiptap/extension-link';
+import { Mention } from '@tiptap/extension-mention';
+import { Paragraph } from '@tiptap/extension-paragraph';
+import { Placeholder } from '@tiptap/extension-placeholder';
+import { Text } from '@tiptap/extension-text';
+import { EditorContent, JSONContent, useEditor } from '@tiptap/react';
 import cn from 'classnames';
 import { useSetAtom } from "jotai";
 import { ChangeEvent, FormEvent, FormEventHandler, SyntheticEvent, useCallback, useEffect, useRef, useState } from "react";
@@ -42,12 +51,140 @@ export default function Composer(props: {
     const lastPos = useRef<any>(null);
     const typeAheadTimeoutRef = useRef<any>(null);
     const [isFocus, setIsFocus] = useState(false);
+    const [richtext, setRichText] = useState(new RichText({ text: '' }));
+
+    const editor = useEditor({
+        extensions: [
+            Document,
+            Link.configure({
+                protocols: ['http', 'https'],
+                autolink: true,
+            }),
+            Mention.configure({
+                HTMLAttributes: {
+                    class: styles.mention,
+                },
+                suggestion: {
+                    items: async (props) => {
+                        const typeAhead = await agent.searchActorsTypeahead({
+                            term: props.query
+                        });
+                        setAutoComplete((prev: any) => ({ ...prev, data: typeAhead.data.actors.slice(0, 10), show: true, index: 0 }));
+                        return typeAhead.data.actors.slice(0, 10)
+                    },
+                    char: '@',
+                    render: () => {
+                        return {
+                            onStart: (props) => {
+                                if (!props.clientRect) return;
+                                
+                                const rect = props.clientRect();
+
+                                autoCompleteRef.current?.animate({
+                                    top: rect?.y! + 20 + 'px',
+                                    left: rect?.x! + 'px'
+                                }, {
+                                    duration: 100,
+                                    fill: "forwards",
+                                    easing: "ease-out"
+                                });
+
+                                setAutoComplete((prev: any) => ({ ...prev, data: props.items, show: true, props }));
+                            },
+                            onKeyDown: (props) => {
+                                if (props.event.key === 'Escape') {
+                                    setAutoComplete({ show: false });
+                                    return true;
+                                }
+                                return _handleArrows(props) || false;
+                            },
+                            onUpdate: props => {
+                                if (!props.clientRect) {
+                                    setAutoComplete((prev: any) => ({ ...prev, show: false }));
+                                    return;
+                                };
+                                const rect = props.clientRect();
+
+                                autoCompleteRef.current?.animate({
+                                    top: rect?.y! + 20 + 'px',
+                                    left: rect?.x! + 'px'
+                                }, {
+                                    duration: 100,
+                                    fill: "forwards",
+                                    easing: "ease-out"
+                                });
+                                setAutoComplete((prev: any) => ({ ...prev, data: props.items, show: true, props }));
+                            },
+                            onExit: () => {
+                                setAutoComplete((prev: any) => ({ ...prev, show: false }));
+                            }
+                        };
+                    }
+                }
+                // suggestion: createSuggestion({autocompleteView}),
+            }),
+            Paragraph,
+            Placeholder.configure({
+                // placeholder,
+                placeholder: "What's on your mind?"
+            }),
+            Text,
+            History,
+            Hardbreak,
+        ],
+        editorProps: {
+            //   attributes: {
+            //     class: modeClass,
+            //   },
+            handlePaste: (_, event) => {
+                const items = event.clipboardData?.items
+
+                if (items === undefined) {
+                    return
+                }
+                _handlePasteImage(event);
+            },
+            handleKeyDown: (_, event) => {
+                if ((event.metaKey || event.ctrlKey) && event.code === 'Enter') {
+                    // Workaround relying on previous state from `setRichText` to
+                    // get the updated text content during editor initialization
+                    setRichText((state: RichText) => {
+                        // onPressPublish(state)
+                        _handleSubmit(null, state);
+                        return state
+                    })
+                    return true;
+                }
+            },
+        },
+        content: richtext.text.toString(),
+        autofocus: inModal ? true : false,
+        editable: true,
+        injectCSS: true,
+        onUpdate({ editor: editorProp }) {
+            const json = editorProp.getJSON()
+            const newRt = new RichText({ text: editorJsonToText(json).trim() })
+            setRichText(newRt)
+
+            const newSuggestedLinks = new Set(editorJsonToLinks(json))
+            //   if (!isEqual(newSuggestedLinks, suggestedLinks)) {
+            //     onSuggestedLinksChanged(newSuggestedLinks)
+            //   }
+        },
+    });
 
     const _handlePublished = () => {
         setFiles([]);
         setText('');
-        textareaRef.current.textContent = '';
+        setRichText((prev: any) => ({ ...prev, text: '' }));
+        _clearEditor();
+        // textareaRef.current.textContent = '';
     };
+
+    const _clearEditor = useCallback(() => {
+        editor?.commands.clearContent(true);
+    }, [editor]);
+
 
     useEffect(() => {
         window.addEventListener('publish-post', _handlePublished);
@@ -55,7 +192,7 @@ export default function Composer(props: {
         return () => {
             window.removeEventListener('publish-post', _handlePublished);
         }
-    }, []);
+    }, [editor]);
 
     const _handleKeyUp = useCallback((e: KeyboardEvent) => {
         const selection = window.getSelection();
@@ -63,7 +200,7 @@ export default function Composer(props: {
         if (selection) {
             const pos = selection.anchorOffset;
             const currentChar = text.charAt(pos - 1);
-            
+
             if (currentChar == '@' || e.which == 50) {
                 lastPos.current = pos;
                 let range = selection.getRangeAt(0),
@@ -121,29 +258,30 @@ export default function Composer(props: {
             e.preventDefault();
             e.stopPropagation();
         }
-        const selection = window.getSelection();
+        autoComplete.props.command({ id: user.handle });
+        // const selection = window.getSelection();
 
 
-        let currentText = selection?.focusNode?.textContent!;
-        let nextSpacePos = currentText.substring(lastPos.current, currentText.length).indexOf(' ');
-        if (nextSpacePos <= -1) {
-            nextSpacePos = currentText.length;
-        } else {
-            nextSpacePos += lastPos.current;
-        }
-        let newText = '';
-        newText += currentText.substring(0, lastPos.current) + `${user.handle}` + ' ' + currentText.substring(nextSpacePos, currentText.length);
-        setText(newText);
-        if (selection && selection.focusNode) {
-            selection.focusNode.textContent = newText;
-        }
-        // textareaRef.current.textContent = newText;
-        if (e) {
-            textareaRef.current.focus();
-        }
-        SetCaretPosition(selection?.focusNode, Math.min((lastPos.current + user.handle.length + 1), newText.length));
-        setAutoComplete((prev: any) => ({ ...prev, show: false, fetch: false, data: null }));
-    }, [lastPos.current, text, textareaRef.current, window.getSelection()])
+        // let currentText = selection?.focusNode?.textContent!;
+        // let nextSpacePos = currentText.substring(lastPos.current, currentText.length).indexOf(' ');
+        // if (nextSpacePos <= -1) {
+        //     nextSpacePos = currentText.length;
+        // } else {
+        //     nextSpacePos += lastPos.current;
+        // }
+        // let newText = '';
+        // newText += currentText.substring(0, lastPos.current) + `${user.handle}` + ' ' + currentText.substring(nextSpacePos, currentText.length);
+        // setText(newText);
+        // if (selection && selection.focusNode) {
+        //     selection.focusNode.textContent = newText;
+        // }
+        // // textareaRef.current.textContent = newText;
+        // if (e) {
+        //     textareaRef.current.focus();
+        // }
+        // SetCaretPosition(selection?.focusNode, Math.min((lastPos.current + user.handle.length + 1), newText.length));
+        // setAutoComplete((prev: any) => ({ ...prev, show: false, fetch: false, data: null }));
+    }, [lastPos.current, text, textareaRef.current, autoComplete.props, window.getSelection()])
 
     const _fetchTypeAhead = useCallback(async () => {
 
@@ -167,14 +305,18 @@ export default function Composer(props: {
         }, 500);
     };
 
-    const _handleSubmit = async (e: FormEvent) => {
-        e.preventDefault();
+    const _handleSubmit = useCallback(async (e: FormEvent | any, rt: any = null) => {
+        if (e)
+            e.preventDefault();
 
-        if ((!text.length && !files.length) || fileUploadLoading || submitLoading) return;
+        if (!rt && ((!richtext.text.length && !files.length) || fileUploadLoading || submitLoading || richtext.graphemeLength > 300)) return;
+        if (rt && ((!rt.text.length && !files.length) || fileUploadLoading || submitLoading || rt.graphemeLength > 300)) return;
         const filesData = await _handleFilesUpload();
 
-        onSubmit(filesData, textareaRef.current.innerHTML.replace(/<div>/gi, '\n').replace(/<\/div>/gi, '').replace(/<br\/>/gi, '\n').substring(0, 300));
-    }
+        // onSubmit(filesData, textareaRef.current.innerHTML.replace(/<div>/gi, '\n').replace(/<\/div>/gi, '').replace(/<br\/>/gi, '\n').replace(/<br>/gi, '\n').substring(0, 300));
+
+        onSubmit(filesData, rt ? rt.text : richtext.text);
+    }, [richtext])
 
     const _handleFilesUpload = async () => {
         setFileUploadLoading(true);
@@ -286,6 +428,59 @@ export default function Composer(props: {
         }
     }, [isFocus]);
 
+    const _handleArrows = (props: any) => {
+        if ((props.event.code.toLocaleLowerCase() == 'arrowup')) {
+            setAutoComplete((prev: any) => ({ ...prev, index: Math.max(0, prev.index - 1) }));
+            return true;
+        }
+        if ((props.event.code.toLocaleLowerCase() == 'arrowdown')) {
+            setAutoComplete((prev: any) => ({ ...prev, index: Math.min(prev.data.length - 1, prev.index + 1) }));
+            return true;
+        }
+        if (props.event.code.toLocaleLowerCase() == 'enter') {
+            setAutoComplete((prev: any) => {
+                prev.props.command({ id: prev.data[prev.index].handle });
+                return { ...prev, index: 0, show: false }
+            });
+            return true;
+        }
+
+        return false;
+    }
+
+    function editorJsonToText(json: JSONContent): string {
+        let text = ''
+        if (json.type === 'doc' || json.type === 'paragraph') {
+            if (json.content?.length) {
+                for (const node of json.content) {
+                    text += editorJsonToText(node)
+                }
+            }
+            text += '\n'
+        } else if (json.type === 'text') {
+            text += json.text || ''
+        } else if (json.type === 'mention') {
+            text += `@${json.attrs?.id || ''}`
+        }
+        return text
+    }
+
+    function editorJsonToLinks(json: JSONContent): string[] {
+        let links: string[] = []
+        if (json.content?.length) {
+            for (const node of json.content) {
+                links = links.concat(editorJsonToLinks(node))
+            }
+        }
+
+        const link = json.marks?.find(m => m.type === 'link')
+        if (link?.attrs?.href) {
+            links.push(link.attrs.href)
+        }
+
+        return links
+    }
+
     return (
         <>
             <form onSubmit={_handleSubmit}>
@@ -296,7 +491,7 @@ export default function Composer(props: {
                     onKeyDown={_handleCtrlEnter}
                     onChange={_handleTextarea}
                     value={text}></textarea> */}
-                <div
+                {/* <div
                     className={cn(styles.textInput, { [styles.open]: text.length })}
                     spellCheck="false"
                     contentEditable
@@ -309,7 +504,8 @@ export default function Composer(props: {
                     ref={ref => textareaRef.current = ref}
                     placeholder="What's on your mind?"
                     onInput={_handleTextarea}
-                ></div>
+                ></div> */}
+                <EditorContent editor={editor} className={cn(styles.textInput, { [styles.open]: richtext.text.length })} />
                 {quotePost ? <Record isQuote embed={quotePost as any} uri={quotePost.uri as string} author={quotePost.author as any} /> : ''}
                 {files.length ?
                     <div className={styles.files}>
@@ -325,7 +521,7 @@ export default function Composer(props: {
                     : ''}
                 <div className={styles.footer}>
                     <div>
-                        {text.length ? <span>{text.length}/300</span> : ''}
+                        {richtext.text.length ? <span className={cn({ "span-error": richtext.graphemeLength > 300 })}>{richtext.graphemeLength}/300</span> : ''}
                     </div>
                     <div className="d-flex align-items-center">
                         <div className="file-input">
@@ -334,7 +530,7 @@ export default function Composer(props: {
                                 <img src={ImageIcon} height="28" alt="" />
                             </label>
                         </div>
-                        <Button type="submit" loading={submitLoading || fileUploadLoading} className="btn primary" text='Post' />
+                        <Button type="submit" loading={submitLoading || fileUploadLoading} className={cn("btn primary", { disabled: richtext.graphemeLength > 300 })} text='Post' />
                     </div>
                 </div>
             </form>
@@ -344,6 +540,7 @@ export default function Composer(props: {
                     autoCompleteRef.current = ref}
                 className={cn(styles.autoComplete, { [styles.autocompleteOpen]: autoComplete.show, [styles.autocompleteFixed]: inModal })}>
                 <ul>
+
                     {(autoComplete.data)?.map((user: any, index: number) => <li className={cn({ [styles.active]: index == autoComplete.index })} onClick={(e) => _handleMention(e, user)} key={user.did}>
                         <div>
                             <img src={user.avatar || AvatarPlaceholder} alt="" />
