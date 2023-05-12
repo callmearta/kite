@@ -2,7 +2,7 @@
 import { PostView } from '@atproto/api/src/client/types/app/bsky/feed/defs';
 import { Notification as NotificationType } from '@atproto/api/src/client/types/app/bsky/notification/listNotifications';
 import cn from 'classnames';
-import { SyntheticEvent, useMemo, useState } from 'react';
+import { SyntheticEvent, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ArrowDownIcon from '../../assets/arrow.svg';
 import HeartFillIcon from '../../assets/like-fill.svg';
@@ -15,6 +15,8 @@ import RepostIcon from '../../assets/repost.svg';
 import Image from '../../components/Blue/Embed/Image';
 import Record from '../../components/Blue/Embed/Record';
 import User from '../../components/Right/User';
+import Wave from '../../components/Wave';
+import convertURIToBinary from '../../utils/convertURIToBinary';
 import linkFromPost from '../../utils/linkFromPost';
 import styles from './Notification.module.scss';
 
@@ -25,6 +27,7 @@ export default function Notification(props: {
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
     const isReply = notifGroup.reason == 'reply';
+    const [audio,setAudio] = useState<any>(null);
 
     const _handleClick = (e: SyntheticEvent) => {
         e.preventDefault();
@@ -63,6 +66,16 @@ export default function Notification(props: {
 
         setIsOpen(prev => !prev);
     };
+
+    useEffect(() => {
+        if (!(notifGroup.post as any)?.record?.kiteAudio) return;
+        let binary = convertURIToBinary((notifGroup.post as any)?.record?.kiteAudio);
+        let blob = new Blob([binary], {
+            type: 'audio/ogg'
+        });
+        let blobUrl = URL.createObjectURL(blob);
+        setAudio(blobUrl);
+    }, [(notifGroup.post as any)?.record?.kiteAudio]);
 
     return (
         <div className={cn(styles.notification, { "pointer": true, [styles.hover]: true, [styles.new]: !notifGroup.datas[0]?.isRead })} onClick={_handleClick}>
@@ -104,7 +117,8 @@ export default function Notification(props: {
                         {/* <p dir="auto" className={styles.text}>{(notifGroup.datas[0].record as any).text}</p> */}
                     </>
                     : ''}
-                {(notifGroup.post as any)?.record?.text ? <p dir="auto" className={styles.text}>{(notifGroup.post as any)?.record?.text}</p> : ''}
+                {(notifGroup.post as any)?.record?.text ? <p dir="auto" className={styles.text}>{(notifGroup.post as any)?.record?.kiteText || (notifGroup.post as any)?.record?.text}</p> : ''}
+                {(notifGroup.post as any)?.record?.kiteAudio && audio ? <Wave audioUrl={audio} /> : ''}
                 {(notifGroup.post as any) && notifGroup.post.embed && notifGroup.reason != 'quote' && notifGroup.reason != 'mention' ? <Image embed={(notifGroup.post.embed as any)} /> : ''}
                 {/* {notif.reason == 'quote' || notif.reason == 'mention' ? <p dir="auto" className={styles.text}>{(notif as any)?.record?.text}</p> : ''} */}
                 {notifGroup.reason == 'mention' || notifGroup.reason == 'quote' || notifGroup.reason == 'reply' ? <Record isNotif isQuote embed={(notifGroup.datas[0] as any)} post={notifGroup.post} /> : ''}

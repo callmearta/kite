@@ -31,7 +31,7 @@ export default function Composer(props: {
 }) {
     const { onSubmit, submitLoading, quotePost, inModal } = props;
     const setLightbox = useSetAtom(lightboxAtom);
-    const [audio,setAudio] = useState(null);
+    const [audio, setAudio] = useState(null);
     const [fileUploadLoading, setFileUploadLoading] = useState(false);
     const [files, setFiles] = useState<{
         file: File | null,
@@ -81,7 +81,7 @@ export default function Composer(props: {
                         return {
                             onStart: (props) => {
                                 if (!props.clientRect) return;
-                                
+
                                 const rect = props.clientRect();
 
                                 autoCompleteRef.current?.animate({
@@ -314,21 +314,27 @@ export default function Composer(props: {
         if (e)
             e.preventDefault();
 
-        if (!rt && !audio && ((!richtext.text.length && !files.length) || fileUploadLoading || submitLoading || richtext.graphemeLength > 300)) return;
-        if (rt && !audio && ((!rt.text.length && !files.length) || fileUploadLoading || submitLoading || rt.graphemeLength > 300)) return;
-        const filesData = await _handleFilesUpload();
+        const filesData: any[] = await _handleFilesUpload();
+        if (!rt && !audio && ((!richtext.text.length && !filesData.length) || fileUploadLoading || submitLoading || richtext.graphemeLength > 300)) return;
+        if (rt && !audio && ((!rt.text.length && !filesData.length) || fileUploadLoading || submitLoading || rt.graphemeLength > 300)) return;
 
-        onSubmit(filesData, rt ? rt.text : richtext.text,audio);
-    }, [richtext,audio])
+        onSubmit(filesData, rt ? rt.text : richtext.text, audio);
+    }, [richtext, audio, files])
 
-    const _handleFilesUpload = async () => {
-        setFileUploadLoading(true);
-        const results = await Promise.all(
-            files.map(f => _handleFileUpload(f))
-        )
-        setFileUploadLoading(false);
-        return results;
-    };
+    const _handleFilesUpload = useCallback((): Promise<any[]> => {
+        return new Promise(async (resolve, reject) => {
+            // @ts-ignore
+            setFiles(async (files) => {
+                setFileUploadLoading(true);
+                const results = await Promise.all(
+                    files.map(f => _handleFileUpload(f))
+                )
+                setFileUploadLoading(false);
+                resolve(results);
+                return files;
+            });
+        });
+    }, [files, fileUploadLoading]);
 
     const _handleFileUpload = async (file: { file: File | null, preview: any }) => {
         const buffer = await file?.file?.arrayBuffer();
@@ -522,7 +528,7 @@ export default function Composer(props: {
                         )}
                     </div>
                     : ''}
-                    {audio ? <Wave onRemove={() => setAudio(null)} audioUrl={audio}/> : ''}
+                {audio ? <Wave onRemove={() => setAudio(null)} audioUrl={audio} /> : ''}
                 <div className={styles.footer}>
                     <div>
                         {richtext.text.length ? <span className={cn({ "span-error": richtext.graphemeLength > 300 })}>{richtext.graphemeLength}/300</span> : ''}

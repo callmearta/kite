@@ -46,7 +46,7 @@ export default function Record(props: {
                 </div>
             </div>
             <div className={styles.recordBody}>
-                <p dir="auto">{
+                <p className="my-0" dir="auto">{
                     // @ts-ignore
                     (embed.record.value || embed.record as any)?.text}</p>
             </div>

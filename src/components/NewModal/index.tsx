@@ -39,7 +39,7 @@ export default function NewModal(props: {}) {
         }
     });
 
-    const _handleSubmit = async (filesData: any[], text: string) => {
+    const _handleSubmit = async (filesData: any[], text: string, audio: any = null) => {
 
         // if ((!text.length && !files.length) || isLoading || fileUploadLoading) return;
         const filesUpload = filesData;
@@ -99,6 +99,17 @@ export default function NewModal(props: {}) {
                     images: filesUpload.length ? filesUpload.map(i => ({ alt: "", image: i.data.blob.original })) : undefined
                 }
             }
+        }
+
+        if (audio) {
+            // @ts-ignore
+            data.kiteAudio = audio;
+            const newRt = new RichText({ text: 'Unsupported audio message. To view this message you need to use Kite 🪁\n\nhttps://kite.black' });
+            await newRt.detectFacets(agent);
+            data.text = newRt.text;
+            data.facets = newRt.facets;
+            // @ts-ignore
+            data.kiteText = rt.text || '\n';
         }
 
         // @ts-ignore

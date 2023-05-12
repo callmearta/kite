@@ -11,6 +11,7 @@ import PinIcon from '../../assets/pin.svg';
 import AvatarPlaceholder from '../../assets/placeholder.png';
 import RepostIcon from '../../assets/repost-fill.svg';
 import { userAtom } from "../../store/user";
+import convertURIToBinary from "../../utils/convertURIToBinary";
 import fromNow from '../../utils/fromNow';
 import linkFromPost from "../../utils/linkFromPost";
 import renderMarkdown from "../../utils/renderMarkdown";
@@ -39,7 +40,7 @@ export default function Blue(props: {
 }) {
     const { post, isReply, isParent, isSingle, reason, className, isCompose, firehose, isPin } = props;
     const elementRef = useRef<any>(null);
-    const [audio, setAudio] = useState(null);
+    const [audio, setAudio] = useState<any>(null);
     const [deleted, setDeleted] = useState(false);
     if (!post) return <div ref={elementRef} className={cn(styles.blue, styles.deleted, className, { [styles.isReply]: isReply, [styles.parent]: isParent, [styles.single]: isSingle })}>
         <p>This Post Is Deleted</p>
@@ -52,10 +53,10 @@ export default function Blue(props: {
 
     const [markdown, setMarkdown] = useState<any>([]);
     const markdownText = () => {
-        if((post.record as any)?.kiteText){
+        if ((post.record as any)?.kiteText) {
             const res = renderMarkdown((post?.record as any)?.kiteText);
             setMarkdown(res);
-        }else{
+        } else {
             const res = renderMarkdown((post?.record as any)?.text);
             setMarkdown(res);
         }
@@ -106,29 +107,17 @@ export default function Blue(props: {
             }
         }
     };
-    function convertURIToBinary(dataURI) {
-        let BASE64_MARKER = ';base64,';
-        let base64Index = dataURI.indexOf(BASE64_MARKER) + BASE64_MARKER.length;
-        let base64 = dataURI.substring(base64Index);
-        let raw = window.atob(base64);
-        let rawLength = raw.length;
-        let arr = new Uint8Array(new ArrayBuffer(rawLength));
-
-        for (let i = 0; i < rawLength; i++) {
-            arr[i] = raw.charCodeAt(i);
-        }
-        return arr;
-    }
+    
 
     useEffect(() => {
-        if(!post.record?.kiteAudio) return;
-        let binary = convertURIToBinary(post.record?.kiteAudio);
+        if (!(post.record as any)?.kiteAudio) return;
+        let binary = convertURIToBinary((post.record as any)?.kiteAudio);
         let blob = new Blob([binary], {
             type: 'audio/ogg'
         });
         let blobUrl = URL.createObjectURL(blob);
         setAudio(blobUrl);
-    }, [post.record?.kiteAudio]);
+    }, [(post.record as any)?.kiteAudio]);
 
     return (
         deleted ? null :
