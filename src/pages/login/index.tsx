@@ -4,6 +4,8 @@ import store from 'store';
 import agent from "../../Agent";
 import KiteLogo from '../../assets/kite.png';
 import Button from "../../components/Button";
+import EyeOpen from "../../assets/eye-open.svg";
+import EyeClosed from "../../assets/eye-closed.svg";
 
 export default function Login(props: {}) {
     const [form, setForm] = useState({
@@ -13,7 +15,8 @@ export default function Login(props: {}) {
         error: null,
         service: ''
     });
-    const [advanced,setAdvanced] = useState(false);
+    const [advanced, setAdvanced] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
     const theme = store.get("theme");
     const navigate = useNavigate();
 
@@ -66,7 +69,8 @@ export default function Login(props: {}) {
                     <input type="text" placeholder="Identifier ( ex: arta.bsky.social or arta )" value={form.identifier} onChange={e => setForm(prev => ({ ...prev, identifier: e.target.value }))} />
                 </div>
                 <div className="input-wrapper">
-                    <input type="password" placeholder="Password" value={form.password} onChange={e => setForm(prev => ({ ...prev, password: e.target.value }))} />
+                    <input type={showPassword ? "text" : "password"} placeholder="Password" value={form.password} onChange={e => setForm(prev => ({ ...prev, password: e.target.value }))} />
+                    <img src={showPassword ? EyeOpen : EyeClosed} alt="Toggle password visibility" onClick={() => setShowPassword(!showPassword)} />
                 </div>
                 {advanced ? <div className="input-wrapper">
                     <input type="text" placeholder="Service URL, Leave empty if you don't know what this is" value={form.service} onChange={_handleServiceChange} />

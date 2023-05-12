@@ -132,16 +132,29 @@ body {
 }
 
 .input-wrapper {
+    position: relative;
     width: 100%;
     margin: 1rem 0;
-    input {
-        width: 100%;
-        border-radius: 8px;
-        background: rgba(255, 255, 255, .1);
-        border: none;
-        color: #FFF;
-        padding: 1.25rem;
-    }
+}
+
+.input-wrapper input {
+    width: 100%;
+    padding: 1.25rem;
+    padding-right: 50px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, .1);
+    border: none;
+    color: #FFF;
+}
+
+.input-wrapper img {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
 }
 
 .login-page {
