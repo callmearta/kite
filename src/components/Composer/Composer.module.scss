@@ -11,6 +11,9 @@
     p {
         margin: .25rem 0;
     }
+     :global(.btn) {
+        font-size: .79rem !important;
+    }
     &.open {
         &>div {
             min-height: 150px;

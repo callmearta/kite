@@ -47,6 +47,13 @@
         align-items: center;
         justify-content: flex-start;
         font-size: .8rem;
+        &>div {
+            position: relative;
+            top: -1px;
+        }
+        img {
+            width: 20px;
+        }
         &:first-child {
             margin-left: 0;
         }

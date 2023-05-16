@@ -9,7 +9,7 @@ import { renderToString } from 'react-dom/server';
 import { Link, useNavigate } from "react-router-dom";
 import PinIcon from '../../assets/pin.svg';
 import AvatarPlaceholder from '../../assets/placeholder.png';
-import RepostIcon from '../../assets/repost-fill.svg';
+import RepostIcon from '../../assets/repost.svg';
 import { userAtom } from "../../store/user";
 import convertURIToBinary from "../../utils/convertURIToBinary";
 import fromNow from '../../utils/fromNow';

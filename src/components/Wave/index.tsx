@@ -29,7 +29,7 @@ export default function Wave(props: {
             container: waveRef.current,
             backend: "WebAudio",
             height: 60,
-            progressColor: "#00a3ff",
+            progressColor: "#111111",
             responsive: true,
             waveColor: "#C4C4C4",
             cursorColor: "transparent"

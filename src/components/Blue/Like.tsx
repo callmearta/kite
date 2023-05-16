@@ -14,18 +14,18 @@ export default function Like(props: {
     const [liked, setLiked] = useState<boolean>(typeof (post.viewer as any)?.like != 'undefined');
     const [likeUri, setLikeUri] = useState<boolean | string>((post.viewer as any)?.like || '');
     const [likeCount, setLikeCount] = useState<number>((post.likeCount as number));
-    const [loading,setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         setLikeCount(post.likeCount as number);
         setLiked((post.viewer as any)?.like)
         setLikeUri((post.viewer as any)?.like)
-    },[post.likeCount, (post.viewer as any)?.like]);
+    }, [post.likeCount, (post.viewer as any)?.like]);
 
     const _handleLike = useCallback(async (e: SyntheticEvent) => {
         e.preventDefault();
         e.stopPropagation();
-        if(loading) return;
+        if (loading) return;
         // @ts-ignore
         setLiked(prev => !prev);
         setLoading(true);
@@ -52,11 +52,11 @@ export default function Like(props: {
                 setLikeCount(currentLikeCount);
             }
         }
-    }, [liked, likeCount, likeUri,loading]);
+    }, [liked, likeCount, likeUri, loading]);
 
     return (
         <button className={styles.like} >
-        <div className={styles.icon} onClick={_handleLike}>
+            <div className={styles.icon} onClick={_handleLike}>
                 <img src={liked ? HeartFillIcon : HeartIcon} alt="" />
             </div>
             {likeCount ? <span>{likeCount as number}</span> : ''}

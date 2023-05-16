@@ -33,7 +33,7 @@ a.text-primary {
 :root {
     --stroke-color: #ececec;
     --text-color: #323232;
-    --primary-color: #00a3ff;
+    --primary-color: #111;
     --white-color: #FFF;
     --grey-color: #888;
     --light-color: #f4f4f4;
@@ -42,7 +42,7 @@ a.text-primary {
 body.dark {
     --stroke-color: #1a1a1a;
     --text-color: #ebebeb;
-    --primary-color: #00a3ff;
+    --primary-color: #111;
     --white-color: #010101;
     --grey-color: #888;
     --light-color: #181818;
@@ -159,14 +159,44 @@ body {
 
 .login-page {
     width: 100%;
-    max-width: 600px;
-    margin: auto;
+    max-width: 100%;
+    // margin: auto;
     height: 100dvh;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+    // align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
     background: var(--white-color);
+    overflow: hidden;
+    @media screen and (max-width: 1024px) {
+        overflow: initial;
+    }
+    &__left {
+        width: 600px;
+        padding: 0 4rem;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        @media screen and (max-width: 1024px) {
+            justify-content: flex-start;
+            height: auto;
+            padding: 3rem 1rem;
+        }
+    }
+    &__right {
+        width: calc(100% - 600px);
+        height: 100%;
+        @media screen and (max-width: 1024px) {
+            display: none;
+        }
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
     h1 {
         font-size: 3rem;
     }
@@ -177,9 +207,13 @@ body {
     }
     form {
         width: 100%;
-        padding: 2rem;
+        padding: 0;
         input {
             border: 1px solid var(--stroke-color);
+            color: var(--text-color);
+        }
+        &>p {
+            font-size: .9rem;
             color: var(--text-color);
         }
     }
@@ -462,13 +496,13 @@ textarea {
         opacity: .5;
     }
     &:hover {
-        background: #4db7f5 !important;
+        background: #333 !important;
     }
     &.primary {
         background: var(--primary-color);
         color: #FFF;
         &:hover {
-            background: #4db7f5 !important;
+            background: #333 !important;
         }
     }
     &.outline {

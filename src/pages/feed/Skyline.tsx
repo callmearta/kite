@@ -204,7 +204,7 @@ export default function Skyline(props: {}) {
 
     return (
         <div className="skyline">
-            <Fleets />
+            {/* <Fleets /> */}
             {newPosts.length ? <button onClick={_handleNewPostsClick} className={cn("btn primary", styles.newPosts)}>
                 <div className={styles.newAvatars}>
                     {newPosts.filter((i, index) => i.post && i.post.author && newPosts.findIndex(p => p.post?.author.did == i.post?.author.did) == index).slice(0, 3).map(post =>

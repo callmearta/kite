@@ -77,7 +77,7 @@ export default function Sidebar(props: {
         <div className={cn(styles.sidebar,"sidebar")}>
             <div className={styles.logo}>
                 <div>
-                    <img src={KiteIcon} alt="Kite | a better bluesky client" />
+                    {/* <img src={KiteIcon} alt="Kite | a better bluesky client" /> */}
                     <h1>Kite</h1>
                 </div>
                 <ThemeToggle />
