@@ -518,6 +518,8 @@
     .repostDropdown {
         right: 0;
         left: auto;
+        position: absolute !important;
+        top: 30px;
         span:first-child {
             margin-right: 1rem !important;
         }
