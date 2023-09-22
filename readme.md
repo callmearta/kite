@@ -31,7 +31,8 @@ Simply clone the project and run following commands like any other React project
 npm i
 npm run dev
 ```
-
+## LICENCE AND CREDIT
+You may not use Kite's code without giving credits to Kite or @CallMeArta specifically in a visible and obvious way. Any usage without giving credits or hiding credits in parts of page to bypass is forbidden and is legally actionable.
 
 ## Development
 
