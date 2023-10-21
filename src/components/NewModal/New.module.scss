@@ -1,7 +1,11 @@
 .wrapper {
     width: 100%;
     padding: 1.5rem;
-    border-bottom: 1px solid var(--stroke-color);
+    border: 1px solid var(--stroke-color);
+    border-top:none;
+    border-bottom-right-radius:14px;
+    border-bottom-left-radius:14px;
+    // margin:.5rem 0;
     display: flex;
 }
 

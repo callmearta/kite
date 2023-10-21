@@ -107,6 +107,7 @@ export default function Right(props: {
                 </div>
                 <div className={styles.copy}>
                     <Donate />
+                    <p>Donations received since beginning: <b>$0.00</b></p>
                     <p>Version 0.1.2</p>
                     <p>Developed by <Link to="/user/arta.bsky.social">Arta</Link></p>
                     <div className={styles.icon}>

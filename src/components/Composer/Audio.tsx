@@ -112,6 +112,7 @@ export default function Audio(props: {
         <>
             <button className={cn(styles.voice, { [styles.voiceActive]: recordingStatus != 'inactive' })} title="Voice" type="button" onClick={_handleClick}>
                 <img src={recordingStatus == 'inactive' ? MicIcon : MicFillIcon} alt="" />
+                <span>Audio Post</span>
                 {timer && recordingStatus == 'recording' ? <span className={cn({ 'span-error': timer > 30 })}>{timer}</span> : ''}
             </button>
         </>

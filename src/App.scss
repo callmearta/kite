@@ -1,7 +1,9 @@
 @import url('./assets/scss/vazir.css');
-@import url('./assets/scss/lato.css');
+@import url('./assets/scss/Lato.css');
 @import url('./assets/scss/slick.css');
 @import url('./assets/scss/slick-theme.css');
+@import url("https://fonts.googleapis.com/css2?family='Roboto':wght@400;500;700&display=swap");
+
 * {
     box-sizing: border-box;
     outline: none;
@@ -25,6 +27,7 @@
 
 a.text-primary {
     color: var(--primary-color) !important;
+
     &:hover {
         text-decoration: underline !important;
     }
@@ -42,19 +45,23 @@ a.text-primary {
 body.dark {
     --stroke-color: #1a1a1a;
     --text-color: #ebebeb;
-    --primary-color: #111;
+    --primary-color: #ac7017;
     --white-color: #010101;
     --grey-color: #888;
     --light-color: #181818;
+
     img[src*=".svg"]:not(img[src*="-fill"]) {
         filter: brightness(1.5);
     }
+
     img[src*="placeholder.png"] {
         filter: invert(1);
     }
+
     img[src*="close.svg"]:not([contenteditable]+div span img) {
         filter: invert(1) !important;
     }
+
     textarea {
         color: var(--text-color) !important;
     }
@@ -90,10 +97,12 @@ a:hover {
     display: inline-block;
     box-sizing: border-box;
     animation: rotation 1s linear infinite;
+
     &.colored {
         border: 2px solid var(--primary-color);
         border-bottom-color: transparent;
     }
+
     &.small {
         width: 16px;
         height: 16px;
@@ -112,6 +121,7 @@ a:hover {
     0% {
         transform: rotate(0deg);
     }
+
     100% {
         transform: rotate(360deg);
     }
@@ -125,7 +135,7 @@ html {
 body {
     margin: 0;
     padding: 0;
-    font-family: Lato, Vazir;
+    font-family: 'Roboto', Vazir, sans-serif;
     color: var(--text-color);
     background: var(--white-color);
     overflow-anchor: auto;
@@ -168,9 +178,11 @@ body {
     flex-direction: row;
     background: var(--white-color);
     overflow: hidden;
+
     @media screen and (max-width: 1024px) {
         overflow: initial;
     }
+
     &__left {
         width: 600px;
         padding: 0 4rem;
@@ -179,50 +191,61 @@ body {
         flex-direction: column;
         align-items: center;
         justify-content: center;
+
         @media screen and (max-width: 1024px) {
             justify-content: flex-start;
             height: auto;
             padding: 3rem 1rem;
         }
     }
+
     &__right {
         width: calc(100% - 600px);
         height: 100%;
+
         @media screen and (max-width: 1024px) {
             display: none;
         }
+
         img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
     }
+
     h1 {
         font-size: 3rem;
     }
+
     h2 {
         font-size: 1.5rem;
         color: var(--grey-color);
         font-weight: normal;
     }
+
     form {
         width: 100%;
         padding: 0;
+
         input {
             border: 1px solid var(--stroke-color);
             color: var(--text-color);
         }
+
         &>p {
             font-size: .9rem;
             color: var(--text-color);
         }
     }
+
     button {
         width: 100%;
         display: block;
         padding: 1.25rem;
         font-size: 1.1rem;
     }
+
     button {
         padding: 1rem 2rem;
         background: var(--primary-color);
@@ -230,6 +253,7 @@ body {
         border: none;
         color: #FFF;
     }
+
     .back-button {
         background: none;
         display: flex;
@@ -253,14 +277,19 @@ body {
 
 .skyline,
 .feed-center {
+
     &>h1,
     .col-header {
         padding: 1rem 1.5rem;
         // padding-bottom:1.5rem;
+        border-right:1px solid var(--stroke-color);
+        border-left:1px solid var(--stroke-color);
         margin: 0;
         border-bottom: 1px solid var(--stroke-color);
+
         &>div:last-child {
             display: flex;
+
             button {
                 margin: 0 .25rem;
             }
@@ -285,6 +314,7 @@ body.hot-col .skyline:not(.skycol) {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     @media screen and (max-width: 1040px) {
         position: sticky;
         top: 0;
@@ -292,9 +322,11 @@ body.hot-col .skyline:not(.skycol) {
         background: var(--white-color);
         z-index: 3;
         padding: .75rem 1.5rem !important;
+
         &>img:first-child {
             display: none;
         }
+
         h1 {
             text-transform: uppercase;
         }
@@ -310,6 +342,7 @@ body.hot-col .skyline:not(.skycol) {
     cursor: pointer;
     background: none;
     border: none;
+
     img {
         width: 30px;
         height: 30px;
@@ -324,7 +357,8 @@ body.hot-col .skyline:not(.skycol) {
 
 .skyline:not(.feed-center .skyline),
 .feed-center {
-    border-right: 1px solid var(--stroke-color);
+    // border-right: 1px solid var(--stroke-color);
+
     @media screen and (max-width: 1040px) {
         border-right: none;
     }
@@ -343,14 +377,17 @@ body.hot-col .skyline:not(.skycol) {
     position: sticky;
     border-left: 1px solid var(--stroke-color);
     top: 0;
+
     @media screen and (max-width: 1040px) {
         width: 100%;
         flex: 0 0 auto;
     }
+
     &::-webkit-scrollbar {
         width: 6px;
         background: var(--light-color);
     }
+
     &::-webkit-scrollbar-thumb {
         width: 10px;
         background: var(--primary-color);
@@ -384,10 +421,13 @@ body.hot-col .feed:not(.home) {
     align-items: center;
     cursor: pointer;
     justify-content: center;
+
     img {
         margin-right: .5rem;
     }
+
     font-size:1.1rem;
+
     strong {
         color: var(--text-color);
     }
@@ -402,7 +442,6 @@ body.hot-col .feed:not(.home) {
     // border-top: 1px solid var(--stroke-color);
     // border-bottom: 1px solid var(--stroke-color);
     padding: .5rem;
-    padding-left: 2.5rem;
     position: relative;
     margin-bottom: 1rem;
     font-weight: bold;
@@ -411,6 +450,7 @@ body.hot-col .feed:not(.home) {
     display: flex;
     align-items: center;
     width: calc(100% - 3rem);
+
     a {
         background: var(--white-color);
         display: inline-block;
@@ -418,15 +458,18 @@ body.hot-col .feed:not(.home) {
         padding: 0 1rem;
         cursor: pointer;
     }
+
     &::before {
-        width: 100%;
+        width: 90%;
         display: inline-block;
         content: '';
         background: var(--stroke-color);
         height: 1px;
+        left:10%;
         z-index: -1;
         position: absolute;
     }
+
     &::after {
         width: 1px;
         height: 6rem;
@@ -434,7 +477,7 @@ body.hot-col .feed:not(.home) {
         background: var(--stroke-color);
         content: '';
         display: block;
-        left: 3rem;
+        left: 3.6rem;
         position: absolute;
         top: 0;
     }
@@ -474,7 +517,7 @@ textarea {
     // border:1px solid var(--stroke-color);
     border: none;
     // padding:1rem;
-    font-family: Lato, Vazir;
+    font-family: 'Roboto', Vazir, sans-serif;
     font-size: 1rem;
     background: var(--white-color);
 }
@@ -489,27 +532,33 @@ textarea {
     font-weight: bold;
     border-radius: 50px;
     border: none;
-    font-family: Lato;
+    font-family: 'Roboto', Vazir, sans-serif;
     cursor: pointer;
+
     &.disabled {
         // background: var(--grey-color) !important;
         opacity: .5;
     }
+
     &:hover {
         background: #333 !important;
     }
+
     &.primary {
         background: var(--primary-color);
         color: #FFF;
+
         &:hover {
             background: #333 !important;
         }
     }
+
     &.outline {
         background: transparent;
         border: 1px solid var(--stroke-color);
         color: var(--text-color);
         margin: .5rem 0;
+
         &:hover {
             background: var(--light-color) !important;
         }
@@ -528,6 +577,7 @@ textarea {
     .feed-center {
         padding-left: 0;
     }
+
     .feed {
         justify-content: flex-start !important;
     }
@@ -538,6 +588,7 @@ textarea {
     position: relative;
     margin: .5rem 0;
     cursor: pointer;
+
     input {
         width: 100%;
         height: 100%;
@@ -549,6 +600,7 @@ textarea {
         opacity: 0;
         cursor: pointer;
     }
+
     label {
         width: 100%;
         display: flex;
@@ -559,6 +611,7 @@ textarea {
         border: 1px solid var(--stroke-color);
         opacity: .8;
     }
+
     input:checked+label {
         border: 1px solid var(--primary-color);
         box-shadow: 0px 0px 14px -4px rgba(0, 163, 255, .4);
@@ -576,6 +629,7 @@ textarea {
 .section-icon {
     width: 46px;
     height: 46px;
+
     img {
         width: 100%;
         height: 100%;
@@ -594,7 +648,7 @@ textarea {
     text-align: center;
     opacity: 1 !important;
     margin-bottom: 1rem;
-    box-shadow: 0px 0px 14px 1px #00a2ff1f;
+
     &:hover {
         background: var(--primary-color);
         color: #FFF;
@@ -611,6 +665,7 @@ textarea {
     align-items: center;
     justify-content: center;
     z-index: 9;
+
     h1 {
         font-size: 1.5rem !important;
     }
@@ -647,15 +702,18 @@ body.hot-col .sidebar {
     background: none;
     color: var(--text-color);
     cursor: pointer;
+
     &:hover {
         background: var(--light-color);
     }
+
     &:first-child {
         img {
             position: relative;
             top: -3px;
         }
     }
+
     img {
         // width: 24px;
         height: 20px;
@@ -675,9 +733,11 @@ body.hot-col .sidebar {
     max-width: 90%;
     overflow: auto;
     box-shadow: 0px 14px 24px -4px rgba(0, 0, 0, .2);
+
     h1 {
         font-size: 3rem;
     }
+
     &>p {
         font-size: .9rem;
         margin: 2rem 0;
@@ -688,10 +748,12 @@ body.hot-col .sidebar {
     h1 {
         font-size: 1.5rem !important;
     }
+
     .single {
         padding-bottom: 59px;
         width: 100% !important;
     }
+
     .feed-center {
         width: 100%;
     }
@@ -718,6 +780,7 @@ body.hot-col .sidebar {
     position: relative;
     margin: 0 .5rem;
     cursor: pointer;
+
     input {
         position: absolute;
         top: 0;
@@ -732,6 +795,7 @@ body.hot-col .sidebar {
         z-index: 2;
         cursor: pointer;
     }
+
     label {
         display: flex;
         align-items: center;
@@ -739,6 +803,7 @@ body.hot-col .sidebar {
         width: 48px;
         height: 48px;
         pointer-events: none;
+
         // padding-top: 4px;
         img {
             width: 36px;
@@ -788,6 +853,7 @@ button {
     background: var(--white-color);
     position: relative;
     z-index: 13;
+
     h3 {
         margin: 0;
         margin-bottom: 2rem;
@@ -800,6 +866,7 @@ button {
             margin-bottom: .5rem;
             display: block;
         }
+
         input,
         textarea,
         select {
@@ -808,10 +875,12 @@ button {
             color: var(--text-color) !important;
             font-size: 1rem;
         }
+
         textarea {
             min-height: 150px;
         }
     }
+
     select {
         border-radius: 50px;
         width: 100%;
@@ -823,6 +892,7 @@ button {
 
 .select-wrapper {
     position: relative;
+
     &::after {
         width: 14px;
         height: 14px;
@@ -846,17 +916,20 @@ button {
     position: relative;
     border: 1px solid var(--stroke-color);
     border-radius: 12px;
+
     &>img {
         width: 100%;
         height: auto;
         max-height: 150px;
         object-fit: cover;
     }
+
     &:hover {
         span {
             display: flex;
         }
     }
+
     span {
         position: absolute;
         top: 0;
@@ -868,6 +941,7 @@ button {
         justify-content: center;
         background: rgba(0, 0, 0, .2);
         overflow: hidden;
+
         input {
             position: absolute;
             top: 0;
@@ -879,6 +953,7 @@ button {
             appearance: none;
             -webkit-appearance: none;
         }
+
         img {
             width: 34px;
             height: 34px;
@@ -898,6 +973,7 @@ button {
     border-radius: 50%;
     overflow: hidden;
     margin-top: -2rem;
+
     img {
         width: 100%;
         height: 100%;
@@ -915,6 +991,7 @@ button {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+
     .media {
         width: calc(100% / 3);
         flex: 1 1 25%;
@@ -923,6 +1000,7 @@ button {
         display: flex;
         align-items: center;
         justify-content: center;
+
         img {
             width: 100%;
             height: 100%;

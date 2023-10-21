@@ -172,13 +172,19 @@ form {
 }
 
 .voice {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
+    width: auto;
+    height: 42px;
+    border-radius: 46px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: none;
+    border:1px solid var(--primary-color) !important;
+    padding-right:1.25rem;
+    span{
+
+        color:var(--text-color) !important;
+    }
+    padding-left:.75rem;
     margin-right: .5rem;
     margin-left: -.5rem;
     cursor: pointer;
