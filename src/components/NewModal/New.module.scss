@@ -81,6 +81,8 @@
             .post {
                 cursor: initial;
                 padding: 0;
+                border:none;
+                margin:0;
                 &::before {
                     left: 1.5rem;
                 }
