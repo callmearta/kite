@@ -15,7 +15,8 @@
 }
 
 .suggested {
-    background: var(--light-color);
+    background: none;
+    border:1px solid var(--stroke-color);
     border-radius: 24px;
     padding: 1.5rem;
     width: 100%;
